@@ -1,16 +1,33 @@
-"use client"
+"use client";
 
-import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
+import { SignInButton, SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextjs'
 import Link from 'next/link'
 import React from 'react'
 import { Button } from './ui/button'
 import { BrainCircuit, ChevronDown, FileText, GraduationCap, LayoutDashboard, PenBox, StarIcon } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
-import { checkUser } from '@/lib/checkUser.js'
+import { ensureUserExists } from '@/lib/action.js';
 
-const Header = async () => {
-  // Ensure user check runs before rendering
-  await checkUser()
+const Header =  () => {
+
+    // Ensure user check runs before rendering
+    //await checkUser()
+
+    const { isSignedIn } = useUser();
+
+    useEffect(() => {
+      const runCheckUser = async () => {
+        if (isSignedIn) {
+          try {
+            await ensureUserExists(); // call server action
+          } catch (err) {
+            console.error("Error checking user:", err);
+          }
+        }
+      };
+  
+      runCheckUser();
+    }, [isSignedIn]);
 
   return (
     <header className="fixed top-0 border-b w-full bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 z-50">
