@@ -7,7 +7,7 @@ import { BrainCircuit, ChevronDown, FileText, GraduationCap, LayoutDashboard, Pe
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { checkUser } from '@/lib/checkUser.js'
 
-const Header = async () => {
+const Header = () => {
   useEffect(async() => {
     // Ensure user check runs before rendering
     await checkUser() 
