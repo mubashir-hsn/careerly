@@ -7,7 +7,7 @@ export async function POST(req) {
 
         // Initialize the Generative AI model
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
         // Define the system instruction for the AI's role
         const systemInstruction = "You are an AI career guide. Your purpose is to provide helpful and concise information on technology skills, career paths, and industry trends. Be friendly and encouraging, but keep your answers brief and to the point. Avoid lengthy explanations.";
