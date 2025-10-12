@@ -6,7 +6,7 @@ import { features } from "@/data/features";
 import { howItWorks } from "@/data/howItWorks";
 import { testimonial } from "@/data/testimonials";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@radix-ui/react-accordion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -111,14 +111,8 @@ export default function Home() {
                 <CardContent className="pt-6">
                   <div className="flex flex-col space-y-4">
                     <div className="flex items-center space-x-4 mb-4">
-                      <div className="relative h-12 w-12 flex-shrink-0">
-                        <Image
-                          width={40}
-                          height={40}
-                          src={testimonial.image}
-                          alt={testimonial.author}
-                          className="rounded-full object-cover border-2 border-primary"
-                        />
+                      <div className="relative h-12 w-12 flex justify-center items-center flex-shrink-0 rounded-full border-2 border-gray-800">
+                        <User className="w-6 h-6"/>
                       </div>
                       <div>
                         <p className="font-semibold">{testimonial.author}</p>
