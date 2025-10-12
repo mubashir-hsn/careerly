@@ -8,9 +8,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { checkUser } from '@/lib/checkUser.js'
 
 const Header = () => {
-  useEffect(async() => {
-    // Ensure user check runs before rendering
-    await checkUser() 
+   useEffect(() => {
+    checkUser()
   }, [])
 
   return (
