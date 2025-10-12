@@ -1,16 +1,14 @@
-"use client"
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import Link from 'next/link'
-import React,{ useEffect } from 'react'
+import React from 'react'
 import { Button } from './ui/button'
 import { BrainCircuit, ChevronDown, FileText, GraduationCap, LayoutDashboard, PenBox, StarIcon } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { checkUser } from '@/lib/checkUser.js'
 
-const Header = () => {
-   useEffect(() => {
-    checkUser()
-  }, [])
+const Header = async() => {
+    // Ensure user check runs before rendering
+    await checkUser()
 
   return (
     <header className="fixed top-0 border-b w-full bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 z-50">
