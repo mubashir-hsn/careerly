@@ -97,8 +97,8 @@ const ResumeBuilder = ({ initialContent }) => {
         const { summary, skills, experience, education, projects } = formValues;
         return [
             getContactMarkdown(),
-            summary && `## Professional Summary\n\n${summary}`,
-            skills && `## Skills\n\n${skills}`,
+            summary && `### Professional Summary\n\n${summary}`,
+            skills && `### Skills\n\n${skills}`,
             entriesToMarkdown(experience, "Work Experience"),
             entriesToMarkdown(education, "Education"),
             entriesToMarkdown(projects, "Projects"),

@@ -3,6 +3,7 @@
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server"
 import { generateAIInsight } from "./dashboard.js";
+import { use } from "react";
 
 export const updateUser = async (data) => {
     const { userId } = await auth();
@@ -71,34 +72,31 @@ export const updateUser = async (data) => {
 }
 
 
+  
 export async function userOnboardingStatus() {
-    const { userId } = await auth();
-
-    if (!userId) throw new Error('Unauthorized');
-
-    const user = await db.user.findUnique({
-        where: {
-            clerkUserId: userId
-        }
-    });
-
-    if (!user) throw new Error('User not found');
-
     try {
-        
-        const user = await db.user.findUnique({
-            where: {
-                clerkUserId: userId
-            },
-            select:{
-                industry:true
-            }
-        });
-
-        return { isOnboarded: !!user?.industry}
-
+      const { userId } = await auth();
+      if (!userId) return { isOnboarded: false };
+  
+      const user = await db.user.findUnique({
+        where: { clerkUserId: userId },
+        select: { industry: true }
+      });
+  
+      if (!user) return { isOnboarded: false };
+  
+    //   console.log("RAW INDUSTRY VALUE:", user.industry);
+    //   console.log("TYPE:", typeof user.industry);
+  
+      const isOnboarded =
+        typeof user.industry === "string" &&
+        user.industry.trim().length > 0;
+  
+      return { isOnboarded };
+  
     } catch (error) {
-        console.log("Error checking onboarding status", error.message);
-        throw new Error('Failed to checking onboarding status.')
+      console.log("Error checking onboarding:", error.message);
+      return { isOnboarded: false };
     }
-}
+  }
+  

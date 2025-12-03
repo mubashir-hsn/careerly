@@ -35,6 +35,8 @@ model User {
   coverLetter   CoverLetter[]
 }
 
+
+
 model Assessment {
   id            String    @id @default(cuid())
   userId        String

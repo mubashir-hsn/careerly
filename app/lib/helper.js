@@ -3,7 +3,7 @@ export function entriesToMarkdown(entries, type) {
     if (!entries?.length) return "";
   
     return (
-      `## ${type}\n\n` +
+      `### ${type}\n\n` +
       entries
         .map((entry) => {
           const dateRange = entry.current
