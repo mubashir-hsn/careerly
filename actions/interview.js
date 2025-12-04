@@ -22,25 +22,48 @@ export async function generateQuiz(data) {
   if (!user) throw new Error("User not found");
 
   const prompt = `
-    Generate ${data.quizQuestion} technical ${data.difficultyLevel} level interview questions for a ${
-      user.industry
-    } professional${
-    user.skills?.length ? ` with expertise in ${user.skills.join(", ")}` : ""
+  Generate ${data.quizQuestion} ${data.interviewType} ${data.difficultyLevel} level interview questions for a ${data.jobRole} with ${data.experienceLevel} experience${
+    data.skills?.length ? ` and expertise in ${data.skills.join(", ")}` : ""
   }.
-    
-    Each question should be multiple choice with 4 options.
-    
-    Return the response in this JSON format only, no additional text:
-    {
-      "questions": [
-        {
-          "question": "string",
-          "options": ["string", "string", "string", "string"],
-          "correctAnswer": "string",
-          "explanation": "string"
-        }
-      ]
-    }
+  
+  Technology Stack: ${data.skills?.length ? data.skills.join(", ") : "Not specified"}  
+  Interview Type: ${data.interviewType} (Technical / HR / Behavioral / Mixed)  
+  Experience Level: ${data.experienceLevel}  
+  Difficulty Level: ${data.difficultyLevel} (Beginner / Intermediate / Advanced)
+  
+  Generate questions based on the **difficulty level** as follows:
+  - **Beginner:** Mostly simple and conceptual questions, with 1-2 basic scenario questions.  
+  - **Intermediate:** Balanced mix of simple, conceptual, and scenario/problem-solving questions.  
+  - **Advanced:** Mostly scenario/problem-solving questions, with few conceptual questions for depth.
+  
+  For **Mixed Interview Type**, ensure the questions include:
+  - Scenario-based questions
+  - Conceptual questions
+  - Simple practical questions
+  - Problem-solving based questions
+  
+  All questions must strictly match:
+  - Selected Job Role
+  - Experience Level
+  - Technology Stack
+  - Interview Type
+  - Difficulty Level
+  
+  Each question should be multiple choice with exactly **4 options**.
+  
+  Return the response in this JSON format only, no additional text:
+  {
+    "questions": [
+      {
+        "question": "string",
+        "options": ["string", "string", "string", "string"],
+        "correctAnswer": "string",
+        "explanation": "string"
+      }
+    ]
+  }
+  
+  
   `;
 
   try {

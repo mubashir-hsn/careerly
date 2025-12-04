@@ -20,7 +20,8 @@ import QuizResult from './QuizResult';
 import { Input } from '@/components/ui/input';
 
 const Quiz = () => {
-
+     
+    // Quiz states
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answers, setAnswers] = useState([]);
     const [showExplanation, setShowExplanation] = useState(false);
@@ -28,6 +29,11 @@ const Quiz = () => {
     const [difficultyLevel, setDifficultyLevel] = useState('beginner');
     const [error, setError] = useState("")
 
+    // User input states
+    const [jobRole, setJobRole] = useState("");
+    const [experienceLevel, setExperienceLevel] = useState("");
+    const [skills, setSkills] = useState(""); // comma-separated
+    const [interviewType, setInterviewType] = useState("technical");
 
     const {
         loading: quizLoading,
@@ -97,16 +103,24 @@ const Quiz = () => {
             setError("Please enter a valid number of questions greater than 0.")
             return
         }
-
         if (quizQuestion > 30) {
             setError("You can select a maximum of 30 questions.")
             return
-          }
-        setError("") // clear error if valid
+        }
+        if (!jobRole || !experienceLevel || !skills || !interviewType) {
+            setError("Please fill all interview details.")
+            return
+        }
+
+        setError(""); // clear error if valid
 
         const data = {
             quizQuestion: Number(quizQuestion),
-            difficultyLevel,
+            difficultyLevel,                     // beginner | intermediate | advanced
+            interviewType,                       // technical | hr | behavioral | mixed
+            jobRole,                             // e.g., Frontend Developer
+            experienceLevel,                     // fresher | 1-3 | senior
+            skills: skills.split(",").map(s => s.trim()) // convert comma-separated to array
         }
 
         generateQuizFn(data)
@@ -132,10 +146,71 @@ const Quiz = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <p className="text-muted-foreground">
-                        Choose how many questions you want and your difficulty level to begin.
+                        Fill the form below to generate your AI-powered quiz.
                     </p>
 
-                    {/* Number of Questions Input */}
+                    {/* Job Role */}
+                    <div className="space-y-2">
+                        <Label>Job Role</Label>
+                        <Input
+                            placeholder="e.g. Frontend Developer"
+                            value={jobRole}
+                            onChange={(e) => setJobRole(e.target.value)}
+                        />
+                    </div>
+
+                    {/* Experience Level */}
+                    <div className="space-y-2">
+                        <Label>Experience Level</Label>
+                        <RadioGroup
+                            value={experienceLevel}
+                            onValueChange={setExperienceLevel}
+                            className="flex gap-4"
+                        >
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="fresher" id="fresher" />
+                                <Label htmlFor="fresher">Fresher</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="1-3" id="1-3" />
+                                <Label htmlFor="1-3">1–3 Years</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="senior" id="senior" />
+                                <Label htmlFor="senior">Senior</Label>
+                            </div>
+                        </RadioGroup>
+                    </div>
+
+                    {/* Technology Stack */}
+                    <div className="space-y-2">
+                        <Label>Technology Stack</Label>
+                        <Input
+                            placeholder="React, Next.js, Node, PostgreSQL"
+                            value={skills}
+                            onChange={(e) => setSkills(e.target.value)}
+                        />
+                        <p className=' text-sm text-muted-foreground ps-2'>Separate multiple skills with commas</p>
+                    </div>
+
+                    {/* Interview Type */}
+                    <div className="space-y-2">
+                        <Label>Interview Type</Label>
+                        <RadioGroup
+                            value={interviewType}
+                            onValueChange={setInterviewType}
+                            className="flex gap-4 flex-wrap"
+                        >
+                            {["technical", "hr", "behavioral", "mixed"].map(type => (
+                                <div key={type} className="flex items-center space-x-2">
+                                    <RadioGroupItem value={type} id={type} />
+                                    <Label htmlFor={type}>{type.toUpperCase()}</Label>
+                                </div>
+                            ))}
+                        </RadioGroup>
+                    </div>
+
+                    {/* Number of Questions */}
                     <div className="space-y-2">
                         <Label htmlFor="questions">Number of Questions</Label>
                         <Input
@@ -147,10 +222,9 @@ const Quiz = () => {
                             onChange={(e) => setQuizQuestion(e.target.value)}
                             placeholder="Enter number of questions 1-30"
                         />
-                        {error && <p className="text-red-500 text-sm">{error}</p>}
                     </div>
 
-                    {/* Difficulty Level Radio */}
+                    {/* Difficulty Level */}
                     <div className="space-y-2">
                         <Label>Difficulty Level</Label>
                         <RadioGroup
@@ -172,6 +246,8 @@ const Quiz = () => {
                             </div>
                         </RadioGroup>
                     </div>
+
+                    {error && <p className="text-red-500 text-sm">{error}</p>}
                 </CardContent>
 
                 <CardFooter>

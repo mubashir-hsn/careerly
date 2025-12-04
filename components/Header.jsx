@@ -1,6 +1,6 @@
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import Link from 'next/link'
-import React,{useEffect} from 'react'
+import React from 'react'
 import { Button } from './ui/button'
 import { BrainCircuit, ChevronDown, FileText, GraduationCap, LayoutDashboard, PenBox, StarIcon } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
