@@ -50,13 +50,13 @@ const QuizResult = ({result,onStartNew, hideStartNew=false}) => {
                         </div>
 
                         <div className='text-sm text-muted-foreground'>
-                           <p>Your Answer: {q.userAnswer}</p>
-                           {!q.isCorrect && <p>Correct Answer: {q.answer}</p>}
+                           <p><b>Your Answer:</b> {q.userAnswer}</p>
+                           {!q.isCorrect && <p><b>Correct Answer:</b> {q.answer}</p>}
                         </div>
 
                         <div className='bg-muted p-2 rounded text-sm'>
                            <p className='font-medium'>Explanation:</p>
-                           <p>{q.explanation}</p>
+                           <p className='text-xs text-muted-foreground'>{q.explanation}</p>
                         </div>
                     </div>
                 ))

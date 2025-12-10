@@ -45,8 +45,8 @@ const QuizList = ({ assessments }) => {
                                 onClick={() => setSelectedQuiz(assessment)}
                             >
                                 <CardHeader>
-                                    <CardTitle className="gradient-subtitle text-2xl">
-                                        Quiz {i + 1}
+                                    <CardTitle className="gradient-subtitle text-2xl capitalize">
+                                        Quiz {i + 1}. {assessment?.title} 
                                     </CardTitle>
                                     <CardDescription className="flex justify-between w-full">
                                         <div>Score: {assessment.quizScore.toFixed(1)}%</div>
@@ -74,7 +74,7 @@ const QuizList = ({ assessments }) => {
             {/* Dialog Section */}
 
             <Dialog open={!!selectedQuiz} onOpenChange={()=> setSelectedQuiz(null)} >
-                <DialogContent className="max-w-3xl h-[90vh] overflow-y-auto">
+                <DialogContent className="max-w-4xl h-[90vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle></DialogTitle>
                     </DialogHeader>

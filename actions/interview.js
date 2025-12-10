@@ -82,7 +82,7 @@ export async function generateQuiz(data) {
 
 
 
-export async function saveQuizResult(questions, answers, score) {
+export async function saveQuizResult(questions, answers, score, quizDetail) {
     const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
   
@@ -113,16 +113,18 @@ export async function saveQuizResult(questions, answers, score) {
         )
         .join("\n\n");
   
-      const improvementPrompt = `
-        The user got the following ${user.industry} technical interview questions wrong:
-  
+        const improvementPrompt = `
+        The user got the following ${quizDetail.interviewType} questions for the role of ${quizDetail.jobRole} wrong:
+    
         ${wrongQuestionsText}
-  
+    
         Based on these mistakes, provide a concise, specific improvement tip.
         Focus on the knowledge gaps revealed by these wrong answers.
         Keep the response under 2 sentences and make it encouraging.
+        You can suggest practicing topics related to these skills: ${quizDetail.skills.join(", ")}.
         Don't explicitly mention the mistakes, instead focus on what to learn/practice.
-      `;
+    `;
+    
   
       try {
         const tipResult = await model.generateContent(improvementPrompt);
@@ -141,8 +143,9 @@ export async function saveQuizResult(questions, answers, score) {
           userId: user.id,
           quizScore: score,
           questions: questionResults,
-          category: "Technical",
+          category: quizDetail.interviewType.toLowerCase() === 'mixed' ? 'Mixed(technical.hr,behavioral)' : quizDetail?.interviewType,
           improvementTip,
+          title: quizDetail?.jobRole
         },
       });
   

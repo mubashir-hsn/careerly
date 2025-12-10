@@ -48,8 +48,6 @@ const Quiz = () => {
         setData: setResultData
     } = useFetch(saveQuizResult);
 
-    console.log(resultData);
-
     useEffect(() => {
         if (quizData) {
             setAnswers(new Array(quizData.length).fill(null))
@@ -87,9 +85,14 @@ const Quiz = () => {
 
     const finishQuiz = async () => {
         const score = calculateScore();
+        const quizDetail = {
+            jobRole,
+            interviewType,
+            skills: skills.split(",").map(s => s.trim())
+        }
 
         try {
-            await saveQuizResultFn(quizData, answers, score);
+            await saveQuizResultFn(quizData, answers, score, quizDetail);
             toast.success("Quiz Completed.");
         } catch (error) {
             toast.error(error.message || "Failed to save quiz results.")
@@ -112,7 +115,7 @@ const Quiz = () => {
             return
         }
 
-        setError(""); // clear error if valid
+        setError(""); 
 
         const data = {
             quizQuestion: Number(quizQuestion),
