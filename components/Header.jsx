@@ -1,4 +1,4 @@
-import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
+import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import Link from 'next/link'
 import React from 'react'
 import { Button } from './ui/button'
@@ -79,6 +79,7 @@ const Header =  async() => {
             <SignInButton>
               <Button variant="outline">Sign In</Button>
             </SignInButton>
+            <SignUpButton/>
           </SignedOut>
 
           {/* User Menu (only if signed in) */}
