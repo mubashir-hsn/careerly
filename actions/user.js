@@ -3,7 +3,6 @@
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server"
 import { generateAIInsight } from "./dashboard.js";
-import { use } from "react";
 
 export const updateUser = async (data) => {
     const { userId } = await auth();
