@@ -16,13 +16,71 @@ import { useUser } from '@clerk/nextjs'
 // import html2pdf from 'html2pdf.js'
 import MDEditor from '@uiw/react-md-editor'
 import { toast } from 'sonner'
+import RenderTemplate from './renderTemplate'
+
+const data = {
+
+    contactInfo: {
+        email: 'mubazi80@gmail.com',
+        mobile: '03212321342',
+        linkedin: 'linkedin/in/mubashir',
+        twitter: 'twitter/mubashir'
+    },
+    summary: 'I’m Mubashar Hassan, a Passionate Software Engineer skilled in building full-stack web applications using the MERN and Next.js stacks. Experienced in developing secure authentication systems, AI-powered platforms, and responsive user interfaces.',
+    skills: 'React,Next,MySQL,MongoDB,JWT,Git & GitHub,Node,Express,AI Integration.',
+    experience: [
+        {
+            title: "Event Coordinator",
+            organization: 'Arid University',
+            description: 'Organized technical and literary events, enhancing teamwork and communication skills',
+            startDate: 'Feb 2022',
+            endDate: 'May 2023'
+        },
+        {
+            title: "Backend Developer",
+            organization: 'Appexify Solutions',
+            description: 'Built responsive web modules using the MERN stack and Tailwind CSS.Implemented JWT-based authentication and CRUD functionalities.',
+            startDate: 'Jun 2024',
+            endDate: 'Oct 2024'
+        }
+    ],
+    education: [
+        {
+            title: "BS Software Engineering",
+            organization: 'Arid University Sahiwal',
+            startDate: 'Nov 2022',
+            endDate: 'Jun 2026'
+        }
+    ],
+    projects: [
+        {
+            title: "Careerly - AI Career Coach",
+            organization: 'Next.js',
+            githubLink: 'abc.com',
+            liveLink: 'abc.com',
+            description: 'Built responsive web modules using the MERN stack and Tailwind CSS.Implemented JWT-based authentication and CRUD functionalities.',
+        },
+        {
+            title: "LiteFit - EComerce Website",
+            organization: 'MERN STACK',
+            githubLink: 'abc.com',
+            liveLink: 'abc.com',
+            description: 'Built responsive web modules using the MERN stack and Tailwind CSS.Implemented JWT-based authentication and CRUD functionalities.',
+        }
+    ]
+
+}
 
 const ResumeBuilder = ({ initialContent }) => {
     const [activeTab, setActiveTab] = useState('edit');
     const [resumeMode, setResumeMode] = useState("preview");
     const [previewContent, setPreviewContent] = useState(initialContent);
+    const [template, setTemplate] = useState('minimalist')
     const [html2pdfLib, setHtml2pdfLib] = useState(null)
     const { user } = useUser();
+
+    const templates = ['minimalist', 'executive', 'academic', 'classic', 'technical'];
+
 
     const {
         control,
@@ -116,11 +174,19 @@ const ResumeBuilder = ({ initialContent }) => {
         try {
             const element = document.getElementById("resume-pdf")
             const opt = {
-                margin: [15, 15],
-                filename: "resume.pdf",
+                margin: [10, 10],
+                filename: `resume_${user?.firstName}`,
                 image: { type: "jpeg", quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+                html2canvas: {
+                    scale: 1.5,
+                    useCORS: true,
+                    backgroundColor: "#ffffff",
+                },
+                jsPDF: {
+                    unit: "mm",
+                    format: "a4",
+                    orientation: "portrait",
+                },
             }
             await html2pdfLib().set(opt).from(element).save()
         } catch (error) {
@@ -143,7 +209,44 @@ const ResumeBuilder = ({ initialContent }) => {
             console.error("Save error:", error);
         }
     };
+
+    const handleGeneratePDF = async () => {
+        setIsGenerating(true);
+    
+        try {
+          const response = await fetch("/api/generate-resume-pdf", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                 data,
+                 template, 
+                 user 
+            }),
+          });
+    
+          if (!response.ok) throw new Error("PDF generation failed");
+    
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+    
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `${user?.firstName || "resume"}.pdf`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+        } catch (err) {
+          console.error(err);
+          alert("Failed to generate PDF. Try again!");
+        } finally {
+          setIsGenerating(false);
+        }
+      };
+      
+
     return (
+
         <div className='space-y-4'>
             <div className='flex flex-col md:flex-row justify-between items-center gap-2'>
                 <h1 className='text-4xl gradient-subtitle font-bold'>Resume Builder</h1>
@@ -166,7 +269,7 @@ const ResumeBuilder = ({ initialContent }) => {
                             </>
                         )}
                     </Button>
-                    <Button onClick={generatePDF} disabled={isGenerating}>
+                    <Button onClick={handleGeneratePDF} disabled={isGenerating}>
                         {isGenerating ? (
                             <>
                                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -413,30 +516,39 @@ const ResumeBuilder = ({ initialContent }) => {
                         </div>
                     )}
 
-                    <div className='rounded-lg border'>
-                        <MDEditor
+                    <div className='rounded-lg space-y-8 bg-slate-800 py-10 border-2 border-slate-400'>
+                        {/* <MDEditor
                             value={previewContent}
                             onChange={setPreviewContent}
                             height={800}
                             preview={resumeMode}
-                        />
+                        /> */}
+
+                        <div className='space-x-2 space-y-2 px-4 py-2'>
+                            {
+                                templates.map((temp, idx) => (
+                                    <Button variant={`${temp == template ? 'default' : 'outline'}`} key={idx} onClick={() => setTemplate(temp)}>{temp}</Button>
+                                ))
+                            }
+                        </div>
+
+
+                        <RenderTemplate data={data} user={user} template={template} />
                     </div>
 
-                    <div className="hidden">
-                        <div id="resume-pdf" style={{
-                            background: "white",
-                            color: "black",
-                            fontFamily: "Arial, sans-serif"
-                        }}>
-                            <MDEditor.Markdown
+                    {/* <div className="hidden">
+                        <div id="resume-pdf">
+                            <RenderTemplate data={data} user={user} template={template} />
+                            {/* <MDEditor.Markdown
                                 source={previewContent}
                                 style={{
                                     background: "white",
                                     color: "black",
                                 }}
-                            />
-                        </div>
-                    </div>
+                            /> */}
+
+                        {/* </div> */}
+                    {/* </div> } */}
 
                 </TabsContent>
             </Tabs>

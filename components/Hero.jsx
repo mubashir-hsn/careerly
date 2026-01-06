@@ -32,7 +32,7 @@ const HeroSection = () => {
 
 
     return (
-        <div className='w-full pt-36 md:pt-48 p-10'>
+        <div className='w-full pt-36 md:pt-36 p-10'>
 
             <div className=' space-y-6 text-center'>
 

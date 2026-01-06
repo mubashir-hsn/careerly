@@ -1,4 +1,5 @@
 "use client"
+
 import { generateCoverLetter } from '@/actions/cover-letter';
 import { coverLetterSchema } from '@/app/lib/schema';
 import useFetch from '@/hooks/useFetch';

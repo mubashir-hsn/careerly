@@ -22,7 +22,7 @@ import { format, parse } from 'date-fns';
 
 const EntryForm = ({ type, entries, onChange }) => {
 
-    const [isAdding, setIsAdding] = useState(false);
+    const [isAdding, setIsAdding] = useState(true);
 
     const {
         register,

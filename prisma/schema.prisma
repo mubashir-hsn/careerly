@@ -33,6 +33,7 @@ model User {
   assessments   Assessment[]
   resume        Resume?
   coverLetter   CoverLetter[]
+  resumeAnalysis ResumeAnalysis[]
 }
 
 
@@ -105,4 +106,35 @@ model IndustryInsight {
   nextUpdate    DateTime  // Scheduled update time
 
   @@index([industry])
+}
+
+model ResumeAnalysis {
+  id              String   @id @default(cuid())
+
+  userId          String
+  user            User      @relation(fields: [userId], references: [id])
+
+  // Resume info
+  resumeUrl       String    // PDF or file link
+
+  // Job info
+  companyName     String?
+  jobTitle        String
+  jobDescription  String    @db.Text
+
+  // Scores
+  overallScore    Float
+  atsScore        Float
+
+  // Skills analysis
+  matchedSkills   String[]
+  missingSkills   String[]
+
+  // AI JSON response
+  aiFeedback      Json
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
 }

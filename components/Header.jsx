@@ -2,7 +2,7 @@ import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@cl
 import Link from 'next/link'
 import React from 'react'
 import { Button } from './ui/button'
-import { BrainCircuit, ChevronDown, FileText, GraduationCap, LayoutDashboard, PenBox, StarIcon } from 'lucide-react'
+import { BrainCircuit, ChevronDown, FileScan, FileText, GraduationCap, LayoutDashboard, PenBox, StarIcon } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { checkUser } from '@/lib/checkUser.js';
 
@@ -52,10 +52,11 @@ const Header =  async() => {
                     <span>AI Chat</span>
                   </Link>
                 </DropdownMenuItem>
+                
                 <DropdownMenuItem>
-                  <Link href="/resume" className="flex items-center gap-2">
-                    <FileText className="w-4 h-4" />
-                    <span>Build Resume</span>
+                  <Link href="/interviews" className="flex items-center gap-2">
+                    <GraduationCap className="w-4 h-4" />
+                    <span>Interview Prep</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
@@ -64,12 +65,14 @@ const Header =  async() => {
                     <span>Cover Letter</span>
                   </Link>
                 </DropdownMenuItem>
+                
                 <DropdownMenuItem>
-                  <Link href="/interviews" className="flex items-center gap-2">
-                    <GraduationCap className="w-4 h-4" />
-                    <span>Interview Prep</span>
+                  <Link href="/resume" className="flex items-center gap-2">
+                    <FileText className="w-4 h-4" />
+                    <span>Resume</span>
                   </Link>
                 </DropdownMenuItem>
+                
               </DropdownMenuContent>
             </DropdownMenu>
           </SignedIn>
@@ -77,7 +80,7 @@ const Header =  async() => {
           {/* Sign In Button (only if signed out) */}
           <SignedOut>
             <SignInButton>
-              <Button variant="outline">Sign In</Button>
+              <Button>Sign In</Button>
             </SignInButton>
             <SignUpButton/>
           </SignedOut>

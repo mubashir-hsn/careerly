@@ -5,7 +5,7 @@ import { faqs } from "@/data/faqs";
 import { features } from "@/data/features";
 import { howItWorks } from "@/data/howItWorks";
 import { testimonial } from "@/data/testimonials";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@radix-ui/react-accordion";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ArrowRight, User } from "lucide-react";
 import Link from "next/link";
 
@@ -19,15 +19,15 @@ export default function Home() {
 
       {/*Features section  */}
       <section className="w-full py-12 md:py-24 lg:py-32 bg-background">
-        <div className="container mx-auto px-4 md:px-6">
+        <div className="container mx-auto px-4 md:px-5">
           <h1 className="text-3xl font-bold tracking-tighter text-center mb-12">Powerful Features for Your Career Growth</h1>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-y-10 max-w-5xl mx-auto">
             {
               features.map((feature, index) => {
                 return (
                   <Card key={index} className="border-2 border-slate-300 shadow-xl hover:border-primary transition-colors duration-300">
-                    <CardContent className="pt-4 text-center flex flex-col items-center">
+                    <CardContent className="pt-2 text-center flex flex-col items-center">
                       <Link href={`${feature.link}`}>
                       <div className="flex flex-col items-center justify-center ">
                         <p className="px-3 pt-3 rounded-full bg-slate-200 text-sm flex justify-center items-center">{feature.icon}</p>
@@ -36,7 +36,6 @@ export default function Home() {
                       </div>
                       </Link>
                     </CardContent>
-
                   </Card>
                 )
               })
@@ -155,13 +154,13 @@ export default function Home() {
           </div>
 
           <div className="max-w-3xl mx-auto p-4">
-            <Accordion type="single" collapsible className="w-full">
+          <Accordion type="single" collapsible className="w-full border-b border-gray-400">
               {faqs.map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index}`} className="mt-2 border rounded-sm border-gray-400">
-                  <AccordionTrigger className="text-left p-4 cursor-pointer">
+                <AccordionItem key={index} value={`item-${index}`} className="mt-2 border-b border-gray-400">
+                  <AccordionTrigger className="text-left p-4 cursor-pointer font-normal text-[16px] hover:no-underline">
                     {faq.question}
                   </AccordionTrigger>
-                  <AccordionContent className="text-gray-600 p-4 leading-relaxed">
+                  <AccordionContent className="text-gray-600 p-4 text-[16px] leading-relaxed">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>

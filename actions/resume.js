@@ -4,12 +4,11 @@ import { auth } from "@clerk/nextjs/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { revalidatePath } from "next/cache";
 
-
-
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({
   model: "gemini-2.5-flash",
 });
+
 
 export const saveResume = async(content)=>{
     const { userId } = await auth();
@@ -103,3 +102,4 @@ export async function improveWithAI({ current, type }) {
       throw new Error("Failed to improve content");
     }
   }
+
