@@ -29,9 +29,11 @@ export const onboardingSchema = z.object({
 
 export const contactSchema = z.object({
   email: z.string().email("Invalid email address"),
-  mobile: z.string().optional(),
+  mobile: z.string().min(1,'Invalid mobile number'),
+  profession : z.string().optional(),
   linkedin: z.string().optional(),
   twitter: z.string().optional(),
+  portfolio: z.string().optional(),
 });
 
 export const entrySchema = z
@@ -40,6 +42,8 @@ export const entrySchema = z
     organization: z.string().min(1, "Organization is required"),
     startDate: z.string().min(1, "Start date is required"),
     endDate: z.string().optional(),
+    liveLink: z.string().optional(),
+    githubLink: z.string().optional(),
     description: z.string().min(1, "Description is required"),
     current: z.boolean().default(false),
   })

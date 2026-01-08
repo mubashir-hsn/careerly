@@ -25,7 +25,7 @@ export async function generateAIInsight(industry) {
     }
 
     IMPORTANT: Return ONLY the JSON. No additional text, notes, or markdown formatting.
-    Include at least 5 common roles for salary ranges.
+    Include at least 5 common roles for salary ranges in Pakistani rupees (Rs.).
     Growth rate should be a percentage.
     Include at least 5 skills and trends.
   `;

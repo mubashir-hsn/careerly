@@ -39,6 +39,8 @@ const EntryForm = ({ type, entries, onChange }) => {
             startDate: '',
             endDate: '',
             description: '',
+            liveLink: '',
+            githubLink: '',
             current: false,
         }
     });
@@ -49,7 +51,7 @@ const EntryForm = ({ type, entries, onChange }) => {
         onChange(newEntries);
     };
 
-   
+
 
     const handleAdd = handleValidation((data) => {
 
@@ -91,14 +93,23 @@ const EntryForm = ({ type, entries, onChange }) => {
 
 
     const handleImprovedDescription = async () => {
+        const title = watch("title");
+        const organization = watch("organization");
         const description = watch("description");
+
         if (!description) {
             toast.error('Please enter the description first.');
             return
         }
 
+        const data = {
+            title,
+            organization,
+            description
+        }
+
         await improveWithAIFn({
-            current: description,
+            current: data,
             type: type.toLowerCase() // 'experience' , 'project' , or 'education'
         })
     }
@@ -128,6 +139,18 @@ const EntryForm = ({ type, entries, onChange }) => {
                                     ? `${item.startDate} - Present`
                                     : `${item.startDate} - ${item.endDate}`}
                             </p>
+
+                            {(item.liveLink || item.githubLink) && (
+                                <p className='text-gray-600 text-sm py-2 space-x-4 flex'>
+                                    {item.githubLink && (
+                                        <span>Github Url: {item?.githubLink}</span>
+                                    )}
+                                    {item.liveLink && (
+                                        <span>Live Url: {item?.liveLink}</span>
+                                    )}
+                                </p>
+                            )}
+
                             <p className="mt-2 text-sm whitespace-pre-wrap">
                                 {item.description}
                             </p>
@@ -173,6 +196,26 @@ const EntryForm = ({ type, entries, onChange }) => {
                                     }
                                 </div>
                             </div>
+
+                            {
+                                type === 'Project' && <div className=' grid grid-cols-1 md:grid-cols-2 gap-4 space-y-2'>
+                                    {/* Links */}
+                                    <div>
+                                        <Input
+                                            {...register('githubLink')}
+                                            placeholder="Github Link"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <Input
+                                            {...register('liveLink')}
+                                            placeholder="Live website link"
+                                        />
+                                    </div>
+
+                                </div>
+                            }
 
                             <div className='grid grid-cols-2 gap-4'>
                                 {/* Start Date */}
@@ -287,6 +330,9 @@ const EntryForm = ({ type, entries, onChange }) => {
                     </Button>
                 )
             }
+
+
+
         </div>
     )
 }

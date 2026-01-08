@@ -1,103 +1,53 @@
 "use client"
 import { Button } from '@/components/ui/button'
-import { AlertTriangle, Download, Edit, Loader2, Monitor, Save } from 'lucide-react'
+import { Download, Loader2, Save, Sparkles } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { resumeSchema } from '@/app/lib/schema'
 import useFetch from '@/hooks/useFetch'
-import { saveResume } from '@/actions/resume'
+import { improveWithAI, saveResume } from '@/actions/resume'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import EntryForm from './EntryForm'
-import { entriesToMarkdown } from '@/app/lib/helper'
 import { useUser } from '@clerk/nextjs'
-// import html2pdf from 'html2pdf.js'
-import MDEditor from '@uiw/react-md-editor'
 import { toast } from 'sonner'
-import RenderTemplate from './renderTemplate'
+import ResumeTemplate from '@/components/ResumeTemplates'
 
-const data = {
-
+const initialData = {
     contactInfo: {
-        email: 'mubazi80@gmail.com',
-        mobile: '03212321342',
-        linkedin: 'linkedin/in/mubashir',
-        twitter: 'twitter/mubashir'
+        email: '',
+        mobile: '',
+        linkedin: '',
+        portfolio: '',
+        twitter: '',
+        profession: ''
     },
-    summary: 'I’m Mubashar Hassan, a Passionate Software Engineer skilled in building full-stack web applications using the MERN and Next.js stacks. Experienced in developing secure authentication systems, AI-powered platforms, and responsive user interfaces.',
-    skills: 'React,Next,MySQL,MongoDB,JWT,Git & GitHub,Node,Express,AI Integration.',
-    experience: [
-        {
-            title: "Event Coordinator",
-            organization: 'Arid University',
-            description: 'Organized technical and literary events, enhancing teamwork and communication skills',
-            startDate: 'Feb 2022',
-            endDate: 'May 2023'
-        },
-        {
-            title: "Backend Developer",
-            organization: 'Appexify Solutions',
-            description: 'Built responsive web modules using the MERN stack and Tailwind CSS.Implemented JWT-based authentication and CRUD functionalities.',
-            startDate: 'Jun 2024',
-            endDate: 'Oct 2024'
-        }
-    ],
-    education: [
-        {
-            title: "BS Software Engineering",
-            organization: 'Arid University Sahiwal',
-            startDate: 'Nov 2022',
-            endDate: 'Jun 2026'
-        }
-    ],
-    projects: [
-        {
-            title: "Careerly - AI Career Coach",
-            organization: 'Next.js',
-            githubLink: 'abc.com',
-            liveLink: 'abc.com',
-            description: 'Built responsive web modules using the MERN stack and Tailwind CSS.Implemented JWT-based authentication and CRUD functionalities.',
-        },
-        {
-            title: "LiteFit - EComerce Website",
-            organization: 'MERN STACK',
-            githubLink: 'abc.com',
-            liveLink: 'abc.com',
-            description: 'Built responsive web modules using the MERN stack and Tailwind CSS.Implemented JWT-based authentication and CRUD functionalities.',
-        }
-    ]
-
+    summary: '',
+    skills: '',
+    experience: [],
+    education: [],
+    projects: []
 }
 
 const ResumeBuilder = ({ initialContent }) => {
     const [activeTab, setActiveTab] = useState('edit');
-    const [resumeMode, setResumeMode] = useState("preview");
-    const [previewContent, setPreviewContent] = useState(initialContent);
-    const [template, setTemplate] = useState('minimalist')
-    const [html2pdfLib, setHtml2pdfLib] = useState(null)
+    // const [previewContent, setPreviewContent] = useState(initialData);
     const { user } = useUser();
-
-    const templates = ['minimalist', 'executive', 'academic', 'classic', 'technical'];
-
+    const [isGenerating, setIsGenerating] = useState(false);
 
     const {
         control,
         register,
         handleSubmit,
         watch,
+        setValue,
+        reset,
         formState: { errors },
     } = useForm({
         resolver: zodResolver(resumeSchema),
-        defaultValues: {
-            contactInfo: {},
-            summary: '',
-            skills: '',
-            education: [],
-            experience: [],
-            projects: [],
-        }
+        defaultValues: initialData
     });
 
     const {
@@ -107,24 +57,18 @@ const ResumeBuilder = ({ initialContent }) => {
         error: saveError
     } = useFetch(saveResume);
 
-    // Watch form fields for preview updates
     const formValues = watch();
-
-    useEffect(() => {
-        import("html2pdf.js").then((mod) => setHtml2pdfLib(() => mod.default))
-    }, [])
 
     useEffect(() => {
         if (initialContent) setActiveTab("preview");
     }, [initialContent]);
 
-    // Update preview content when form values change
     useEffect(() => {
-        if (activeTab === "edit") {
-            const newContent = getCombinedContent();
-            setPreviewContent(newContent ? newContent : initialContent);
+        if (initialContent) {
+            const savedData = JSON.parse(initialContent);
+            reset(savedData);
         }
-    }, [formValues, activeTab]);
+    }, [initialContent, reset]);
 
     // Handle save result
     useEffect(() => {
@@ -132,125 +76,81 @@ const ResumeBuilder = ({ initialContent }) => {
             toast.success("Resume saved successfully!");
         }
         if (saveError) {
-            toast.error(saveError.message || "Failed to save resume");
+            toast.error(saveError?.message || "Failed to save resume");
         }
     }, [saveResult, saveError, isSaving]);
 
-    const getContactMarkdown = () => {
-        const { contactInfo } = formValues;
-        const parts = [];
-        if (contactInfo.email) parts.push(`📧 ${contactInfo.email}`);
-        if (contactInfo.mobile) parts.push(`📱 ${contactInfo.mobile}`);
-        if (contactInfo.linkedin)
-            parts.push(`💼 [LinkedIn](${contactInfo.linkedin})`);
-        if (contactInfo.twitter) parts.push(`🐦 [Twitter](${contactInfo.twitter})`);
-
-        return parts.length > 0
-            ? `## <div align="center">${user.fullName}</div>
-        \n\n<div align="center">\n\n${parts.join(" | ")}\n\n</div>`
-            : "";
-    };
-
-    const getCombinedContent = () => {
-        const { summary, skills, experience, education, projects } = formValues;
-        return [
-            getContactMarkdown(),
-            summary && `### Professional Summary\n\n${summary}`,
-            skills && `### Skills\n\n${skills}`,
-            entriesToMarkdown(experience, "Work Experience"),
-            entriesToMarkdown(education, "Education"),
-            entriesToMarkdown(projects, "Projects"),
-        ]
-            .filter(Boolean)
-            .join("\n\n");
-    };
-
-    const [isGenerating, setIsGenerating] = useState(false);
-
-
-    const generatePDF = async () => {
-        if (!html2pdfLib) return
-        setIsGenerating(true)
+    const onSubmit = async (formValues) => {
         try {
-            const element = document.getElementById("resume-pdf")
-            const opt = {
-                margin: [10, 10],
-                filename: `resume_${user?.firstName}`,
-                image: { type: "jpeg", quality: 0.98 },
-                html2canvas: {
-                    scale: 1.5,
-                    useCORS: true,
-                    backgroundColor: "#ffffff",
-                },
-                jsPDF: {
-                    unit: "mm",
-                    format: "a4",
-                    orientation: "portrait",
-                },
-            }
-            await html2pdfLib().set(opt).from(element).save()
+            const content = JSON.stringify(formValues);
+            await saveResumeFn(content);
         } catch (error) {
-            console.error("PDF generation error:", error)
-        } finally {
-            setIsGenerating(false)
-        }
-    }
-
-    const onSubmit = async () => {
-        try {
-            const formattedContent = previewContent
-                .replace(/\n/g, "\n") // Normalize newlines
-                .replace(/\n\s*\n/g, "\n\n") // Normalize multiple newlines to double newlines
-                .trim();
-
-            // console.log(previewContent, formattedContent);
-            await saveResumeFn(previewContent);
-        } catch (error) {
-            console.error("Save error:", error);
+            console.error("Resume Saving error:", error);
         }
     };
 
     const handleGeneratePDF = async () => {
         setIsGenerating(true);
-    
         try {
-          const response = await fetch("/api/generate-resume-pdf", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                 data,
-                 template, 
-                 user 
-            }),
-          });
-    
-          if (!response.ok) throw new Error("PDF generation failed");
-    
-          const blob = await response.blob();
-          const url = window.URL.createObjectURL(blob);
-    
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = `${user?.firstName || "resume"}.pdf`;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          window.URL.revokeObjectURL(url);
+            const response = await fetch("/api/generate-resume-pdf", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    data: formValues,
+                    user
+                }),
+            });
+
+            if (!response.ok) throw new Error("PDF generation failed");
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `${user?.firstName || "resume"}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
         } catch (err) {
-          console.error(err);
-          alert("Failed to generate PDF. Try again!");
+            console.error(err);
+            toast.error("Failed to generate PDF. Try again!");
         } finally {
-          setIsGenerating(false);
+            setIsGenerating(false);
         }
-      };
-      
+    };
+
+    const {
+        loading: isImproving,
+        fn: improveWithAIFn,
+        data: improvedContent,
+        error: improveError
+    } = useFetch(improveWithAI);
+
+    useEffect(() => {
+        if (improvedContent && !isImproving) {
+            setValue("summary", improvedContent);
+            toast.success("Summary improved!");
+        }
+        if (improveError) {
+            toast.error(improveError.message || "Failed to improve summary");
+        }
+    }, [improvedContent, improveError, isImproving, setValue]);
+
+    const handleImprovedSummary = async () => {
+        const summary = watch("summary");
+        if (!summary) return;
+
+        await improveWithAIFn({
+            current: summary,
+            type: 'summary'
+        });
+    }
 
     return (
-
         <div className='space-y-4'>
             <div className='flex flex-col md:flex-row justify-between items-center gap-2'>
                 <h1 className='text-4xl gradient-subtitle font-bold'>Resume Builder</h1>
-
                 <div className="space-x-2">
                     <Button
                         variant="destructive"
@@ -258,28 +158,16 @@ const ResumeBuilder = ({ initialContent }) => {
                         disabled={isSaving}
                     >
                         {isSaving ? (
-                            <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Saving...
-                            </>
+                            <><Loader2 className="mr-1 h-4 w-4 animate-spin" />Saving...</>
                         ) : (
-                            <>
-                                <Save className="h-4 w-4" />
-                                Save
-                            </>
+                            <><Save className="mr-1 h-4 w-4" />Save</>
                         )}
                     </Button>
                     <Button onClick={handleGeneratePDF} disabled={isGenerating}>
                         {isGenerating ? (
-                            <>
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                                Generating PDF...
-                            </>
+                            <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating PDF...</>
                         ) : (
-                            <>
-                                <Download className="h-4 w-4" />
-                                Download PDF
-                            </>
+                            <><Download className="mr-2 h-4 w-4" />Download PDF</>
                         )}
                     </Button>
                 </div>
@@ -288,7 +176,7 @@ const ResumeBuilder = ({ initialContent }) => {
             <Tabs value={activeTab} onValueChange={setActiveTab}>
                 <TabsList>
                     <TabsTrigger value="edit">Form</TabsTrigger>
-                    <TabsTrigger value="preview">Markdown</TabsTrigger>
+                    <TabsTrigger value="preview">Preview</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="edit">
@@ -318,11 +206,25 @@ const ResumeBuilder = ({ initialContent }) => {
                                         className={'bg-white'}
                                         {...register("contactInfo.mobile")}
                                         type="tel"
-                                        placeholder="+1 234 567 8900"
+                                        placeholder="+92 3045678900"
                                     />
                                     {errors.contactInfo?.mobile && (
                                         <p className="text-sm text-red-500">
                                             {errors.contactInfo.mobile.message}
+                                        </p>
+                                    )}
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium">Profession</label>
+                                    <Input
+                                        className={'bg-white'}
+                                        {...register("contactInfo.profession")}
+                                        type="tel"
+                                        placeholder="eg. engineer, inspector"
+                                    />
+                                    {errors.contactInfo?.profession && (
+                                        <p className="text-sm text-red-500">
+                                            {errors.contactInfo.profession.message}
                                         </p>
                                     )}
                                 </div>
@@ -356,6 +258,22 @@ const ResumeBuilder = ({ initialContent }) => {
                                         </p>
                                     )}
                                 </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium">
+                                        Portfolio
+                                    </label>
+                                    <Input
+                                        className={'bg-white'}
+                                        {...register("contactInfo.portfolio")}
+                                        type="url"
+                                        placeholder="https://portfolio.com"
+                                    />
+                                    {errors.contactInfo?.portfolio && (
+                                        <p className="text-sm text-red-500">
+                                            {errors.contactInfo.portfolio.message}
+                                        </p>
+                                    )}
+                                </div>
                             </div>
                         </div>
 
@@ -381,6 +299,25 @@ const ResumeBuilder = ({ initialContent }) => {
                                     {errors?.summary?.message}
                                 </p>
                             )}
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={handleImprovedSummary}
+                                disabled={isImproving || !watch("summary")}
+                            >
+                                {isImproving ? (
+                                    <>
+                                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                        Improving...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Sparkles className="h-4 w-4 mr-2" />
+                                        Improve with AI
+                                    </>
+                                )}
+                            </Button>
                         </div>
 
                         {/* Skills */}
@@ -475,83 +412,16 @@ const ResumeBuilder = ({ initialContent }) => {
                                 </p>
                             )}
                         </div>
-
-
-
-
                     </form>
                 </TabsContent>
 
                 <TabsContent value="preview">
-
-                    {activeTab === "preview" && (
-                        <Button
-                            variant="link"
-                            type="button"
-                            className="mb-2"
-                            onClick={() =>
-                                setResumeMode(resumeMode === "preview" ? "edit" : "preview")
-                            }
-                        >
-                            {resumeMode === "preview" ? (
-                                <>
-                                    <Edit className="h-4 w-4" />
-                                    Edit Resume
-                                </>
-                            ) : (
-                                <>
-                                    <Monitor className="h-4 w-4" />
-                                    Show Preview
-                                </>
-                            )}
-                        </Button>
-                    )}
-
-                    {activeTab === "preview" && resumeMode !== "preview" && (
-                        <div className="flex p-3 gap-2 items-center border-2 border-yellow-600 text-yellow-600 rounded mb-2">
-                            <AlertTriangle className="h-5 w-5" />
-                            <span className="text-sm">
-                                You will lose editied markdown if you update the form data.
-                            </span>
-                        </div>
-                    )}
-
-                    <div className='rounded-lg space-y-8 bg-slate-800 py-10 border-2 border-slate-400'>
-                        {/* <MDEditor
-                            value={previewContent}
-                            onChange={setPreviewContent}
-                            height={800}
-                            preview={resumeMode}
-                        /> */}
-
-                        <div className='space-x-2 space-y-2 px-4 py-2'>
-                            {
-                                templates.map((temp, idx) => (
-                                    <Button variant={`${temp == template ? 'default' : 'outline'}`} key={idx} onClick={() => setTemplate(temp)}>{temp}</Button>
-                                ))
-                            }
-                        </div>
-
-
-                        <RenderTemplate data={data} user={user} template={template} />
+                    <div className='rounded-lg bg-slate-600 p-2 border-2 shadow-inner'>
+                        <ResumeTemplate data={formValues} user={user} />
                     </div>
-
-                    {/* <div className="hidden">
-                        <div id="resume-pdf">
-                            <RenderTemplate data={data} user={user} template={template} />
-                            {/* <MDEditor.Markdown
-                                source={previewContent}
-                                style={{
-                                    background: "white",
-                                    color: "black",
-                                }}
-                            /> */}
-
-                        {/* </div> */}
-                    {/* </div> } */}
-
                 </TabsContent>
             </Tabs>
+
 
         </div>
     )

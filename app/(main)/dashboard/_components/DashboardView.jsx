@@ -1,13 +1,34 @@
 "use client"
+import { updateIndustryInsights } from '@/actions/user';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import useFetch from '@/hooks/useFetch';
 import { format, formatDistanceToNow } from 'date-fns';
-import { Brain, BriefcaseIcon, LineChart, TrendingDown, TrendingUp } from 'lucide-react';
+import { Brain, BriefcaseIcon, LineChart, Loader2, TrendingDown, TrendingUp } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import React from 'react'
-import { Bar, BarChart, CartesianGrid, Rectangle, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { toast } from 'sonner';
 
 const DashboardView = ({ insights }) => {
+
+    const router = useRouter();
+
+    const {
+        loading: updating,
+        fn: updateInsightFn,
+        data: updatedData,
+    } = useFetch(updateIndustryInsights);
+
+    React.useEffect(() => {
+        if (updatedData && !updating) {
+            toast.success("Industry Insights updated.");
+            router.refresh();
+        }
+    }, [updatedData, updating]);
+
 
     // Transform salary data for the chart
     const salaryData = insights.salaryRanges.map((range) => ({
@@ -46,6 +67,7 @@ const DashboardView = ({ insights }) => {
     const OutlookIcon = getMarketOutlookInfo(insights.marketOutlook).icon;
     const outlookColor = getMarketOutlookInfo(insights.marketOutlook).color;
 
+    const canUpdate = new Date() >= new Date(insights.nextUpdate);
     // Format dates using date-fns
     const lastUpdatedDate = format(new Date(insights.lastUpdated), "dd/MM/yyyy");
     const nextUpdateDistance = formatDistanceToNow(
@@ -53,10 +75,38 @@ const DashboardView = ({ insights }) => {
         { addSuffix: true }
     );
 
+
+
+
+    const handleSubmit = async () => {
+        try {
+            await updateInsightFn();
+            toast.success("Industry Insights updated.");
+        } catch (err) {
+            console.log("Error while updating insights: ", err || 'Failed to update industry insights.')
+        }
+    }
+
     return (
         <div className='space-y-6'>
 
             <div className='flex items-center justify-between'>
+                <Button
+                    variant={'default'}
+                    disabled={updating || !canUpdate}
+                    onClick={handleSubmit}
+                >
+                    {updating ? (
+                        <>
+                            <Loader2 className='w-4 h-4 animate-spin mr-2' /> Updating....
+                        </>
+                    ) : !canUpdate ? (
+                        `Next update ${nextUpdateDistance}`
+                    ) : (
+                        "Update Insights"
+                    )}
+                </Button>
+
                 <Badge variant={'outline'}>Last updated: {lastUpdatedDate}</Badge>
             </div>
 
@@ -147,7 +197,7 @@ const DashboardView = ({ insights }) => {
                                                     <p className="font-medium">{label}</p>
                                                     {payload.map((item) => (
                                                         <p key={item.name} className="text-sm">
-                                                            {item.name}: ${item.value}K
+                                                            {item.name}: Rs. {item.value}K
                                                         </p>
                                                     ))}
                                                 </div>
@@ -179,14 +229,14 @@ const DashboardView = ({ insights }) => {
                     </CardHeader>
                     <CardContent>
                         <ul className='space-y-4'>
-                           {
-                            insights?.keyTrends.map((trend,index)=>(
-                                <li key={index} className='flex items-start space-x-2'>
-                                    <div className='w-2 h-2 rounded-full bg-primary mt-2'></div>
-                                    <span>{trend}</span>
-                                </li>
-                            ))
-                           }
+                            {
+                                insights?.keyTrends.map((trend, index) => (
+                                    <li key={index} className='flex items-start space-x-2'>
+                                        <div className='w-2 h-2 rounded-full bg-primary mt-2'></div>
+                                        <span>{trend}</span>
+                                    </li>
+                                ))
+                            }
                         </ul>
                     </CardContent>
                 </Card>
@@ -195,19 +245,19 @@ const DashboardView = ({ insights }) => {
                     <CardHeader>
                         <CardTitle>Recomended Skills</CardTitle>
                         <CardDescription>
-                           Skills to consider developing
+                            Skills to consider developing
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                       <div className='flex flex-wrap gap-2'>
-                          {
-                            insights?.recommendedSkills.map((skill)=>(
-                                <Badge key={skill} variant={'outline'}>
-                                    {skill}
-                                </Badge>
-                            ))
-                          }
-                       </div>
+                        <div className='flex flex-wrap gap-2'>
+                            {
+                                insights?.recommendedSkills.map((skill) => (
+                                    <Badge key={skill} variant={'outline'}>
+                                        {skill}
+                                    </Badge>
+                                ))
+                            }
+                        </div>
                     </CardContent>
                 </Card>
 

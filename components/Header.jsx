@@ -2,16 +2,16 @@ import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@cl
 import Link from 'next/link'
 import React from 'react'
 import { Button } from './ui/button'
-import { BrainCircuit, ChevronDown, FileScan, FileText, GraduationCap, LayoutDashboard, PenBox, StarIcon } from 'lucide-react'
+import { BrainCircuit, ChevronDown, FileText, GraduationCap, LayoutDashboard, PenBox, StarIcon } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { checkUser } from '@/lib/checkUser.js';
 
-const Header =  async() => {
+const Header = async () => {
 
-    // Ensure user check runs before rendering
-    await checkUser()
+  // Ensure user check runs before rendering
+  await checkUser()
 
-   
+
 
   return (
     <header className="fixed top-0 border-b w-full bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 z-50">
@@ -52,7 +52,7 @@ const Header =  async() => {
                     <span>AI Chat</span>
                   </Link>
                 </DropdownMenuItem>
-                
+
                 <DropdownMenuItem>
                   <Link href="/interviews" className="flex items-center gap-2">
                     <GraduationCap className="w-4 h-4" />
@@ -65,24 +65,24 @@ const Header =  async() => {
                     <span>Cover Letter</span>
                   </Link>
                 </DropdownMenuItem>
-                
+
                 <DropdownMenuItem>
                   <Link href="/resume" className="flex items-center gap-2">
                     <FileText className="w-4 h-4" />
                     <span>Resume</span>
                   </Link>
                 </DropdownMenuItem>
-                
+
               </DropdownMenuContent>
             </DropdownMenu>
           </SignedIn>
 
-          {/* Sign In Button (only if signed out) */}
+          {/* Sign In & up Button (only if signed out) */}
           <SignedOut>
             <SignInButton>
               <Button>Sign In</Button>
             </SignInButton>
-            <SignUpButton/>
+            <SignUpButton />
           </SignedOut>
 
           {/* User Menu (only if signed in) */}
