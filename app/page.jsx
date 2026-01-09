@@ -6,7 +6,7 @@ import { features } from "@/data/features";
 import { howItWorks } from "@/data/howItWorks";
 import { testimonial } from "@/data/testimonials";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { ArrowRight, User } from "lucide-react";
+import { ArrowRight, Rocket, User, Users } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
@@ -29,13 +29,13 @@ export default function Home() {
                   <Card key={index} className="bg-white border-0 shadow-xl transition-colors duration-300">
                     <CardContent className="pt-2 text-center flex flex-col items-center">
                       <Link href={`${feature.link}`}>
-                      <div className="flex flex-col items-center justify-center ">
-                        <div className={`px-3 pt-3 rounded-full ${feature.bg} flex justify-center items-center`}>
-                          {feature.icon}
+                        <div className="flex flex-col items-center justify-center ">
+                          <div className={`px-3 pt-3 rounded-full ${feature.bg} flex justify-center items-center`}>
+                            {feature.icon}
+                          </div>
+                          <h3 className="text-xl font-bold my-2">{feature.title}</h3>
+                          <p className=" text-muted-foreground">{feature.description}</p>
                         </div>
-                        <h3 className="text-xl font-bold my-2">{feature.title}</h3>
-                        <p className=" text-muted-foreground">{feature.description}</p>
-                      </div>
                       </Link>
                     </CardContent>
                   </Card>
@@ -47,24 +47,24 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="w-full py-12 md:py-24 bg-slate-100">
+      <section className="w-full py-12 md:py-24 bg-gray-100">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto font-medium text-center">
             <div className="flex flex-col items-center justify-center space-y-2">
               <h3 className="text-4xl font-bold">50+</h3>
-              <p className="text-muted-foreground">Industries Covered</p>
+              <p className="text-muted-foreground tracking-wider">Industries Covered</p>
             </div>
             <div className="flex flex-col items-center justify-center space-y-2">
               <h3 className="text-4xl font-bold">1000+</h3>
-              <p className="text-muted-foreground">Interview Questions</p>
+              <p className="text-muted-foreground tracking-wider">Interview Questions</p>
             </div>
             <div className="flex flex-col items-center justify-center space-y-2">
               <h3 className="text-4xl font-bold">95%</h3>
-              <p className="text-muted-foreground">Success Rate</p>
+              <p className="text-muted-foreground tracking-wider">Success Rate</p>
             </div>
             <div className="flex flex-col items-center justify-center space-y-2">
               <h3 className="text-4xl font-bold">24/7</h3>
-              <p className="text-muted-foreground">AI Support</p>
+              <p className="text-muted-foreground tracking-wider">AI Support</p>
             </div>
           </div>
         </div>
@@ -72,19 +72,18 @@ export default function Home() {
 
 
       {/*How its work section  */}
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-background">
+      <section className="w-full py-12 md:py-24 lg:py-32 bg-white">
         <div className="container mx-auto px-4 md:px-6">
           <div className="mx-auto max-w-3xl text-center mb-10">
             <h1 className="text-3xl font-bold text-center mb-4">How Its Work</h1>
             <p className=" text-muted-foreground">Four simple steps to accelerate your growth</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-
+          <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-6xl mx-auto">
             {
               howItWorks.map((item, index) => (
                 <div
                   key={index}
-                  className="flex flex-col items-center bg-slate-200 p-2 pt-4 rounded-lg text-center space-y-4"
+                  className="flex flex-col items-center bg-gray-100 p-2 pt-4 rounded-lg text-center space-y-4"
                 >
                   <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center">
                     {item.icon}
@@ -99,8 +98,76 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Who we are */}
+      <section className="w-full pt-20 pb-20 bg-slate-50">
+      <div className="max-w-6xl mx-auto px-10 bg-white rounded-lg py-14">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center justify-start">
+          {/* Left side */}
+          <div>
+            <p className="text-sm font-semibold tracking-wide text-purple-500 uppercase">
+              Who We Are
+            </p>
+
+            <h2 className="mt-4 text-4xl font-bold text-gray-900">
+              Driven by Mission,
+              <br />
+              Powered by AI
+            </h2>
+
+            <p className="mt-6 text-gray-500 text-lg">
+              Careerly was founded with a simple belief:
+              <br />
+              everyone deserves a world class career coach
+              <br />
+              in their pocket.
+            </p>
+          </div>
+
+          {/* Right side */}
+          <div className="space-y-10">
+            {/* Mission */}
+            <div className="flex gap-6 items-start">
+              <div className="flex items-center justify-center w-24 h-12 rounded-full bg-purple-100">
+                <Rocket className="text-purple-600 w-6 h-6" />
+              </div>
+
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900">
+                  Our Mission
+                </h3>
+                <p className="mt-2 text-gray-500 leading-relaxed">
+                  To bridge the gap between talent and opportunity using
+                  artificial intelligence, making career growth accessible
+                  to all.
+                </p>
+              </div>
+            </div>
+
+            {/* Values */}
+            <div className="flex gap-6 items-start">
+              <div className="flex items-center justify-center w-28 h-12 rounded-full bg-pink-100">
+                <Users className="text-pink-600 w-6 h-6" />
+              </div>
+
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900">
+                  Our Values
+                </h3>
+                <p className="mt-2 text-gray-500 leading-relaxed">
+                  We prioritize user privacy, data transparency, and
+                  inclusive design in every feature we build, ensuring
+                  a fair platform for everyone.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
       {/* testimonial section */}
-      <section className="w-full py-12 md:py-24 bg-muted/50">
+      <section className="w-full py-12 md:py-24 md:pb-32 bg-muted/50">
         <div className="container mx-auto px-4 md:px-6">
           <h2 className="text-3xl font-bold text-center mb-12">
             What Our Users Say
@@ -108,11 +175,11 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {testimonial.map((testimonial, index) => (
               <Card key={index} className="bg-background border-0 shadow-xl">
-                <CardContent className="pt-6">
+                <CardContent className="">
                   <div className="flex flex-col space-y-4">
                     <div className="flex items-center space-x-4 mb-4">
                       <div className="relative h-12 w-12 flex justify-center items-center flex-shrink-0 rounded-full border-2 border-gray-800">
-                        <User className="w-6 h-6"/>
+                        <User className="w-6 h-6" />
                       </div>
                       <div>
                         <p className="font-semibold">{testimonial.author}</p>
@@ -124,17 +191,17 @@ export default function Home() {
                         </p>
                       </div>
                     </div>
-                    <blockquote>
-                      <p className="text-muted-foreground italic relative">
-                        <span className="text-3xl text-primary absolute -top-4 -left-2">
+                    <div className={`text-slate-600 font-medium relative italic pl-4 border-l-2 ${testimonial.border}`}>
+                      <blockquote>
+                        <span className="text-xl absolute -top-[5px] left-1">
                           &quot;
                         </span>
-                        {testimonial.quote}
-                        <span className="text-3xl text-primary absolute -bottom-4">
+                        <span className="italic text-[15px]"> {testimonial.quote}</span>
+                        <span className="text-xl absolute -bottom-4">
                           &quot;
                         </span>
-                      </p>
-                    </blockquote>
+                      </blockquote>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -156,13 +223,13 @@ export default function Home() {
           </div>
 
           <div className="max-w-3xl mx-auto p-4">
-          <Accordion type="single" collapsible className="w-full border-b border-gray-400">
+            <Accordion type="single" collapsible className="w-full border-b border-slate-200">
               {faqs.map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index}`} className="mt-2 border-b border-gray-400">
-                  <AccordionTrigger className="text-left cursor-pointer font-normal text-[16px] hover:no-underline">
+                <AccordionItem key={index} value={`item-${index}`} className="mt-3 pb-2 border-b-1 border-slate-200">
+                  <AccordionTrigger className="text-left cursor-pointer font-medium text-[17px] hover:no-underline [&>svg]:w-7 [&>svg]:h-7 [&>svg]:text-slate-600">
                     {faq.question}
                   </AccordionTrigger>
-                  <AccordionContent className="text-gray-600 p-4 text-[16px] leading-relaxed">
+                  <AccordionContent className=" text-muted-foreground font-normal text-justify text-[16px] leading-relaxed">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>
@@ -176,8 +243,8 @@ export default function Home() {
       <section className="w-full">
         <div className="mx-auto py-24 bg-slate-50 rounded-lg">
           <div className="flex flex-col items-center justify-center space-y-4 text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold tracking-tighter bg-gradient-to-tl from-rose-600 via-violet-500 to-blue-700 text-transparent bg-clip-text sm:text-4xl md:text-5xl">
-              Ready to Accelerate Your Career?
+            <h2 className="text-3xl font-bold leading-13 tracking-tight sm:text-4xl md:text-5xl">
+              Ready to Accelerate <br /> <span className="bg-gradient-to-tl from-violet-500 to-pink-500 text-transparent bg-clip-text">Your Career?</span>
             </h2>
             <p className="mx-auto max-w-[600px] text-gray-600 md:text-xl">
               Join thousands of professionals who are advancing their careers
@@ -186,7 +253,7 @@ export default function Home() {
             <Link href="/dashboard" passHref>
               <Button
                 size="lg"
-                
+
                 className="h-11 mt-5 animate-bounce"
               >
                 Start Your Journey Today <ArrowRight className="ml-2 h-4 w-4" />

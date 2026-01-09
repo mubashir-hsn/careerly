@@ -61,7 +61,7 @@ export default function HeroSection() {
                     </h1>
 
                     <p className="text-text-muted-light md:text-lg pb-5 leading-relaxed max-w-xs sm:max-w-sm md:max-w-md mx-auto md:mx-0">
-                        Advance your career with personalized guidance , interview prep and AI-powered tools for job success
+                        Advance your career with personalized guidance, interview prep and AI-powered tools for job success
                     </p>
 
                     <Link href={'/dashboard'}>

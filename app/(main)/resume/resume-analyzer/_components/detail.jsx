@@ -117,7 +117,7 @@ const Details = ({ feedback }) => {
       <Accordion type="single" collapsible className="space-y-4 border-b border-gray-200">
 
         <AccordionItem value="tone-style">
-          <AccordionTrigger className={"accordion-chevron flex items-center font-normal hover:no-underline hover:cursor-pointer"}>
+          <AccordionTrigger className={"[&>svg]:w-6 [&>svg]:h-6 [&>svg]:text-slate-600 flex items-center font-normal hover:no-underline hover:cursor-pointer"}>
             <CategoryHeader title="Tone & Style" categoryScore={feedback.aiFeedback.toneAndStyle.score} />
           </AccordionTrigger>
           <AccordionContent>
@@ -126,7 +126,7 @@ const Details = ({ feedback }) => {
         </AccordionItem>
 
         <AccordionItem value="content">
-          <AccordionTrigger className={"accordion-chevron flex items-center font-normal hover:no-underline hover:cursor-pointer"}>
+          <AccordionTrigger className={"[&>svg]:w-6 [&>svg]:h-6 [&>svg]:text-slate-600 flex items-center font-normal hover:no-underline hover:cursor-pointer"}>
             <CategoryHeader title="Content" categoryScore={feedback.aiFeedback.content.score} />
           </AccordionTrigger>
           <AccordionContent>
@@ -135,7 +135,7 @@ const Details = ({ feedback }) => {
         </AccordionItem>
 
         <AccordionItem value="structure">
-          <AccordionTrigger className={"accordion-chevron flex items-center font-normal hover:no-underline hover:cursor-pointer"}>
+          <AccordionTrigger className={"[&>svg]:w-6 [&>svg]:h-6 [&>svg]:text-slate-600 flex items-center font-normal hover:no-underline hover:cursor-pointer"}>
             <CategoryHeader title="Structure" categoryScore={feedback.aiFeedback.structure.score} />
           </AccordionTrigger>
           <AccordionContent>
@@ -144,7 +144,7 @@ const Details = ({ feedback }) => {
         </AccordionItem>
 
         <AccordionItem value="skills">
-          <AccordionTrigger className={"accordion-chevron flex items-center font-normal hover:no-underline hover:cursor-pointer"}>
+          <AccordionTrigger className={"[&>svg]:w-6 [&>svg]:h-6 [&>svg]:text-slate-600 flex items-center font-normal hover:no-underline hover:cursor-pointer"}>
             <CategoryHeader title="Skills" categoryScore={feedback.aiFeedback.skills.score} />
           </AccordionTrigger>
           <AccordionContent>
@@ -255,7 +255,7 @@ export default Details;
 //     <div className="flex flex-col gap-4 w-full">
 //       <Accordion type="single" collapsible className="space-y-4 border-b border-gray-200">
 //         <AccordionItem value="tone-style">
-//           <AccordionTrigger className={'accordion-chevron flex items-center font-normal hover:no-underline hover:cursor-pointer'}>
+//           <AccordionTrigger className={'[&>svg]:w-6 [&>svg]:h-6 [&>svg]:text-slate-600 flex items-center font-normal hover:no-underline hover:cursor-pointer'}>
 //             <CategoryHeader
 //               title="Tone & Style"
 //               categoryScore={feedback.toneAndStyle.score}
@@ -267,7 +267,7 @@ export default Details;
 //         </AccordionItem>
 
 //         <AccordionItem value="content">
-//           <AccordionTrigger className={'accordion-chevron flex items-center font-normal hover:no-underline hover:cursor-pointer'}>
+//           <AccordionTrigger className={'[&>svg]:w-6 [&>svg]:h-6 [&>svg]:text-slate-600 flex items-center font-normal hover:no-underline hover:cursor-pointer'}>
 //             <CategoryHeader
 //               title="Content"
 //               categoryScore={feedback.content.score}
@@ -279,7 +279,7 @@ export default Details;
 //         </AccordionItem>
 
 //         <AccordionItem value="structure">
-//           <AccordionTrigger className={'accordion-chevron flex items-center font-normal hover:no-underline hover:cursor-pointer'}>
+//           <AccordionTrigger className={'[&>svg]:w-6 [&>svg]:h-6 [&>svg]:text-slate-600 flex items-center font-normal hover:no-underline hover:cursor-pointer'}>
 //             <CategoryHeader
 //               title="Structure"
 //               categoryScore={feedback.structure.score}
@@ -291,7 +291,7 @@ export default Details;
 //         </AccordionItem>
 
 //         <AccordionItem value="skills">
-//           <AccordionTrigger className={'accordion-chevron flex items-center font-normal hover:no-underline hover:cursor-pointer'}>
+//           <AccordionTrigger className={'[&>svg]:w-6 [&>svg]:h-6 [&>svg]:text-slate-600 flex items-center font-normal hover:no-underline hover:cursor-pointer'}>
 //             <CategoryHeader
 //               title="Skills"
 //               categoryScore={feedback.skills.score}
