@@ -31,8 +31,10 @@ const PerformanceChart = ({ assessments }) => {
     return (
         <Card>
             <CardHeader>
-                <CardTitle className={'gradient-subtitle text-3xl md:text-4xl'}>Performance Trend</CardTitle>
-                <CardDescription>Your quiz score over time.</CardDescription>
+                <CardTitle className={'gradient-subtitle text-3xl'}>
+                    Performance Trend
+                    <p className='text-sm text-slate-500 font-normal'>Your quiz score over time.</p>
+                </CardTitle>
             </CardHeader>
             <CardContent>
                 <div className="h-[300px]">

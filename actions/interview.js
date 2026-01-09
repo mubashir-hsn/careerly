@@ -29,7 +29,6 @@ export async function generateQuiz(data) {
   Technology Stack: ${data.skills?.length ? data.skills.join(", ") : "Not specified"}  
   Interview Type: ${data.interviewType} (Technical / HR / Behavioral / Mixed)  
   Experience Level: ${data.experienceLevel}  
-  Difficulty Level: ${data.difficultyLevel} (Beginner / Intermediate / Advanced)
   
   Generate questions based on the **difficulty level** as follows:
   - **Beginner:** Mostly simple and conceptual questions, with 1-2 basic scenario questions.  
@@ -47,7 +46,7 @@ export async function generateQuiz(data) {
   - Experience Level
   - Technology Stack
   - Interview Type
-  - Difficulty Level
+
   
   Each question should be multiple choice with exactly **4 options**.
   

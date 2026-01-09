@@ -20,13 +20,12 @@ import QuizResult from './QuizResult';
 import { Input } from '@/components/ui/input';
 
 const Quiz = () => {
-     
+
     // Quiz states
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answers, setAnswers] = useState([]);
     const [showExplanation, setShowExplanation] = useState(false);
     const [quizQuestion, setQuizQuestion] = useState(5);
-    const [difficultyLevel, setDifficultyLevel] = useState('beginner');
     const [error, setError] = useState("")
 
     // User input states
@@ -115,11 +114,10 @@ const Quiz = () => {
             return
         }
 
-        setError(""); 
+        setError("");
 
         const data = {
             quizQuestion: Number(quizQuestion),
-            difficultyLevel,                     // beginner | intermediate | advanced
             interviewType,                       // technical | hr | behavioral | mixed
             jobRole,                             // e.g., Frontend Developer
             experienceLevel,                     // fresher | 1-3 | senior
@@ -145,55 +143,72 @@ const Quiz = () => {
         return (
             <Card className="w-full md:w-[95%] mx-auto mt-8">
                 <CardHeader>
-                    <CardTitle>Ready to test your knowledge?</CardTitle>
+                    <CardTitle>
+                        Ready to test your knowledge?
+                        <p className="text-gray-400 text-sm font-normal pt-2">Fill the form below to generate your AI-powered quiz.</p>
+                    </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <p className="text-muted-foreground">
-                        Fill the form below to generate your AI-powered quiz.
-                    </p>
 
-                    {/* Job Role */}
-                    <div className="space-y-2">
-                        <Label>Job Role</Label>
-                        <Input
-                            placeholder="e.g. Frontend Developer"
-                            value={jobRole}
-                            onChange={(e) => setJobRole(e.target.value)}
-                        />
+                    <div className='grid md:grid-cols-2 gap-5'>
+                        {/* Job Role */}
+                        <div className="space-y-2">
+                            <Label>Job Role</Label>
+                            <Input
+                                placeholder="e.g. Frontend Developer"
+                                value={jobRole}
+                                onChange={(e) => setJobRole(e.target.value)}
+                            />
+                        </div>
+                        {/* Technology Stack */}
+                        <div className="space-y-2">
+                            <Label>Technology Stack</Label>
+                            <Input
+                                placeholder="React, Next.js, Node, PostgreSQL"
+                                value={skills}
+                                onChange={(e) => setSkills(e.target.value)}
+                            />
+                            <p className=' text-sm text-muted-foreground ps-2'>Separate multiple skills with commas</p>
+                        </div>
+
                     </div>
 
-                    {/* Experience Level */}
-                    <div className="space-y-2">
-                        <Label>Experience Level</Label>
-                        <RadioGroup
-                            value={experienceLevel}
-                            onValueChange={setExperienceLevel}
-                            className="flex gap-4"
-                        >
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="fresher" id="fresher" />
-                                <Label htmlFor="fresher">Fresher</Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="1-3" id="1-3" />
-                                <Label htmlFor="1-3">1–3 Years</Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="senior" id="senior" />
-                                <Label htmlFor="senior">Senior</Label>
-                            </div>
-                        </RadioGroup>
-                    </div>
-
-                    {/* Technology Stack */}
-                    <div className="space-y-2">
-                        <Label>Technology Stack</Label>
-                        <Input
-                            placeholder="React, Next.js, Node, PostgreSQL"
-                            value={skills}
-                            onChange={(e) => setSkills(e.target.value)}
-                        />
-                        <p className=' text-sm text-muted-foreground ps-2'>Separate multiple skills with commas</p>
+                    <div className='grid md:grid-cols-2 gap-5'>
+                        {/* Number of Questions */}
+                        <div className="space-y-2">
+                            <Label htmlFor="questions">Number of Questions</Label>
+                            <Input
+                                id="questions"
+                                type="number"
+                                min="5"
+                                max="30"
+                                value={quizQuestion}
+                                onChange={(e) => setQuizQuestion(e.target.value)}
+                                placeholder="Enter number of questions 1-30"
+                            />
+                        </div>
+                        {/* Experience Level */}
+                        <div className="space-y-2">
+                            <Label>Experience Level</Label>
+                            <RadioGroup
+                                value={experienceLevel}
+                                onValueChange={setExperienceLevel}
+                                className="flex gap-4"
+                            >
+                                <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value="fresher" id="fresher" />
+                                    <Label htmlFor="fresher" className={'text-gray-500'}>Fresher</Label>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value="1-3" id="1-3" />
+                                    <Label htmlFor="1-3" className={'text-gray-500'}>1–3 Years</Label>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value="senior" id="senior" />
+                                    <Label htmlFor="senior" className={'text-gray-500'}>Senior</Label>
+                                </div>
+                            </RadioGroup>
+                        </div>
                     </div>
 
                     {/* Interview Type */}
@@ -207,46 +222,9 @@ const Quiz = () => {
                             {["technical", "hr", "behavioral", "mixed"].map(type => (
                                 <div key={type} className="flex items-center space-x-2">
                                     <RadioGroupItem value={type} id={type} />
-                                    <Label htmlFor={type}>{type.toUpperCase()}</Label>
+                                    <Label htmlFor={type} className={'text-gray-500'}>{type.toUpperCase()}</Label>
                                 </div>
                             ))}
-                        </RadioGroup>
-                    </div>
-
-                    {/* Number of Questions */}
-                    <div className="space-y-2">
-                        <Label htmlFor="questions">Number of Questions</Label>
-                        <Input
-                            id="questions"
-                            type="number"
-                            min="5"
-                            max="30"
-                            value={quizQuestion}
-                            onChange={(e) => setQuizQuestion(e.target.value)}
-                            placeholder="Enter number of questions 1-30"
-                        />
-                    </div>
-
-                    {/* Difficulty Level */}
-                    <div className="space-y-2">
-                        <Label>Difficulty Level</Label>
-                        <RadioGroup
-                            value={difficultyLevel}
-                            onValueChange={setDifficultyLevel}
-                            className="flex gap-4"
-                        >
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="beginner" id="beginner" />
-                                <Label htmlFor="beginner">Beginner</Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="intermediate" id="intermediate" />
-                                <Label htmlFor="intermediate">Intermediate</Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="advanced" id="advanced" />
-                                <Label htmlFor="advanced">Advanced</Label>
-                            </div>
                         </RadioGroup>
                     </div>
 
@@ -278,7 +256,7 @@ const Quiz = () => {
 
     return (
         <div>
-            <Card className={'mx-2'}>
+            <Card className={'mx-2 bg-white'}>
                 <CardHeader>
                     <CardTitle>Question {currentQuestion + 1} of {quizData.length}</CardTitle>
                 </CardHeader>
@@ -301,9 +279,9 @@ const Quiz = () => {
                     </RadioGroup>
 
                     {
-                        showExplanation && <div className='mt-4 p-4 bg-muted rounded-lg'>
-                            <p className='font-medium'>Explanation:</p>
-                            <p className='text-muted-foreground pl-4 pt-2'>{question.explanation}</p>
+                        showExplanation && <div className='mt-4 p-4 bg-slate-100 border-l-2 border-purple-500 text-slate-500 rounded-lg'>
+                            <p className='font-bold'>Explanation:</p>
+                            <p className='pl-4 pt-2'>{question.explanation}</p>
                         </div>
                     }
 
