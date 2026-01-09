@@ -174,7 +174,7 @@ const ResumeBuilder = ({ initialContent }) => {
             </div>
 
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList>
+                <TabsList className={'bg-slate-200'}>
                     <TabsTrigger value="edit">Form</TabsTrigger>
                     <TabsTrigger value="preview">Preview</TabsTrigger>
                 </TabsList>
@@ -184,11 +184,11 @@ const ResumeBuilder = ({ initialContent }) => {
                         {/* Contact Information */}
                         <div className="space-y-4 mt-4 w-full">
                             <h3 className="text-lg font-medium">Contact Information</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded-lg bg-muted/50">
-                                <div className="space-y-2">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded-lg bg-white">
+                                <div className="space-y-3">
                                     <label className="text-sm font-medium">Email</label>
                                     <Input
-                                        className={'bg-white'}
+                                        className={'bg-slate-100 text-slate-500'}
                                         {...register("contactInfo.email")}
                                         type="email"
                                         placeholder="your@email.com"
@@ -203,7 +203,7 @@ const ResumeBuilder = ({ initialContent }) => {
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium">Mobile Number</label>
                                     <Input
-                                        className={'bg-white'}
+                                        className={'bg-slate-100 text-slate-500'}
                                         {...register("contactInfo.mobile")}
                                         type="tel"
                                         placeholder="+92 3045678900"
@@ -217,10 +217,10 @@ const ResumeBuilder = ({ initialContent }) => {
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium">Profession</label>
                                     <Input
-                                        className={'bg-white'}
+                                        className={'bg-slate-100 text-slate-500'}
                                         {...register("contactInfo.profession")}
                                         type="tel"
-                                        placeholder="eg. engineer, inspector"
+                                        placeholder="e.g. Intern, Developer ,Assistant, Coordinator"
                                     />
                                     {errors.contactInfo?.profession && (
                                         <p className="text-sm text-red-500">
@@ -231,7 +231,7 @@ const ResumeBuilder = ({ initialContent }) => {
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium">LinkedIn URL</label>
                                     <Input
-                                        className={'bg-white'}
+                                        className={'bg-slate-100 text-slate-500'}
                                         {...register("contactInfo.linkedin")}
                                         type="url"
                                         placeholder="https://linkedin.com/in/your-profile"
@@ -246,8 +246,8 @@ const ResumeBuilder = ({ initialContent }) => {
                                     <label className="text-sm font-medium">
                                         Twitter/X Profile
                                     </label>
-                                    <Input
-                                        className={'bg-white'}
+                                    <Input 
+                                        className={'bg-slate-100 text-slate-500'}
                                         {...register("contactInfo.twitter")}
                                         type="url"
                                         placeholder="https://twitter.com/your-handle"
@@ -263,7 +263,7 @@ const ResumeBuilder = ({ initialContent }) => {
                                         Portfolio
                                     </label>
                                     <Input
-                                        className={'bg-white'}
+                                        className={'bg-slate-100 text-slate-500'}
                                         {...register("contactInfo.portfolio")}
                                         type="url"
                                         placeholder="https://portfolio.com"
@@ -278,7 +278,7 @@ const ResumeBuilder = ({ initialContent }) => {
                         </div>
 
                         {/* Summary */}
-                        <div className='space-y-4 mt-4'>
+                        <div className='space-y-3 mt-4'>
                             <h3 className="text-lg font-medium">Professional Summary</h3>
                             <Controller
                                 name={"summary"}
@@ -287,7 +287,7 @@ const ResumeBuilder = ({ initialContent }) => {
                                     <Textarea
                                         {...field}
                                         placeholder="Writing a compelling professional summary"
-                                        className={'h-32 bg-muted'}
+                                        className={'h-32 bg-white text-slate-500'}
                                         error={errors?.summary}
                                     />
                                 )}
@@ -303,6 +303,7 @@ const ResumeBuilder = ({ initialContent }) => {
                                 type="button"
                                 variant="ghost"
                                 size="sm"
+                                className={'hover:bg-slate-200'}
                                 onClick={handleImprovedSummary}
                                 disabled={isImproving || !watch("summary")}
                             >
@@ -321,7 +322,7 @@ const ResumeBuilder = ({ initialContent }) => {
                         </div>
 
                         {/* Skills */}
-                        <div className='space-y-4 mt-4'>
+                        <div className='space-y-3 mt-4'>
                             <h3 className="text-lg font-medium">Skills</h3>
                             <Controller
                                 name={"skills"}
@@ -329,8 +330,8 @@ const ResumeBuilder = ({ initialContent }) => {
                                 render={({ field }) => (
                                     <Textarea
                                         {...field}
-                                        placeholder="List your key skills....."
-                                        className={'h-24 bg-muted'}
+                                        placeholder="e.g. Programming, Data Analysis, Patient Care, Research, Management, Communication"
+                                        className={'h-24 bg-white text-slate-500'}
                                         error={errors?.skills}
                                     />
                                 )}
@@ -416,7 +417,7 @@ const ResumeBuilder = ({ initialContent }) => {
                 </TabsContent>
 
                 <TabsContent value="preview">
-                    <div className='rounded-lg bg-slate-600 p-2 border-2 shadow-inner'>
+                    <div className='rounded-lg bg-slate-600 py-5 border-2 shadow-inner'>
                         <ResumeTemplate data={formValues} user={user} />
                     </div>
                 </TabsContent>

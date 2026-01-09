@@ -153,20 +153,22 @@ const Quiz = () => {
                     <div className='grid md:grid-cols-2 gap-5'>
                         {/* Job Role */}
                         <div className="space-y-2">
-                            <Label>Job Role</Label>
+                            <Label>Target Role or Position</Label>
                             <Input
-                                placeholder="e.g. Frontend Developer"
+                                placeholder="e.g. Intern, Junior Role, Medical Officer, Business Analyst, Assistant, Trainee"
                                 value={jobRole}
                                 onChange={(e) => setJobRole(e.target.value)}
+                                className={'bg-slate-100 text-slate-500'}
                             />
                         </div>
                         {/* Technology Stack */}
                         <div className="space-y-2">
-                            <Label>Technology Stack</Label>
+                            <Label>Skills or Background</Label>
                             <Input
-                                placeholder="React, Next.js, Node, PostgreSQL"
+                                placeholder="e.g. Programming, Patient Care, Research, Accounting, Communication"
                                 value={skills}
                                 onChange={(e) => setSkills(e.target.value)}
+                                className={'bg-slate-100 text-slate-500'}
                             />
                             <p className=' text-sm text-muted-foreground ps-2'>Separate multiple skills with commas</p>
                         </div>
@@ -184,7 +186,8 @@ const Quiz = () => {
                                 max="30"
                                 value={quizQuestion}
                                 onChange={(e) => setQuizQuestion(e.target.value)}
-                                placeholder="Enter number of questions 1-30"
+                                placeholder="Enter number of questions 5-30"
+                                className={'bg-slate-100 text-slate-500'}
                             />
                         </div>
                         {/* Experience Level */}

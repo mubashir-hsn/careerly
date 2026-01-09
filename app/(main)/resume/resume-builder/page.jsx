@@ -8,7 +8,7 @@ import { getResume } from '@/actions/resume';
 const ResumeBuilderPage = async() => {
   const resume = await getResume();
   return (
-    <div className='py-5 pt-2 mx-auto container'>
+    <div className='py-5 pt-8 mx-auto container'>
       <Link href={'/resume'}>
           <Button variant={'link'} className={'font-medium'}>
             <ArrowLeft className='w-4 h-4' /> Back to resume page

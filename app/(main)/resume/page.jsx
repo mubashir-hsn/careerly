@@ -9,7 +9,7 @@ const ResumePage = async () => {
     const feedbacks = await getAllResumeFeedbacks();
     return (
         <>
-            <div className='space-y-3 text-center bg-slate-100 flex flex-col justify-center items-center rounded-lg py-6 w-full h-[300px]'>
+            <div className='space-y-3 text-center bg-slate-100 flex flex-col justify-center items-center py-6 w-full h-[300px]'>
                 <div className='px-2 space-y-3'>
                     <h1 className='text-3xl md:text-4xl font-extrabold bg-gradient-to-b from-gray-700 via-gray-600 to-gray-700 text-transparent bg-clip-text'>Smart Resume Creation And Analyzer</h1>
                     <p className='text-muted-foreground'>Generate and analyze ATS-optimized resumes with AI assistance.</p>
@@ -33,7 +33,7 @@ const ResumePage = async () => {
 
             </div>
 
-            <div className='container mx-auto mt-5'>
+            <div className='container mx-auto mt-5 px-5 pb-5'>
                 <ResumeFeedbackList feedbacks={feedbacks} />
             </div>
 

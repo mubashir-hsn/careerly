@@ -18,11 +18,55 @@ import useFetch from '@/hooks/useFetch';
 import { improveWithAI } from '@/actions/resume';
 import { toast } from 'sonner';
 import { format, parse } from 'date-fns';
+import { Label } from '@/components/ui/label';
+
+const uiText = {
+    Project: {
+        titleLabel: "Project Name",
+        titlePlaceholder: "e.g. Final Year Project, Business System, Research Tool",
+        orgLabel: "Tools or Technologies Used",
+        orgPlaceholder: "e.g. Software, Equipment, Platforms, Methods",
+        descriptionPlaceholder:
+            "Purpose of the project, your role, process, and outcome",
+        github: {
+            label: "Reference or Profile Link",
+            placeholder:
+                "e.g. Portfolio, Research Page, GitHub, LinkedIn, Drive Folder"
+        },
+        live: {
+            label: "Work or Resource Link",
+            placeholder:
+                "e.g. Live System, Published Work, Report, Demo Video"
+        }
+    },
+
+    Experience: {
+        titleLabel: "Role or Position",
+        titlePlaceholder: "e.g. Intern, Assistant, Coordinator, Trainee",
+        orgLabel: "Organization or Workplace",
+        orgPlaceholder: "e.g. Company, Hospital, Lab, Office, Firm",
+        descriptionPlaceholder:
+            "What you did, what you learned, and your responsibilities"
+    },
+
+    Education: {
+        titleLabel: "Degree or Program Name",
+        titlePlaceholder:
+            "e.g. BS Computer Science, MBBS, Pharm D, BBA, Diploma",
+        orgLabel: "Institute or University",
+        orgPlaceholder:
+            "e.g. University, College, Medical Institute, Training Center",
+        descriptionPlaceholder:
+            "Main subjects, specialization, achievements, or academic work"
+    }
+};
+
 
 
 const EntryForm = ({ type, entries, onChange }) => {
 
     const [isAdding, setIsAdding] = useState(true);
+    const text = uiText[type];
 
     const {
         register,
@@ -119,7 +163,7 @@ const EntryForm = ({ type, entries, onChange }) => {
 
             <div className='space-y-4'>
                 {entries.map((item, index) => (
-                    <Card key={index} className={'bg-muted'}>
+                    <Card key={index} className={'bg-white'}>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">
                                 {item.title} @ {item.organization}
@@ -168,10 +212,12 @@ const EntryForm = ({ type, entries, onChange }) => {
                             <div className='grid grid-cols-2 gap-4'>
                                 {/* Position/Title */}
                                 <div className=' space-y-2'>
+                                    <Label>{text.titleLabel}</Label>
                                     <Input
                                         {...register('title')}
-                                        placeholder="Title/Position"
+                                        placeholder={text.titlePlaceholder}
                                         errors={errors?.title}
+                                        className={'bg-slate-100 text-slate-500'}
                                     />
 
                                     {
@@ -183,10 +229,11 @@ const EntryForm = ({ type, entries, onChange }) => {
 
                                 {/* Organization */}
                                 <div className=' space-y-2'>
+                                    <Label>{text.orgLabel}</Label>
                                     <Input
-                                        {...register('organization')}
-                                        placeholder="organization"
-                                        errors={errors?.organization}
+                                        {...register("organization")}
+                                        placeholder={text.orgPlaceholder}
+                                        className={"bg-slate-100 text-slate-500"}
                                     />
 
                                     {
@@ -200,17 +247,21 @@ const EntryForm = ({ type, entries, onChange }) => {
                             {
                                 type === 'Project' && <div className=' grid grid-cols-1 md:grid-cols-2 gap-4 space-y-2'>
                                     {/* Links */}
-                                    <div>
+                                    <div className='space-y-2'>
+                                        <Label>{text.github.label}</Label>
                                         <Input
                                             {...register('githubLink')}
-                                            placeholder="Github Link"
+                                            placeholder={text.github.placeholder}
+                                            className={'bg-slate-100 text-slate-500'}
                                         />
                                     </div>
 
-                                    <div>
+                                    <div className='space-y-2'>
+                                       <Label>{text.live.label}</Label>
                                         <Input
                                             {...register('liveLink')}
-                                            placeholder="Live website link"
+                                            placeholder={text.live.placeholder}
+                                            className={'bg-slate-100 text-slate-500'}
                                         />
                                     </div>
 
@@ -220,10 +271,12 @@ const EntryForm = ({ type, entries, onChange }) => {
                             <div className='grid grid-cols-2 gap-4'>
                                 {/* Start Date */}
                                 <div className=' space-y-2'>
+                                    <Label>Start Date</Label>
                                     <Input
                                         {...register('startDate')}
                                         type={'month'}
                                         errors={errors?.startDate}
+                                        className={'bg-slate-100 text-slate-500'}
                                     />
 
                                     {
@@ -234,12 +287,14 @@ const EntryForm = ({ type, entries, onChange }) => {
                                 </div>
 
                                 {/* End Date */}
-                                <div className=' space-y-2'>
+                                <div className='space-y-2'>
+                                    <Label>End Date</Label>
                                     <Input
                                         {...register('endDate')}
                                         type={'month'}
                                         disabled={current}
                                         errors={errors?.endDate}
+                                        className={'bg-slate-100 text-slate-500'}
                                     />
 
                                     {
@@ -261,6 +316,7 @@ const EntryForm = ({ type, entries, onChange }) => {
                                             setValue("endDate", "");
                                         }
                                     }}
+                                    className={'bg-slate-100 text-slate-500'}
                                 />
                                 <label htmlFor="current">Current {type}</label>
                             </div>
@@ -268,9 +324,10 @@ const EntryForm = ({ type, entries, onChange }) => {
                             {/* Description */}
 
                             <div className="space-y-2">
+                                <Label>Description</Label>
                                 <Textarea
-                                    placeholder={`Description of your ${type.toLowerCase()}`}
-                                    className="h-32"
+                                    placeholder={text.descriptionPlaceholder}
+                                    className={'bg-slate-100 text-slate-500 h-32'}
                                     {...register("description")}
                                     error={errors?.description}
                                 />
@@ -287,6 +344,7 @@ const EntryForm = ({ type, entries, onChange }) => {
                                 size="sm"
                                 onClick={handleImprovedDescription}
                                 disabled={isImproving || !watch("description")}
+                                className={'hover:bg-slate-200'}
                             >
                                 {isImproving ? (
                                     <>

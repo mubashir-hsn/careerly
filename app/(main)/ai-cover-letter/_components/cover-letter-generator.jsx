@@ -76,6 +76,7 @@ const CoverLetterGenerator = () => {
                                     id="CompanyName"
                                     placeholder="Enter company name"
                                     {...register("companyName")}
+                                    className={'bg-slate-100 text-slate-500'}
                                 />
 
                                 {
@@ -91,6 +92,7 @@ const CoverLetterGenerator = () => {
                                     id="jobtitle"
                                     placeholder="Enter job title"
                                     {...register("jobTitle")}
+                                    className={'bg-slate-100 text-slate-500'}
                                 />
 
                                 {
@@ -107,7 +109,7 @@ const CoverLetterGenerator = () => {
                             <Textarea
                                 id="jobdesc"
                                 placeholder="Paste the job description here"
-                                className={'h-32'}
+                                className={'h-32 bg-slate-100 text-slate-500'}
                                 {...register("jobDescription")}
                             />
 
