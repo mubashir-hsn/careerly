@@ -3,8 +3,8 @@ import { BarLoader } from 'react-spinners'
 
 const DashboardLayout = ({children}) => {
   return (
-    <div className='px-5'>
-      <div className='flex justify-between items-center mb-5'>
+    <div className='px-5 bg-slate-100 pb-5'>
+      <div className='flex justify-between items-center mb-4 pt-8'>
         <h1 className='text-4xl gradient-subtitle'>Industry Insights</h1>
       </div>
       <Suspense 

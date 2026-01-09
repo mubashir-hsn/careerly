@@ -34,7 +34,7 @@ export default function HeroSection() {
 
 
     return (
-        <section className="relative py-36 p-10 overflow-hidden w-full mx-auto">
+        <section className="relative bg-white py-36 p-10 overflow-hidden w-full mx-auto">
             {/* Background blobs */}
             <div className="absolute inset-0 -z-10 overflow-hidden">
                 <div className="absolute -top-20 -left-20 w-64 sm:w-72 h-64 sm:h-72 bg-purple-100 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-2xl sm:blur-3xl opacity-60 animate-blob"></div>

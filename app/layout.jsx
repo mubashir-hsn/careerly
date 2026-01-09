@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
           <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet" />
         </head>
         <body
-          className={`${inter.className}`}
+          className={`${inter.className} bg-white`}
         >
           <ThemeProvider
             attribute="class"
@@ -34,7 +34,7 @@ export default function RootLayout({ children }) {
             <Header />
 
             {/* main content */}
-            <main className=" min-h-screen">
+            <main className="min-h-screen">
               {children}
             </main>
             <Toaster richColors />
