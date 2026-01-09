@@ -141,43 +141,6 @@
   }
 }
 
-.hero-image-wrapper {
-  perspective: 1000px;
-}
-
-.hero-image {
-  /* transform: rotateX(20deg) scale(0.9) translateY(-50); */
-  transform: rotateX(15deg) scale(1);
-  transition: transform 0.5s ease-out;
-  will-change: transform;
-}
-
-.hero-image.scrolled {
-  transform: rotateX(0deg) scale(1) translateY(40px);
-}
-
-.grid-background{
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  background: linear-gradient( to right, rgba(0, 0, 0, 0.1) 1px , transparent 1px), linear-gradient( to bottom, rgba(0, 0, 0, 0.1) 1px , transparent 1px) ;
-  background-size: 50px 50px;
-  z-index: -1;
-}
-
-.grid-background::before{
-  position: absolute;
-  content: "";
-  top:0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle,transparent,rgba(255, 255, 255, 0.9));
-}
-
 .typing-dots {
   display: inline-block;
 }
@@ -196,11 +159,51 @@
 .dot-3 {
   animation-delay: 0s;
 }
+
 @keyframes dot-animation {
   0%, 80%, 100% {
     transform: scale(0);
   }
   40% {
     transform: scale(1);
+  }
+}
+
+@layer utilities {
+  /* Blob animation */
+  @keyframes blob {
+    0% { transform: translate(0px, 0px) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+    100% { transform: translate(0px, 0px) scale(1); }
+  }
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+
+  /* Fade-in animation */
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  /* Career stage animation */
+  @keyframes careerStage {
+    0%, 20% { transform: translateY(0); }
+    25%, 458% { transform: translateY(-100%); }
+    50%, 70% { transform: translateY(-200%); }
+    75%, 95% { transform: translateY(-300%); }
+    100% { transform: translateY(0); }
+  }
+  .animate-career-stage {
+    animation: careerStage 8s infinite ease-in-out;
+  }
+
+  /* Spin slow animation */
+  .animate-spin-slow {
+    animation: spin 12s linear infinite;
   }
 }

@@ -15,7 +15,7 @@ const Header = async () => {
 
   return (
     <header className="fixed top-0 border-b w-full bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 z-50">
-      <nav className="container mx-auto h-16 flex items-center justify-between px-4">
+      <nav className="container md:max-w-6xl mx-auto h-16 flex items-center justify-between px-4">
         {/* Logo / Brand */}
         <Link
           href="/"
@@ -96,6 +96,8 @@ const Header = async () => {
                 },
               }}
               afterSwitchSessionUrl="/"
+              userProfileMode="navigation"
+              userProfileUrl="/user-profile"
             />
           </SignedIn>
         </div>

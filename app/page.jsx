@@ -18,19 +18,21 @@ export default function Home() {
       <HeroSection />
 
       {/*Features section  */}
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-background">
+      <section className="w-full py-12 md:py-24 lg:py-32 bg-slate-50">
         <div className="container mx-auto px-4 md:px-5">
-          <h1 className="text-3xl font-bold tracking-tighter text-center mb-12">Powerful Features for Your Career Growth</h1>
+          <h1 className="text-3xl p-2 font-bold tracking-tighter text-center mb-12">Powerful Features for Your Career Growth</h1>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-y-10 max-w-5xl mx-auto">
             {
               features.map((feature, index) => {
                 return (
-                  <Card key={index} className="border-2 border-slate-300 shadow-xl hover:border-primary transition-colors duration-300">
+                  <Card key={index} className="bg-white border-0 shadow-xl transition-colors duration-300">
                     <CardContent className="pt-2 text-center flex flex-col items-center">
                       <Link href={`${feature.link}`}>
                       <div className="flex flex-col items-center justify-center ">
-                        <p className="px-3 pt-3 rounded-full bg-slate-200 text-sm flex justify-center items-center">{feature.icon}</p>
+                        <div className={`px-3 pt-3 rounded-full ${feature.bg} flex justify-center items-center`}>
+                          {feature.icon}
+                        </div>
                         <h3 className="text-xl font-bold my-2">{feature.title}</h3>
                         <p className=" text-muted-foreground">{feature.description}</p>
                       </div>
@@ -157,7 +159,7 @@ export default function Home() {
           <Accordion type="single" collapsible className="w-full border-b border-gray-400">
               {faqs.map((faq, index) => (
                 <AccordionItem key={index} value={`item-${index}`} className="mt-2 border-b border-gray-400">
-                  <AccordionTrigger className="text-left p-4 cursor-pointer font-normal text-[16px] hover:no-underline">
+                  <AccordionTrigger className="text-left cursor-pointer font-normal text-[16px] hover:no-underline">
                     {faq.question}
                   </AccordionTrigger>
                   <AccordionContent className="text-gray-600 p-4 text-[16px] leading-relaxed">
