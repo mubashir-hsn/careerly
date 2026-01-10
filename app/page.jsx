@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { faqs } from "@/data/faqs";
 import { features } from "@/data/features";
-import { howItWorks } from "@/data/howItWorks";
+import { steps } from "@/data/howItWorks";
 import { testimonial } from "@/data/testimonials";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ArrowRight, Rocket, User, Users } from "lucide-react";
@@ -46,13 +46,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="w-full py-12 md:py-24 bg-gray-100">
+       {/* Stats Section */}
+       <section className="w-full py-12 md:py-24 bg-blue-50">
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto font-medium text-center">
             <div className="flex flex-col items-center justify-center space-y-2">
               <h3 className="text-4xl font-bold">50+</h3>
-              <p className="text-muted-foreground tracking-wider">Industries Covered</p>
+              <p className="text-muted-foreground font-medium tracking-wider">Industries Covered</p>
             </div>
             <div className="flex flex-col items-center justify-center space-y-2">
               <h3 className="text-4xl font-bold">1000+</h3>
@@ -70,33 +70,59 @@ export default function Home() {
         </div>
       </section>
 
-
+   
       {/*How its work section  */}
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-white">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="mx-auto max-w-3xl text-center mb-10">
-            <h1 className="text-3xl font-bold text-center mb-4">How Its Work</h1>
-            <p className=" text-muted-foreground">Four simple steps to accelerate your growth</p>
-          </div>
-          <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-6xl mx-auto">
-            {
-              howItWorks.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col items-center bg-gray-100 p-2 pt-4 rounded-lg text-center space-y-4"
-                >
-                  <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center">
-                    {item.icon}
-                  </div>
-                  <h3 className="font-semibold text-xl">{item.title}</h3>
-                  <p className="text-muted-foreground">{item.description}</p>
-                </div>
-              ))
-            }
+    <section className="w-full py-24 bg-background">
+      <div className="container mx-auto px-4 max-w-2xl md:px-14">
+        <div className="text-center mb-14">
+          <h2 className="text-3xl font-bold mb-2">
+            How It Works
+          </h2>
+          <p className="text-muted-foreground text-lg py-3 text-center">
+            Four simple steps to accelerate your growth
+          </p>
+        </div>
 
+        <div className="relative">
+          <div className="absolute left-5 top-0 h-full w-px bg-muted" />
+
+          <div className="space-y-12">
+            {steps.map((item, index) => (
+              <div key={index} className="relative flex gap-8">
+                <div className="flex flex-col items-center">
+                  {index === 0 ? (
+                    <div className="w-12 h-12 rounded-full bg-indigo-500 text-white flex items-center justify-center text-sm font-semibold">
+                      {item.step}
+                    </div>
+                  ) : (
+                    <div className="w-12 h-12 rounded-full border-2 border-indigo-500 bg-background flex items-center justify-center text-sm font-semibold text-indigo-500">
+                      {item.step}
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex gap-4">
+                  {/* <div
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center ${item.color}`}
+                  >
+                    <item.icon className="w-2 h-2" />
+                  </div> */}
+
+                  <div className="space-y-1">
+                    <h3 className="font-semibold text-xl">
+                      {item.title}
+                    </h3>
+                    <p className="text-slate-500 leading-relaxed">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
       {/* Who we are */}
       <section className="w-full pt-20 pb-20 bg-slate-100">
@@ -164,7 +190,6 @@ export default function Home() {
         </div>
       </div>
     </section>
-
 
       {/* testimonial section */}
       <section className="w-full py-12 md:py-24 md:pb-32 bg-muted/50">

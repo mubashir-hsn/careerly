@@ -37,8 +37,8 @@ export default function HeroSection() {
         <section className="relative bg-white py-36 p-10 overflow-hidden w-full mx-auto">
             {/* Background blobs */}
             <div className="absolute inset-0 -z-10 overflow-hidden">
-                <div className="absolute -top-20 -left-20 w-64 sm:w-72 h-64 sm:h-72 bg-purple-100 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-2xl sm:blur-3xl opacity-60 animate-blob"></div>
-                <div className="absolute top-20 -right-20 w-56 sm:w-64 h-56 sm:h-64 bg-pink-100 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-2xl sm:blur-3xl opacity-60 animate-blob animation-delay-2000"></div>
+                <div className="absolute -top-20 -left-20 w-64 sm:w-72 h-64 sm:h-72 bg-purple-200 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-2xl sm:blur-3xl opacity-60 animate-blob"></div>
+                <div className="absolute top-20 -right-20 w-56 sm:w-64 h-56 sm:h-64 bg-pink-200 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-2xl sm:blur-3xl opacity-60 animate-blob animation-delay-2000"></div>
             </div>
 
             {/* Main content */}

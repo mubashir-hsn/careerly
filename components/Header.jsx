@@ -16,13 +16,13 @@ const Header = async () => {
 
   return (
     <header className="fixed top-0 border-b w-full bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 z-50">
-      <nav className="container md:max-w-7xl mx-auto h-16 flex items-center justify-between px-4">
+      <nav className="container md:max-w-7xl mx-auto h-16 flex items-center justify-between px-4 md:px-10">
         {/* Logo / Brand */}
         <Link
           href="/"
           className="uppercase flex items-center text-xl bg-gradient-to-l from-gray-600 via-gray-700 to-gray-800 font-extrabold text-transparent bg-clip-text"
         >
-          <Image src={'/careerly.jpg'} alt='careerly' width={140} height={150}/>
+          <Image src={'/careerly.jpg'} alt='careerly' width={130} height={140}/>
         </Link>
 
         {/* Navigation & User Controls */}
