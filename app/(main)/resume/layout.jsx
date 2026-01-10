@@ -3,7 +3,7 @@ import { BarLoader } from 'react-spinners'
 
 const ResumeLayout = ({children}) => {
     return (
-      <div className=''>
+      <div className='py-5 px-5'>
         <Suspense 
          fallback={<BarLoader className='mt-4' width={'100%'} color='gray'/>}
         >

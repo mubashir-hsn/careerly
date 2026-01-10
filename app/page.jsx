@@ -99,7 +99,7 @@ export default function Home() {
       </section>
 
       {/* Who we are */}
-      <section className="w-full pt-20 pb-20 bg-slate-50">
+      <section className="w-full pt-20 pb-20 bg-slate-100">
       <div className="max-w-6xl mx-auto px-10 bg-white rounded-lg py-14">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center justify-start">
           {/* Left side */}
@@ -241,10 +241,10 @@ export default function Home() {
 
       {/* CTA Section */}
       <section className="w-full">
-        <div className="mx-auto py-24 bg-slate-50 rounded-lg">
+        <div className="mx-auto py-24 bg-slate-100 rounded-lg">
           <div className="flex flex-col items-center justify-center space-y-4 text-center max-w-3xl mx-auto">
             <h2 className="text-3xl font-bold leading-13 tracking-tight sm:text-4xl md:text-5xl">
-              Ready to Accelerate <br /> <span className="bg-gradient-to-tl from-violet-500 to-pink-500 text-transparent bg-clip-text">Your Career?</span>
+              Ready to Accelerate <br /> <span className="bg-gradient-to-tl from-violet-500 via-blue-500 to-pink-500 text-transparent bg-clip-text">Your Career?</span>
             </h2>
             <p className="mx-auto max-w-[600px] text-gray-600 md:text-xl">
               Join thousands of professionals who are advancing their careers

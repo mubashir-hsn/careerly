@@ -1,6 +1,11 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,70 +16,59 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from "@/components/ui/select";
-import { Loader2 } from "lucide-react";
+
 import { industries } from "@/data/industries";
 import useFetch from "@/hooks/useFetch";
 import { updateUser } from "@/actions/user";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { onboardingSchema } from "@/app/lib/schema";
-import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-const UpdateProfileForm = ({ user, setIsEditing }) => {
-  const [industryObj, setIndustryObj] = useState(null);
+const UpdateProfileForm = ({ user, setIsEditing, industry, subIndustry }) => {
+
+  const initialIndustry = industries.find((ind) => ind.id === industry);
+  
+  const initialSubIndustry = initialIndustry?.subIndustries.find(
+    (sub) => sub.toLowerCase() === subIndustry?.toLowerCase()
+  );
 
   const {
     loading: updateLoading,
     fn: updateUserFn,
-    data: updateResult
+    data: updateResult,
   } = useFetch(updateUser);
-
-  const [defaultIndustry, defaultSubIndustry] = user.industry.split('-');
-
-  const formattedSubIndustry = defaultSubIndustry
-    ?.replace(/-/g, " ")
-    ?.toLowerCase();
 
   const {
     register,
     handleSubmit,
     setValue,
     watch,
-    formState: { errors }
+    formState: { errors },
   } = useForm({
     resolver: zodResolver(onboardingSchema),
     defaultValues: {
-      industry: defaultIndustry,
-      subIndustry: formattedSubIndustry,
-      experience: user.experience,
-      skills: user.skills.join(", "),
-      bio: user.bio
-    }
+      industry: initialIndustry?.id || "",
+      subIndustry: initialSubIndustry || "",
+      experience: user?.experience || 0,
+      skills: user?.skills?.join(", ") || "",
+      bio: user?.bio || "",
+    },
   });
 
   const watchIndustry = watch("industry");
   const watchSubIndustry = watch("subIndustry");
+  const router = useRouter();
+  const selectedIndustry = industries.find((ind) => ind.id === watchIndustry);
 
-  useEffect(() => {
-    const selectedIndustry = industries.find(
-      (ind) => ind.id === defaultIndustry
-    );
-
-    if (selectedIndustry) {
-      setIndustryObj(selectedIndustry);
-      setValue("industry", defaultIndustry);
-      setValue("subIndustry", formattedSubIndustry);
-    }
-  }, []);
-
+ 
   useEffect(() => {
     if (updateResult?.success && !updateLoading) {
       toast.success("Profile updated successfully");
+      router.refresh();
       setIsEditing(false);
     }
-  }, [updateResult, updateLoading]);
+  }, [updateResult, updateLoading, setIsEditing]);
 
   const onSubmit = async (values) => {
     const formattedIndustry = `${values.industry}-${values.subIndustry
@@ -91,20 +85,17 @@ const UpdateProfileForm = ({ user, setIsEditing }) => {
     <Card>
       <CardContent>
         <form className="space-y-6 my-4" onSubmit={handleSubmit(onSubmit)}>
-
-          {/* Industry */}
+          {/* Industry Select */}
           <div className="space-y-2">
             <Label>Industry</Label>
             <Select
               value={watchIndustry}
               onValueChange={(value) => {
                 setValue("industry", value);
-                const selected = industries.find((i) => i.id === value);
-                setIndustryObj(selected);
                 setValue("subIndustry", "");
               }}
             >
-              <SelectTrigger>
+              <SelectTrigger className={'bg-slate-100 text-slate-600'}>
                 <SelectValue placeholder="Select industry" />
               </SelectTrigger>
               <SelectContent>
@@ -120,7 +111,7 @@ const UpdateProfileForm = ({ user, setIsEditing }) => {
             )}
           </div>
 
-          {/* Sub Industry */}
+          {/* Sub Industry Select */}
           {watchIndustry && (
             <div className="space-y-2">
               <Label>Sub Industry</Label>
@@ -128,15 +119,12 @@ const UpdateProfileForm = ({ user, setIsEditing }) => {
                 value={watchSubIndustry}
                 onValueChange={(value) => setValue("subIndustry", value)}
               >
-                <SelectTrigger>
-                  <SelectValue placeholder="Specialization" />
+                <SelectTrigger className={'bg-slate-100 text-slate-600'}>
+                  <SelectValue placeholder="Specialization"/>
                 </SelectTrigger>
                 <SelectContent>
-                  {industryObj?.subIndustries?.map((sub) => (
-                    <SelectItem
-                      key={sub}
-                      value={sub.toLowerCase()}
-                    >
+                  {selectedIndustry?.subIndustries.map((sub) => (
+                    <SelectItem key={sub} value={sub}>
                       {sub}
                     </SelectItem>
                   ))}
@@ -158,11 +146,10 @@ const UpdateProfileForm = ({ user, setIsEditing }) => {
               min={0}
               max={50}
               {...register("experience")}
+              className={'bg-slate-100 text-slate-600'}
             />
             {errors.experience && (
-              <p className="text-sm text-red-600">
-                {errors.experience.message}
-              </p>
+              <p className="text-sm text-red-600">{errors.experience.message}</p>
             )}
           </div>
 
@@ -172,10 +159,8 @@ const UpdateProfileForm = ({ user, setIsEditing }) => {
             <Input
               placeholder="e.g Python, JavaScript, C++"
               {...register("skills")}
+              className={'bg-slate-100 text-slate-600'}
             />
-            <p className="text-sm text-muted-foreground">
-              Separate skills with commas
-            </p>
             {errors.skills && (
               <p className="text-sm text-red-600">{errors.skills.message}</p>
             )}
@@ -184,10 +169,7 @@ const UpdateProfileForm = ({ user, setIsEditing }) => {
           {/* Bio */}
           <div className="space-y-2">
             <Label>Professional Bio</Label>
-            <Textarea
-              className="h-32"
-              {...register("bio")}
-            />
+            <Textarea className={'bg-slate-100 text-slate-600 h-28'} {...register("bio")} />
             {errors.bio && (
               <p className="text-sm text-red-600">{errors.bio.message}</p>
             )}
@@ -213,7 +195,6 @@ const UpdateProfileForm = ({ user, setIsEditing }) => {
               Cancel
             </Button>
           </div>
-
         </form>
       </CardContent>
     </Card>

@@ -9,7 +9,7 @@ const AICoverLetterPage = async() => {
   const coverLetters = await getCoverLetters();
 
   return (
-    <div className='space-y-4 p-4 container mx-auto bg-slate-100 min-h-screen'>
+    <div className='space-y-4 container mx-auto bg-slate-100 min-h-screen'>
       <div className='flex justify-between items-center gap-2 pt-4'>
         <h1 className='gradient-subtitle text-3xl font-bold'>My Cover Letter</h1>
         <Link href={'/ai-cover-letter/new'}>

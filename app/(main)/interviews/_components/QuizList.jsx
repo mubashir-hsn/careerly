@@ -8,12 +8,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog"
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
 import QuizResult from './QuizResult';
@@ -76,8 +70,6 @@ const QuizList = ({ assessments }) => {
                     ))}
                 </div>
             </div>
-
-            {/* Dialog Section */}
 
             {
                 selectedQuiz && <div className="w-full min-h-screen flex justify-center items-center fixed bg-slate-500/40 top-0 left-0 z-100 mx-auto">

@@ -6,8 +6,8 @@ import CoverLetterGenerator from '../_components/cover-letter-generator'
 
 const NewCoverLetterPage = () => {
     return (
-        <div className='py-5 container mx-auto px-4 bg-slate-100'>
-            <div className='flex flex-col space-y-4'>
+        <div className='pb-5 container mx-auto px-4 bg-slate-100'>
+            <div className='flex flex-col'>
                 <Link href={'/ai-cover-letter'}>
                     <Button variant={'link'} className={'gap-2 pl-0'}>
                         <ArrowLeft className='w-4 h-4' />

@@ -30,7 +30,7 @@ const Quiz = () => {
 
     // User input states
     const [jobRole, setJobRole] = useState("");
-    const [experienceLevel, setExperienceLevel] = useState("");
+    const [experienceLevel, setExperienceLevel] = useState("fresher");
     const [skills, setSkills] = useState(""); // comma-separated
     const [interviewType, setInterviewType] = useState("technical");
 
@@ -155,7 +155,7 @@ const Quiz = () => {
                         <div className="space-y-2">
                             <Label>Target Role or Position</Label>
                             <Input
-                                placeholder="e.g. Intern, Junior Role, Medical Officer, Business Analyst, Assistant, Trainee"
+                                placeholder="e.g. Intern, Developer, Medical Officer, Business Analyst, Trainee"
                                 value={jobRole}
                                 onChange={(e) => setJobRole(e.target.value)}
                                 className={'bg-slate-100 text-slate-500'}
@@ -165,7 +165,7 @@ const Quiz = () => {
                         <div className="space-y-2">
                             <Label>Skills or Background</Label>
                             <Input
-                                placeholder="e.g. Programming, Patient Care, Research, Accounting, Communication"
+                                placeholder="e.g. Programming, Patient Care, Accounting"
                                 value={skills}
                                 onChange={(e) => setSkills(e.target.value)}
                                 className={'bg-slate-100 text-slate-500'}
@@ -225,7 +225,7 @@ const Quiz = () => {
                             {["technical", "hr", "behavioral", "mixed"].map(type => (
                                 <div key={type} className="flex items-center space-x-2">
                                     <RadioGroupItem value={type} id={type} />
-                                    <Label htmlFor={type} className={'text-gray-500'}>{type.toUpperCase()}</Label>
+                                    <Label htmlFor={type} className={'text-gray-500 capitalize'}>{type}</Label>
                                 </div>
                             ))}
                         </RadioGroup>

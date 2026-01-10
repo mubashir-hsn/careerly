@@ -5,6 +5,7 @@ import { Button } from './ui/button'
 import { BrainCircuit, ChevronDown, FileText, GraduationCap, LayoutDashboard, PenBox, StarIcon } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { checkUser } from '@/lib/checkUser.js';
+import Image from 'next/image'
 
 const Header = async () => {
 
@@ -21,8 +22,7 @@ const Header = async () => {
           href="/"
           className="uppercase flex items-center text-xl bg-gradient-to-l from-gray-600 via-gray-700 to-gray-800 font-extrabold text-transparent bg-clip-text"
         >
-          <GraduationCap className='w-8 h-8 mr-1.5 text-black' />
-          Careerly
+          <Image src={'/careerly.jpg'} alt='careerly' width={140} height={150}/>
         </Link>
 
         {/* Navigation & User Controls */}

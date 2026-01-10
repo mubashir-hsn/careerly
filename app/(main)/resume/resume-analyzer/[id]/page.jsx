@@ -16,7 +16,7 @@ const ResumeReviewPage = async ({ params }) => {
 
   return (
     <>
-      <div className='px-4 py-2 pt-8 space-y-2'>
+      <div className='px-4 pb-2 space-y-2'>
         <Link href={'/resume'}>
           <Button variant={'link'} className={'font-medium'}>
             <ArrowLeft className='w-4 h-4' /> Back to resume page
