@@ -18,6 +18,7 @@ const AICoverLetterPage = async() => {
       </div>
 
       <CoverLetterList coverLetters={coverLetters}/>
+  
     </div>
   )
 }

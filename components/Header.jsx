@@ -15,12 +15,13 @@ const Header = async () => {
 
   return (
     <header className="fixed top-0 border-b w-full bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 z-50">
-      <nav className="container md:max-w-6xl mx-auto h-16 flex items-center justify-between px-4">
+      <nav className="container md:max-w-7xl mx-auto h-16 flex items-center justify-between px-4">
         {/* Logo / Brand */}
         <Link
           href="/"
-          className="uppercase text-2xl bg-gradient-to-l from-gray-600 via-gray-700 to-gray-800 font-extrabold text-transparent bg-clip-text"
+          className="uppercase flex items-center text-xl bg-gradient-to-l from-gray-600 via-gray-700 to-gray-800 font-extrabold text-transparent bg-clip-text"
         >
+          <GraduationCap className='w-8 h-8 mr-1.5 text-black' />
           Careerly
         </Link>
 

@@ -42,11 +42,12 @@ const ResumeFeedbackList = ({ feedbacks }) => {
   return (
     <div className='space-y-4 mt-8'>
       <h1 className='border-b-2 pb-1.5 border-gray-500 text-gray-700 text-xl md:text-2xl font-semibold'>Resume Feedbacks</h1>
+      <div className='grid md:grid-cols-2 gap-5'>
       {
         feedbacks.map((feedback) => (
           <Card key={feedback.id} className="group relative">
             <CardHeader>
-              <div className="flex items-start justify-between">
+              <div className="flex flex-col md:flex-row items-start justify-start gap-4 md:justify-between">
                 <div>
                   <CardTitle className=" flex items-center gap-5">
                     <ScoreGauge score={feedback.overallScore} />
@@ -103,12 +104,13 @@ const ResumeFeedbackList = ({ feedbacks }) => {
             <CardContent>
               <div className="line-clamp-3 bg-slate-100 text-slate-500 border-l-2 border-blue-500 rounded-lg p-4">
                 <p className='font-bold'>Requirements:</p>
-                <p>{feedback?.jobDescription}</p>
+                <p className='text-sm'>{feedback?.jobDescription}</p>
               </div>
             </CardContent>
           </Card>
         ))
       }
+      </div>
     </div>
   )
 }

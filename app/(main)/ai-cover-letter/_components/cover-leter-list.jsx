@@ -105,7 +105,7 @@ export default function CoverLetterList({ coverLetters }) {
           <CardContent>
           <div className=" bg-slate-100 text-slate-500 border-l-2 border-blue-500 rounded-lg p-4">
               <p className='font-bold'>Requirements:</p>
-              <p className="line-clamp-2">{letter.jobDescription} </p>
+              <p className="line-clamp-2 text-sm">{letter.jobDescription} </p>
             </div>
           </CardContent>
         </Card>
