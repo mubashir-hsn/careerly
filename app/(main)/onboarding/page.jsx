@@ -11,7 +11,7 @@ const onBoardingPage = async() => {
     redirect('/dashboard')
   }
   return (
-    <div>
+    <div className='bg-slate-100 min-h-screen pb-10'>
       <OnBoardingForm industries={industries}/>
     </div>
   )

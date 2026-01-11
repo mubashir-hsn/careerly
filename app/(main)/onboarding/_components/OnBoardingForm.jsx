@@ -74,9 +74,9 @@ const OnBoardingForm = ({ industries }) => {
 
 
     return (
-        <div className=' flex items-center justify-center bg-background'>
+        <div className='flex items-center justify-center'>
 
-            <Card className={'w-full max-w-lg mt-10 mx-2'}>
+            <Card className={'w-full max-w-lg mt-10 mx-2 bg-white'}>
 
                 <CardHeader>
                     <CardTitle className={'pb-1 gradient-subtitle text-3xl'}>Complete Your Profile</CardTitle>
@@ -100,7 +100,7 @@ const OnBoardingForm = ({ industries }) => {
                                     setValue("subIndustry", "");
                                 }}
                             >
-                                <SelectTrigger id={'industry'} className="w-[180px]">
+                                <SelectTrigger id={'industry'} className="w-[180px] bg-slate-100 text-slate-600">
                                     <SelectValue placeholder="Select an industry" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -129,7 +129,7 @@ const OnBoardingForm = ({ industries }) => {
                                         setValue("subIndustry", value);
                                     }}
                                 >
-                                    <SelectTrigger id={'subIndustry'} className="w-[180px]">
+                                    <SelectTrigger id={'subIndustry'} className="w-[180px] bg-slate-100 text-slate-600">
                                         <SelectValue placeholder="Specialization" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -158,6 +158,7 @@ const OnBoardingForm = ({ industries }) => {
                                 max={50}
                                 placeholder="Enter years of experience "
                                 {...register('experience')}
+                                className={'bg-slate-100 text-slate-600'}
                             />
 
                             {
@@ -173,6 +174,7 @@ const OnBoardingForm = ({ industries }) => {
                                 id='skills'
                                 placeholder="e.g Python, javascript, C++"
                                 {...register('skills')}
+                                className={'bg-slate-100 text-slate-600'}
                             />
                             <p className=' text-sm text-muted-foreground ps-2'>Separate multiple skills with commas</p>
 
@@ -189,8 +191,8 @@ const OnBoardingForm = ({ industries }) => {
                             <Textarea
                                 id='bio'
                                 placeholder="Tell us about your professional background"
-                                className={'h-32'}
                                 {...register('bio')}
+                                className={'bg-slate-100 text-slate-600 h-32'}
                             />
 
                             {

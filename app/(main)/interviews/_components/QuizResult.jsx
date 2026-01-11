@@ -9,7 +9,7 @@ const QuizResult = ({ result, onStartNew, hideStartNew = false }) => {
         return null;
     }
     return (
-        <div className='mx-auto bg-slate-100'>
+        <div className='mx-auto bg-gray-100'>
             <h1 className='flex items-center gap-2 text-3xl gradient-subtitle p-3'>
                 <Trophy className='w-6 h-6 text-yellow-500' />
                 Quiz Result
