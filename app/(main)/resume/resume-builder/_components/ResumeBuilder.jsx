@@ -33,9 +33,10 @@ const initialData = {
 
 const ResumeBuilder = ({ initialContent }) => {
     const [activeTab, setActiveTab] = useState('edit');
-    // const [previewContent, setPreviewContent] = useState(initialData);
+    const [activeStyle, setActiveStyle] = useState('ats');
     const { user } = useUser();
     const [isGenerating, setIsGenerating] = useState(false);
+
 
     const {
         control,
@@ -97,7 +98,8 @@ const ResumeBuilder = ({ initialContent }) => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     data: formValues,
-                    user
+                    user,
+                    activeStyle
                 }),
             });
 
@@ -246,7 +248,7 @@ const ResumeBuilder = ({ initialContent }) => {
                                     <label className="text-sm font-medium">
                                         Twitter/X Profile
                                     </label>
-                                    <Input 
+                                    <Input
                                         className={'bg-slate-100 text-slate-500'}
                                         {...register("contactInfo.twitter")}
                                         type="url"
@@ -417,8 +419,19 @@ const ResumeBuilder = ({ initialContent }) => {
                 </TabsContent>
 
                 <TabsContent value="preview">
-                    <div className='rounded-lg bg-slate-600 py-5 border-2 shadow-inner'>
-                        <ResumeTemplate data={formValues} user={user} />
+                    <div className='rounded-lg bg-slate-700 py-5 border-2 '>
+                        <div className="max-w-[210mm] mx-auto bg-white p-4 rounded-xl shadow-lg flex flex-wrap justify-center gap-3 no-print">
+                            {['ats', 'academic', 'corporate', 'executive'].map((style) => (
+                                <button
+                                    key={style}
+                                    onClick={() => setActiveStyle(style)}
+                                    className={`px-5 py-2 text-sm rounded-full font-semibold uppercase tracking-wider transition ${activeStyle === style ? 'bg-blue-500 text-white shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                                >
+                                    {style}
+                                </button>
+                            ))}
+                        </div>
+                        <ResumeTemplate data={formValues} user={user} activeStyle={activeStyle} />
                     </div>
                 </TabsContent>
             </Tabs>
