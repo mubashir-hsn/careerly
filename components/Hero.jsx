@@ -34,11 +34,11 @@ export default function HeroSection() {
 
 
     return (
-        <section className="relative bg-white py-36 p-10 overflow-hidden w-full mx-auto">
+        <section className="relative py-36 p-10 overflow-hidden w-full mx-auto">
             {/* Background blobs */}
-            <div className="absolute inset-0 -z-10 overflow-hidden">
+            <div className="absolute inset-0 overflow-hidden">
                 <div className="absolute -top-20 -left-20 w-64 sm:w-72 h-64 sm:h-72 bg-purple-200 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-2xl sm:blur-3xl opacity-60 animate-blob"></div>
-                <div className="absolute top-20 -right-20 w-56 sm:w-64 h-56 sm:h-64 bg-pink-200 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-2xl sm:blur-3xl opacity-60 animate-blob animation-delay-2000"></div>
+                <div className="absolute top-20 -right-20 w-56 sm:w-64 h-56 sm:h-64 bg-pink-100 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-2xl sm:blur-3xl opacity-60 animate-blob animation-delay-2000"></div>
             </div>
 
             {/* Main content */}
@@ -54,7 +54,7 @@ export default function HeroSection() {
 
                     <h1 className="text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900 mb-3 leading-tight">
                         Grow your <br />
-                        <span className="bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
+                        <span className="bg-linear-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
                             Professional
                         </span>{" "}
                         path
@@ -73,9 +73,9 @@ export default function HeroSection() {
                 </div>
 
                 {/* Right animated circle with features */}
-                <div className="relative hidden flex-shrink-0 w-56 md:w-72 h-56 md:h-72 md:flex items-center justify-center mt-6 md:mt-0">
+                <div className="relative hidden shrink-0 w-56 md:w-72 h-56 md:h-72 md:flex items-center justify-center mt-6 md:mt-0">
                     {/* Outer spinning circle */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-full animate-spin-slow">
+                    <div className="absolute inset-0 bg-linear-to-br from-purple-500/10 to-pink-500/10 rounded-full animate-spin-slow">
                         <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1 w-4 h-4 bg-purple-400 rounded-full"></div>
                         <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 -translate-y-1 w-4 h-4 bg-pink-400 rounded-full"></div>
                     </div>
@@ -94,7 +94,7 @@ export default function HeroSection() {
                                     return (
                                         <div
                                             key={idx}
-                                            className="flex flex-col items-center justify-center min-w-full h-full flex-shrink-0"
+                                            className="flex flex-col items-center justify-center min-w-full h-full shrink-0"
                                         >
                                             <Icon className={`w-16 h-16 ${feat.color}`} />
                                             <span className="text-xl font-bold text-gray-500 mt-2 text-center">

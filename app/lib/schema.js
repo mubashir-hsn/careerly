@@ -41,14 +41,15 @@ export const entrySchema = z
     title: z.string().min(1, "Title is required"),
     organization: z.string().min(1, "Organization is required"),
     startDate: z.string().min(1, "Start date is required"),
-    endDate: z.string().optional(),
-    liveLink: z.string().optional(),
-    githubLink: z.string().optional(),
+    endDate: z.string().optional().or(z.literal("")),
+    liveLink: z.string().url("Invalid URL").optional().or(z.literal("")),
+    githubLink: z.string().url("Invalid URL").optional().or(z.literal("")),
     description: z.string().min(1, "Description is required"),
     current: z.boolean().default(false),
   })
   .refine(
     (data) => {
+      // If not current, endDate must exist
       if (!data.current && !data.endDate) {
         return false;
       }
@@ -56,6 +57,19 @@ export const entrySchema = z
     },
     {
       message: "End date is required unless this is your current position",
+      path: ["endDate"],
+    }
+  )
+  .refine(
+    (data) => {
+      // Logical check: Start Date should be before End Date
+      if (!data.current && data.startDate && data.endDate) {
+        return new Date(data.startDate) <= new Date(data.endDate);
+      }
+      return true;
+    },
+    {
+      message: "End date cannot be earlier than start date",
       path: ["endDate"],
     }
   );

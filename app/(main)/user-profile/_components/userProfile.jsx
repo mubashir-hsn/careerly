@@ -14,7 +14,7 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 
 const formatDate = (date) => {
     if (!date) return "N/A";
@@ -75,20 +75,20 @@ export default function UserProfilePage({ user }) {
                     {/* Header */}
                     <div className="flex flex-col md:flex-row items-center gap-6">
                         <Avatar className="h-28 w-28 ring-4 ring-background shadow">
-                            <AvatarImage src={user.imageUrl} />
+                            <AvatarImage src={user?.imageUrl || '/avatar.png'} />
                             <AvatarFallback>
                                 <User className="h-10 w-10" />
                             </AvatarFallback>
                         </Avatar>
 
                         <div className="flex-1 text-center md:text-left">
-                            <h1 className="text-3xl font-semibold text-slate-800">{user.name}</h1>
+                            <h1 className="text-3xl font-semibold text-slate-800">{user?.name}</h1>
                             <div className="flex items-center justify-center text-slate-400 md:justify-start gap-2 text-sm mt-1">
                                 <Mail className="h-4 w-4" />
-                                <span>{user.email}</span>
+                                <span>{user?.email}</span>
                             </div>
                             <p className="mt-4 text-sm max-w-xl text-slate-700">
-                                {user.bio || "No bio added yet"}
+                                {user?.bio || "No bio added yet"}
                             </p>
                         </div>
 
@@ -105,7 +105,7 @@ export default function UserProfilePage({ user }) {
                 <DialogContent className="max-w-5xl h-[90vh] bg-slate-100 overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>
-                            <h1 className="font-semibold">Update Profile</h1>
+                            <p className="font-semibold">Update Profile</p>
                         </DialogTitle>
                     </DialogHeader>
                     <UpdateProfileForm user={user} setIsEditing={setIsEditing} industry={industry} subIndustry={subIndustry} />
@@ -146,7 +146,7 @@ export default function UserProfilePage({ user }) {
                                     </div>
                                     <div>
                                         <h2 className="text-slate-500 font-semibold text-sm">Experience</h2>
-                                        <p className="font-medium capitalize">{user.experience} years</p>
+                                        <p className="font-medium capitalize">{user?.experience || 0} years</p>
                                     </div>
                                 </div>
                                 {/* Member */}
@@ -156,7 +156,7 @@ export default function UserProfilePage({ user }) {
                                     </div>
                                     <div>
                                         <h2 className="text-slate-500 font-semibold text-sm">Member Since</h2>
-                                        <p className="font-medium capitalize">{formatDate(user.createdAt)}</p>
+                                        <p className="font-medium capitalize">{formatDate(user?.createdAt)}</p>
                                     </div>
                                 </div>
                                 {/* Last Updated */}
@@ -166,7 +166,7 @@ export default function UserProfilePage({ user }) {
                                     </div>
                                     <div>
                                         <h2 className="text-slate-500 font-semibold text-sm">Last Updated</h2>
-                                        <p className="font-medium capitalize">{formatDate(user.updatedAt)}</p>
+                                        <p className="font-medium capitalize">{formatDate(user?.updatedAt)}</p>
                                     </div>
                                 </div>
                             </CardContent>

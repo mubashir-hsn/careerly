@@ -47,7 +47,7 @@ export default function Home() {
       </section>
 
        {/* Stats Section */}
-       <section className="w-full py-12 md:py-24 bg-blue-50">
+       <section className="w-full py-12 md:py-24 bg-blue-100/50">
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto font-medium text-center">
             <div className="flex flex-col items-center justify-center space-y-2">
@@ -203,7 +203,7 @@ export default function Home() {
                 <CardContent className="">
                   <div className="flex flex-col space-y-4">
                     <div className="flex items-center space-x-4 mb-4">
-                      <div className="relative h-12 w-12 flex justify-center items-center flex-shrink-0 rounded-full border-2 border-gray-800">
+                      <div className="relative h-12 w-12 flex justify-center items-center shrink-0 rounded-full border-2 border-gray-800">
                         <User className="w-6 h-6" />
                       </div>
                       <div>
@@ -218,7 +218,7 @@ export default function Home() {
                     </div>
                     <div className={`text-slate-600 font-medium relative italic pl-4 border-l-2 ${testimonial.border}`}>
                       <blockquote>
-                        <span className="text-xl absolute -top-[5px] left-1">
+                        <span className="text-xl absolute -top-1.25 left-1">
                           &quot;
                         </span>
                         <span className="italic text-[15px]"> {testimonial.quote}</span>
@@ -250,7 +250,7 @@ export default function Home() {
           <div className="max-w-3xl mx-auto p-4">
             <Accordion type="single" collapsible className="w-full border-b border-slate-200">
               {faqs.map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index}`} className="mt-3 pb-2 border-b-1 border-slate-200">
+                <AccordionItem key={index} value={`item-${index}`} className="mt-3 pb-2 border-b border-slate-200">
                   <AccordionTrigger className="text-left cursor-pointer font-medium text-[17px] hover:no-underline [&>svg]:w-7 [&>svg]:h-7 [&>svg]:text-slate-600">
                     {faq.question}
                   </AccordionTrigger>
@@ -269,9 +269,9 @@ export default function Home() {
         <div className="mx-auto py-24 bg-slate-100 rounded-lg">
           <div className="flex flex-col items-center justify-center space-y-4 text-center max-w-3xl mx-auto">
             <h2 className="text-3xl font-bold leading-13 tracking-tight sm:text-4xl md:text-5xl">
-              Ready to Accelerate <br /> <span className="bg-gradient-to-tl from-violet-500 via-blue-500 to-pink-500 text-transparent bg-clip-text">Your Career?</span>
+              Ready to Accelerate <br /> <span className="bg-linear-to-tl from-violet-500 via-blue-500 to-pink-500 text-transparent bg-clip-text">Your Career?</span>
             </h2>
-            <p className="mx-auto max-w-[600px] text-gray-600 md:text-xl">
+            <p className="mx-auto max-w-150 text-gray-600 md:text-xl">
               Join thousands of professionals who are advancing their careers
               with AI-powered guidance.
             </p>
