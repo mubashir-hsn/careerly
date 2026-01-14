@@ -23,9 +23,22 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import ScoreGauge from './score-guage';
+import { toast } from 'sonner';
+import { deleteResumeFeedback } from '@/actions/resume-analyzer';
 
 const ResumeFeedbackList = ({ feedbacks }) => {
   const router = useRouter();
+
+  const handleDelete = async(id)=>{
+    try {
+      await deleteResumeFeedback(id);
+      toast.success('Resume feedback deleted successfully.')
+      router.refresh();
+    } catch (error) {
+      console.log('Error while deleting resume feedback: ', error)
+      toast.error('Failed to delete resume feedback.')
+    }
+  }
 
   if (!feedbacks?.length) {
     return (
@@ -86,7 +99,7 @@ const ResumeFeedbackList = ({ feedbacks }) => {
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
-                          // onClick={() => handleDelete(feedback.id)}
+                          onClick={() => handleDelete(feedback.id)}
                           className="bg-destructive text-white hover:bg-destructive/90"
                         >
                           Delete

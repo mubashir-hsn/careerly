@@ -100,17 +100,17 @@ const AnalyzeResume = () => {
       {!isProcessing && (
         <div className="mt-6 md:mt-12 w-full">
           <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-            <Input type="text" placeholder="Company Name" {...register("companyName")} />
+            <Input type="text" className={'bg-slate-100 text-slate-600'} placeholder="Company Name" {...register("companyName")} />
             {errors.companyName && <p className="text-red-500 text-sm pl-3">{errors.companyName.message}</p>}
 
-            <Input type="text" placeholder="Job Title" {...register("jobTitle")} />
+            <Input type="text" className={'bg-slate-100 text-slate-600'} placeholder="Job Title" {...register("jobTitle")} />
             {errors.jobTitle && <p className="text-red-500 text-sm pl-3">{errors.jobTitle.message}</p>}
 
-            <Textarea placeholder="Job Description" className="h-28" {...register("jobDescription")} />
+            <Textarea  className={'bg-slate-100 text-slate-600 h-28'} placeholder="Job Description" {...register("jobDescription")} />
             {errors.jobDescription && <p className="text-red-500 text-sm pl-3">{errors.jobDescription.message}</p>}
 
             {file ? (
-              <div className='py-4 px-5 rounded-md bg-gray-100 flex justify-between items-center'>
+              <div className='py-4 px-5 rounded-md bg-slate-100 flex justify-between items-center'>
                 <div className='flex gap-3 justify-center items-center'>
                   <div className='p-2 inset-3 shadow-md rounded-md bg-white text-center'>
                     <img src="/pdf.png" className='w-6 h-6' alt="pdf-img" />
@@ -122,7 +122,7 @@ const AnalyzeResume = () => {
                 </div>
               </div>
             ) : (
-              <div className="border border-gray-300 border-dashed rounded-lg p-4 cursor-pointer hover:bg-muted transition">
+              <div className="border border-gray-300 bg-slate-100 border-dashed rounded-lg p-4 cursor-pointer hover:bg-slate-200 transition">
                 <label className="block text-sm font-medium pb-3">Upload Resume (PDF)</label>
                 <input
                   type="file"

@@ -5,7 +5,6 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { BrainCircuit } from "lucide-react";
 
-// FormattedMessage component remains the same
 const FormattedMessage = ({ text }) => {
   return (
     <ReactMarkdown

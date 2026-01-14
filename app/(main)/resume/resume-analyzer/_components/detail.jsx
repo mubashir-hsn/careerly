@@ -20,7 +20,7 @@ const CategoryContent = ({ tips, matchedSkills, missingSkills, skillImprovementA
     {/* Tips section */}
     <div className="w-full px-5 py-4 text-justify hidden md:grid md:grid-cols-2 gap-4">
       {tips?.map((tip, i) => (
-        <div className="flex flex-row gap-3 items-center justify-start bg-slate-100 rounded-lg p-2" key={i}>
+        <div className="flex flex-row gap-3 items-center justify-start bg-slate-200 rounded-lg p-2" key={i}>
           <img
             src={tip.type === "good" ? "/icons/check.svg" : "/icons/warning.svg"}
             alt="score"

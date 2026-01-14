@@ -22,7 +22,7 @@ const ResumeReviewPage = async ({ params }) => {
             <ArrowLeft className='w-4 h-4' /> Back to resume page
           </Button>
         </Link>
-        <div className='flex flex-col gap-2 md:flow-row md:justify-between p-1'>
+        <div className='flex flex-col gap-2 md:flex-row md:justify-between p-2'>
           <h1 className='text-2xl md:text-3xl font-bold text-gray-700'>
             Resume Review
           </h1>

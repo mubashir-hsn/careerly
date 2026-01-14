@@ -50,7 +50,7 @@ const QuizList = ({ assessments }) => {
                                     <div className={` font-medium ${assessment.quizScore === 100 ? 'text-green-500' : assessment.quizScore >= 50 ? 'text-blue-500' : 'text-red-500'}`}>
                                         Score: {assessment.quizScore.toFixed(1)}%
                                     </div>
-                                    <div className='text-slate-500 text-xs sm:text-sm md:text-[16px]'>
+                                    <div className='text-slate-500 text-xs sm:text-sm'>
                                         {format(
                                             new Date(assessment.createdAt),
                                             "MMMM dd, yyyy HH:mm"
