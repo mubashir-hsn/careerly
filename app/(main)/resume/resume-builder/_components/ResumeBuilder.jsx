@@ -151,8 +151,8 @@ const ResumeBuilder = ({ initialContent }) => {
 
     return (
         <div className='space-y-4'>
-            <div className='flex flex-col md:flex-row justify-between items-center gap-2'>
-                <h1 className='text-4xl gradient-subtitle font-bold'>Resume Builder</h1>
+            <div className='flex flex-col md:flex-row justify-between items-start md:items-center md:gap-2 px-2 md:px-0'>
+                <h1 className='text-2xl sm:text-3xl md:text-4xl gradient-subtitle font-bold'>Resume Builder</h1>
                 <div className="space-x-2">
                     <Button
                         variant="destructive"
@@ -289,7 +289,7 @@ const ResumeBuilder = ({ initialContent }) => {
                                     <Textarea
                                         {...field}
                                         placeholder="Writing a compelling professional summary"
-                                        className={'h-32 bg-white text-slate-500'}
+                                        className={'h-32 bg-white text-sm text-slate-500 placeholder:text-xs md:placeholder:text-sm'}
                                         error={errors?.summary}
                                     />
                                 )}
@@ -333,7 +333,7 @@ const ResumeBuilder = ({ initialContent }) => {
                                     <Textarea
                                         {...field}
                                         placeholder="e.g. Programming, Data Analysis, Patient Care, Research, Management, Communication"
-                                        className={'h-24 bg-white text-slate-500'}
+                                        className={'h-24 text-sm bg-white text-slate-500 placeholder:text-xs md:placeholder:text-sm'}
                                         error={errors?.skills}
                                     />
                                 )}
@@ -420,7 +420,7 @@ const ResumeBuilder = ({ initialContent }) => {
 
                 <TabsContent value="preview">
                     <div className='rounded-lg bg-slate-700 py-5 border-2 '>
-                        <div className="max-w-[210mm] mx-auto bg-white p-4 rounded-xl shadow-lg flex flex-wrap justify-center gap-3 no-print">
+                        <div className="w-full md:max-w-[210mm] mx-auto bg-white p-2 md:p-4 rounded-md md:rounded-xl shadow-lg flex flex-wrap justify-center gap-3 no-print">
                             {['ats', 'academic', 'corporate', 'executive'].map((style) => (
                                 <button
                                     key={style}

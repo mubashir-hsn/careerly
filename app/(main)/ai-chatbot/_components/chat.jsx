@@ -119,8 +119,8 @@ export default function Chat() {
     <div className="w-full mx-auto flex flex-col text-gray-800 font-sans px-2 md:px-5">
       {messages.length === 0 && (
         <div className="flex-1 w-fit mx-auto flex flex-col gap-2 items-center justify-center px-14 py-10 rounded-md mt-6 text-center bg-slate-100">
-           <div className="p-10 rounded-full bg-white">
-             <BrainCircuit className="w-24 h-24 text-purple-600"/>
+           <div className="p-6 md:p-10 rounded-full bg-white">
+             <BrainCircuit className="w-16 h-16 md:w-24 md:h-24 text-purple-600"/>
            </div>
           <h1 className="text-4xl gradient-title font-bold tracking-normal">
             AI Career Guide
@@ -131,7 +131,7 @@ export default function Chat() {
         </div>
       )}
       {messages.length > 0 && (
-        <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50 min-h-screen">
+        <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 bg-gray-50 min-h-screen">
           {messages.map((msg, i) => (
             <div
               key={i}
@@ -163,14 +163,14 @@ export default function Chat() {
       )}
       <form
         onSubmit={handleSubmit}
-        className="flex w-full p-4 bg-white fixed bottom-0 left-0 right-0"
+        className="flex w-full px-3 py-4 md:p-4 bg-white fixed bottom-0 left-0 right-0"
       >
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Type your question here..."
-          className="flex-1 bg-slate-200 text-gray-800 rounded-full py-3 px-6 mr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+          className="flex-1 bg-slate-200 text-gray-800 rounded-full py-3 px-6 mr-2 md:mr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
           disabled={loading}
         />
         {loading ? (

@@ -221,7 +221,7 @@ const EntryForm = ({ type, entries, onChange }) => {
                                 <Input
                                     {...register('title')}
                                     placeholder={text.titlePlaceholder}
-                                    className='bg-slate-100 text-slate-600 border-none'
+                                    className='bg-slate-100 text-slate-600 border-none placeholder:text-xs md:placeholder:text-sm text-sm'
                                 />
                                 {errors.title && <p className='text-xs text-red-500'>{errors.title.message}</p>}
                             </div>
@@ -230,7 +230,7 @@ const EntryForm = ({ type, entries, onChange }) => {
                                 <Input
                                     {...register("organization")}
                                     placeholder={text.orgPlaceholder}
-                                    className='bg-slate-100 text-slate-600 border-none'
+                                    className='bg-slate-100 text-slate-600 border-none placeholder:text-xs md:placeholder:text-sm text-sm'
                                 />
                                 {errors.organization && <p className='text-xs text-red-500'>{errors.organization.message}</p>}
                             </div>
@@ -243,7 +243,7 @@ const EntryForm = ({ type, entries, onChange }) => {
                                     <Input
                                         {...register('githubLink')}
                                         placeholder={text.github.placeholder}
-                                        className='bg-slate-100 text-slate-600 border-none'
+                                        className='bg-slate-100 text-slate-600 border-none placeholder:text-xs md:placeholder:text-sm text-sm'
                                     />
                                 </div>
                                 <div className='space-y-2'>
@@ -251,7 +251,7 @@ const EntryForm = ({ type, entries, onChange }) => {
                                     <Input
                                         {...register('liveLink')}
                                         placeholder={text.live.placeholder}
-                                        className='bg-slate-100 text-slate-600 border-none'
+                                        className='bg-slate-100 text-slate-600 border-none placeholder:text-xs md:placeholder:text-sm text-sm'
                                     />
                                 </div>
                             </div>
@@ -263,7 +263,7 @@ const EntryForm = ({ type, entries, onChange }) => {
                                 <Input
                                     {...register('startDate')}
                                     type='month'
-                                    className='bg-slate-100 text-slate-600 border-none'
+                                    className='bg-slate-100 text-slate-600 border-none text-sm'
                                 />
                                 {errors.startDate && <p className='text-xs text-red-500'>{errors.startDate.message}</p>}
                             </div>
@@ -273,7 +273,7 @@ const EntryForm = ({ type, entries, onChange }) => {
                                     {...register('endDate')}
                                     type='month'
                                     disabled={current}
-                                    className='bg-slate-100 text-slate-600 border-none'
+                                    className='bg-slate-100 text-slate-600 border-none text-sm'
                                 />
                                 {errors.endDate && <p className='text-xs text-red-500'>{errors.endDate.message}</p>}
                             </div>
@@ -300,7 +300,7 @@ const EntryForm = ({ type, entries, onChange }) => {
                             <Textarea
                                 {...register("description")}
                                 placeholder={text.descriptionPlaceholder}
-                                className='h-32 bg-slate-100 text-slate-600 border-none '
+                                className='h-32 bg-slate-100 text-slate-600 border-none placeholder:text-xs md:placeholder:text-sm text-sm'
                             />
                             {errors.description && <p className='text-xs text-red-500'>{errors.description.message}</p>}
 

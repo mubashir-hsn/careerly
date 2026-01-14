@@ -9,7 +9,7 @@ const InterviewPage = async () => {
   const assessments = await getAssessments();
   return (
     <>
-      <div className='py-8'>
+      <div className='py-8 px-2 md:px-0'>
         <h1 className='text-4xl font-bold gradient-subtitle'>Interview Preparation</h1>
         <p className='text-slate-500 text-sm -mt-1 font-medium'>Track your progress and practical skills.</p>
       </div>

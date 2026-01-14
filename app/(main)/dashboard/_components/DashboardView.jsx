@@ -108,7 +108,7 @@ const DashboardView = ({ insights }) => {
                     )}
                 </Button>
 
-                <p className='font-medium tracking-wide text-sm text-slate-600 p-4'>Last updated: {lastUpdatedDate}</p>
+                <p className='font-medium tracking-wide text-sm text-slate-600 px-2 md:p-4'>Last updated: <br className='block md:hidden' /> {lastUpdatedDate}</p>
             </div>
 
             {/* Market Overview Cards */}
@@ -184,7 +184,7 @@ const DashboardView = ({ insights }) => {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div className='h-[400px]'>
+                    <div className='h-100'>
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={salaryData}>
                                 <CartesianGrid strokeDasharray="3 3" />

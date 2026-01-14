@@ -49,7 +49,7 @@ const ResumeFeedbackList = ({ feedbacks }) => {
             <CardHeader>
               <div className="flex flex-col md:flex-row items-start justify-start gap-4 md:justify-between">
                 <div>
-                  <CardTitle className=" flex items-center gap-5">
+                  <CardTitle className="flex flex-col md:flex-row items-center justify-center gap-5">
                     <ScoreGauge score={feedback.overallScore} />
                     <div className='flex flex-col justify-start'>
                       <h1 className='text-lg gradient-subtitle'>{feedback?.jobTitle} at {feedback?.companyName}</h1>
@@ -104,7 +104,7 @@ const ResumeFeedbackList = ({ feedbacks }) => {
             <CardContent>
               <div className="line-clamp-3 bg-slate-100 text-slate-500 border-l-2 border-blue-500 rounded-lg p-4">
                 <p className='font-bold'>Requirements:</p>
-                <p className='text-sm'>{feedback?.jobDescription}</p>
+                <p className='text-sm text-justify'>{feedback?.jobDescription}</p>
               </div>
             </CardContent>
           </Card>

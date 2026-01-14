@@ -16,25 +16,25 @@ const ResumeReviewPage = async ({ params }) => {
 
   return (
     <>
-      <div className='px-4 pb-2 space-y-2'>
+      <div className='md:px-4 pb-2 space-y-2'>
         <Link href={'/resume'}>
           <Button variant={'link'} className={'font-medium'}>
             <ArrowLeft className='w-4 h-4' /> Back to resume page
           </Button>
         </Link>
-        <div className='flex justify-between p-1'>
-          <h1 className='text-3xl font-bold text-gray-700'>
+        <div className='flex flex-col gap-2 md:flow-row md:justify-between p-1'>
+          <h1 className='text-2xl md:text-3xl font-bold text-gray-700'>
             Resume Review
           </h1>
           <Previewbtn resumeUrl={feedback.resumeUrl}/>
         </div>
       </div>
 
-      <div className='max-w-6xl mx-auto flex flex-col gap-8 items-start justify-around mb-4 md:flex-row mt-3 p-2'>
+      <div className='w-full md:max-w-6xl mx-auto flex flex-col gap-8 items-start justify-around mb-4 md:flex-row mt-3 p-2'>
         <Summary feedback={feedback} />
         <Ats score={feedback.atsScore || 0} suggestions={feedback.aiFeedback.ATS.tips || []} />
       </div>
-      <div className='w-full max-w-5xl mx-auto p-2'>
+      <div className='w-full md:max-w-5xl mx-auto p-2'>
         <Details feedback={feedback} />
       </div>
     </>

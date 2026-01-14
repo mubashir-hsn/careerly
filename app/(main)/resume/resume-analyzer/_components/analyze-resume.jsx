@@ -72,15 +72,15 @@ const AnalyzeResume = () => {
   };
 
   return (
-    <div className="max-w-3xl bg-white rounded-lg mx-auto p-4 flex flex-col items-center">
-      <Link href={'/resume'} className='mb-2'>
+    <div className="w-full md:max-w-3xl bg-white rounded-lg mx-auto p-2 py-4 md:p-4 flex flex-col items-center">
+      <Link href={'/resume'} className='md:mb-2'>
         <Button variant={'link'} className={'font-medium'}>
           <ArrowLeft className='w-4 h-4' /> Back to resume page
         </Button>
       </Link>
 
-      <div className="text-center p-2 space-y-4">
-        <h1 className="text-3xl md:text-5xl font-extrabold bg-linear-to-b from-gray-700 via-gray-500 to-gray-700 text-transparent bg-clip-text">
+      <div className="text-center p-2 space-y-2 md:space-y-4">
+        <h1 className="text-2xl md:text-5xl font-extrabold bg-linear-to-b from-gray-700 via-gray-500 to-gray-700 text-transparent bg-clip-text">
           Smart feedback for your dream job
         </h1>
 
@@ -90,7 +90,7 @@ const AnalyzeResume = () => {
             <img src="/resume-scan.gif" className='w-full h-150 drop-shadow-2xl -mt-28' alt="resume-scan" />
           </div>
         ) : (
-          <p className="text-lg text-muted-foreground">
+          <p className="text-sm md:text-lg text-muted-foreground">
             Upload your resume for an ATS score and improvement tips.
           </p>
         )}

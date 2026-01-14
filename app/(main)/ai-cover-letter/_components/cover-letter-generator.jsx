@@ -69,14 +69,14 @@ const CoverLetterGenerator = () => {
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
-                        <div className='grid grid-cols-2 gap-4'>
+                        <div className='grid md:grid-cols-2 gap-4'>
                             <div className='space-y-2'>
                                 <label htmlFor="CompanyName">Company Name</label>
                                 <Input
                                     id="CompanyName"
                                     placeholder="Enter company name"
                                     {...register("companyName")}
-                                    className={'bg-slate-100 text-slate-500'}
+                                    className={'bg-slate-100 text-slate-500 placeholder:text-xs md:placeholder:text-sm'}
                                 />
 
                                 {
@@ -92,7 +92,7 @@ const CoverLetterGenerator = () => {
                                     id="jobtitle"
                                     placeholder="Enter job title"
                                     {...register("jobTitle")}
-                                    className={'bg-slate-100 text-slate-500'}
+                                    className={'bg-slate-100 text-slate-500 placeholder:text-xs md:placeholder:text-sm'}
                                 />
 
                                 {
@@ -109,7 +109,7 @@ const CoverLetterGenerator = () => {
                             <Textarea
                                 id="jobdesc"
                                 placeholder="Paste the job description here"
-                                className={'h-32 bg-slate-100 text-slate-500'}
+                                className={'h-32 bg-slate-100 text-slate-500 placeholder:text-xs md:placeholder:text-sm'}
                                 {...register("jobDescription")}
                             />
 

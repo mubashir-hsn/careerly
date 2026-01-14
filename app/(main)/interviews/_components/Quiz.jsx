@@ -158,7 +158,7 @@ const Quiz = () => {
                                 placeholder="e.g. Intern, Developer, Medical Officer, Business Analyst, Trainee"
                                 value={jobRole}
                                 onChange={(e) => setJobRole(e.target.value)}
-                                className={'bg-slate-100 text-slate-500'}
+                                className={'bg-slate-100 text-slate-500 placeholder:text-xs md:placeholder:text-sm'}
                             />
                         </div>
                         {/* Technology Stack */}
@@ -168,7 +168,7 @@ const Quiz = () => {
                                 placeholder="e.g. Programming, Patient Care, Accounting"
                                 value={skills}
                                 onChange={(e) => setSkills(e.target.value)}
-                                className={'bg-slate-100 text-slate-500'}
+                                className={'bg-slate-100 text-slate-500 placeholder:text-xs md:placeholder:text-sm'}
                             />
                             <p className=' text-sm text-muted-foreground ps-2'>Separate multiple skills with commas</p>
                         </div>

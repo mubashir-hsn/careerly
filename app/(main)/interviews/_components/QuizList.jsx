@@ -23,9 +23,9 @@ const QuizList = ({ assessments }) => {
     return (
         <>
             <div className='space-y-5 max-w-6xl mx-auto mt-5'>
-                <div className={'flex flex-row items-center justify-between pt-5'}>
+                <div className={'flex flex-col items-start justify-start gap-2 md:flex-row md:items-center md:justify-between pt-5 px-2 md:px-0'}>
                     <div>
-                        <h1 className={'text-3xl gradient-subtitle'}>Recent Quiz's</h1>
+                        <h1 className={'text-2xl md:text-3xl gradient-subtitle'}>Recent Quiz's</h1>
                         <p className='text-sm text-slate-500 font-normal -mt-2'>Review your past quiz performance.</p>
                     </div>
 
@@ -34,7 +34,7 @@ const QuizList = ({ assessments }) => {
                     </Button>
                 </div>
 
-                <div className="space-y-4 grid md:grid-cols-2 gap-5">
+                <div className="md:space-y-4 grid md:grid-cols-2 gap-3 md:gap-5">
                     {assessments?.map((assessment, i) => (
                         <Card
                             key={assessment.id}
@@ -42,7 +42,7 @@ const QuizList = ({ assessments }) => {
                             onClick={() => setSelectedQuiz(assessment)}
                         >
                             <CardHeader>
-                                <CardTitle className="gradient-subtitle text-xl capitalize flex flex-col gap-2">
+                                <CardTitle className="gradient-subtitle text-lg md:text-xl capitalize flex flex-col gap-2">
                                     <Badge className={'bg-purple-100 text-purple-500 text-xs'}>{assessment.category}</Badge>
                                     {i + 1}. {assessment?.title}
                                 </CardTitle>
@@ -50,7 +50,7 @@ const QuizList = ({ assessments }) => {
                                     <div className={` font-medium ${assessment.quizScore === 100 ? 'text-green-500' : assessment.quizScore >= 50 ? 'text-blue-500' : 'text-red-500'}`}>
                                         Score: {assessment.quizScore.toFixed(1)}%
                                     </div>
-                                    <div className='text-slate-500'>
+                                    <div className='text-slate-500 text-xs sm:text-sm md:text-[16px]'>
                                         {format(
                                             new Date(assessment.createdAt),
                                             "MMMM dd, yyyy HH:mm"

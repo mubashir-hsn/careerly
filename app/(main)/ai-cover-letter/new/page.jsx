@@ -6,7 +6,7 @@ import CoverLetterGenerator from '../_components/cover-letter-generator'
 
 const NewCoverLetterPage = () => {
     return (
-        <div className='pb-5 container mx-auto px-4 bg-slate-100'>
+        <div className='pb-5 container mx-auto px-2 md:px-4 bg-slate-100'>
             <div className='flex flex-col'>
                 <Link href={'/ai-cover-letter'}>
                     <Button variant={'link'} className={'gap-2 pl-0'}>
@@ -16,7 +16,7 @@ const NewCoverLetterPage = () => {
                 </Link>
 
                 <div className="pb-6">
-                    <h1 className="text-3xl font-bold gradient-subtitle">
+                    <h1 className="text-2xl md:text-3xl font-bold gradient-subtitle">
                         Create Cover Letter
                     </h1>
                     <p className="text-slate-500 text-sm">

@@ -23,12 +23,12 @@ const Ats = ({ score=75, suggestions }) => {
       : 'Needs Improvement';
 
   return (
-    <div className={`bg-gradient-to-b ${gradientClass} to-white max-w-[32rem] rounded-2xl shadow-lg w-full p-6`}>
+    <div className={`bg-linear-to-b ${gradientClass} to-white max-w-lg rounded-2xl shadow-lg w-full p-6`}>
       {/* Top section with icon and headline */}
       <div className="flex items-center gap-4 mb-6">
-        <img src={iconSrc} alt="ATS Score Icon" className="w-12 h-12" />
+        <img src={iconSrc} alt="ATS Score Icon" className="w-8 h-8 md:w-12 md:h-12" />
         <div>
-          <h2 className="text-2xl font-bold">ATS Score - {score}/100</h2>
+          <h2 className="text-lg md:text-2xl font-bold">ATS Score - {score}/100</h2>
         </div>
       </div>
 

@@ -24,9 +24,9 @@ const Category = ({ title, score = 75 }) => {
 
 const Summary = ({feedback}) => {
     return (
-        <div className='max-w-[32rem]'>
-            <div className='bg-white w-full space-y-5 rounded-2xl shadow-lg py-12 px-4 '>
-                <div className='flex justify-start items-center flex-row gap-3 md:gap-5 p-2 pt-0 md:pt-0 md:p-4 mb-6'>
+        <div className='max-w-lg'>
+            <div className='bg-white w-full space-y-5 rounded-2xl shadow-lg py-3 md:py-12 px-4 '>
+                <div className='flex flex-col md:flow-row justify-start items-center gap-5 p-2 pt-0 md:pt-0 md:p-4 mb-6'>
                     <ScoreGauge score={feedback.overallScore} />
                     <div className='flex flex-col gap-2'>
                         <h2 className='text-xl md:text-2xl font-bold text-primary'>Your Resume Score</h2>

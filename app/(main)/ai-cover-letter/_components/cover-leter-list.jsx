@@ -59,7 +59,7 @@ export default function CoverLetterList({ coverLetters }) {
             <div className="flex items-start justify-between">
               <div>
                 <CardTitle className="text-lg gradient-subtitle">
-                  {letter.jobTitle} at {letter.companyName}
+                  {letter.jobTitle} <br className="block md:hidden" /> at  {letter.companyName}
                 </CardTitle>
                 <CardDescription className={'text-slate-400 flex items-center gap-2'}>
                   <Calendar className="w-4 h-4"/> {format(new Date(letter.createdAt), "PPP")}
