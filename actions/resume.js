@@ -1,24 +1,12 @@
 "use server"
 import { db } from "@/lib/prisma.js";
-import { auth } from "@clerk/nextjs/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { checkAuth } from "@/services/authCheck";
+import { generateAIResponse } from "@/services/geminiService";
 import { revalidatePath } from "next/cache";
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({
-  model: "gemini-2.5-flash",
-});
 
 
 export const saveResume = async(content)=>{
-    const { userId } = await auth();
-    if (!userId) throw new Error("Unauthorized");
-  
-    const user = await db.user.findUnique({
-      where: { clerkUserId: userId },
-    });
-  
-    if (!user) throw new Error("User not found");
+  const user = await checkAuth();
 
     try {
 
@@ -49,14 +37,7 @@ export const saveResume = async(content)=>{
 
 
 export const getResume = async()=>{
-    const { userId } = await auth();
-    if (!userId) throw new Error("Unauthorized");
-  
-    const user = await db.user.findUnique({
-      where: { clerkUserId: userId },
-    });
-  
-    if (!user) throw new Error("User not found");
+  const user = await checkAuth();
 
     return await db.resume.findUnique({
         where:{
@@ -67,21 +48,7 @@ export const getResume = async()=>{
 
 
 export async function improveWithAI({ current, type }) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
-
-  const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
-    select: {
-      experience:true,
-      skills: true,
-      bio: true,
-      industry:true,
-      industryInsight: true,
-    }
-  });
-
-  if (!user) throw new Error("User not found");
+  const user = await checkAuth();
 
   let prompt = "";
 
@@ -126,9 +93,8 @@ export async function improveWithAI({ current, type }) {
   }
 
   try {
-    const result = await model.generateContent(prompt);
-    const response = result.response;
-    return response.text().trim();
+    const response = await generateAIResponse(prompt)
+    return response.trim();
   } catch (error) {
     console.error("Error improving content:", error);
     throw new Error("Failed to improve content");

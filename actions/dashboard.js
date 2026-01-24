@@ -1,41 +1,88 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { db } from "@/lib/prisma.js";
-import { auth } from "@clerk/nextjs/server";
 import { inngest } from "@/lib/inngest/client";
+import { checkAuth } from "@/services/authCheck";
+import { generateAIResponse } from "@/services/geminiService";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({
-  model: "gemini-2.5-flash",
-  // model: "gemini-3-flash-preview",
-});
 
 // Utility: Generate raw AI insights
-export async function generateAIInsight(industry) {
+export async function generateAIInsight(data) {
+
   const prompt = `
-    Analyze the current state of the ${industry} industry and provide insights in ONLY the following JSON format without any additional notes or explanations:
+You are a market analyst AI that gives realistic and practical industry insights.
+
+Analyze the current state of the ${data.industry} industry and user's information and return data in ONLY the following JSON format.
+
+Here is user information:
+User Industry: ${data.industry},
+User Skills: ${data.skills},
+User Experience: ${data.experience},
+User Bio: ${data.bio}
+
+Do not add explanations, notes, or extra text.
+
+{
+  "salaryRanges": [
+    { "role": "string", "min": number, "max": number, "median": number, "location": "string" }
+  ],
+  "marketOutlook": {
+    "summary": "string",
+    "demandLevel": "Low" | "Medium" | "High",
+    "automationRisk": "Low" | "Medium" | "High"
+  },
+  "industryTrends": [
     {
-      "salaryRanges": [
-        { "role": "string", "min": number, "max": number, "median": number, "location": "string" }
-      ],
-      "growthRate": number,
-      "demandLevel": "High" | "Medium" | "Low",
-      "topSkills": ["skill1", "skill2"],
-      "marketOutlook": "Positive" | "Neutral" | "Negative",
-      "keyTrends": ["trend1", "trend2"],
-      "recommendedSkills": ["skill1", "skill2"]
+      "trend": "string",
+      "impact": "Low" | "Medium" | "High"
     }
+  ],
+  "topSkills": [
+    {
+      "skill": "string",
+      "demandScore": number
+    }
+  ],
+  "skillGap": {
+    "matched": ["string"],
+    "missing": ["string"],
+    "matchPercentage": number
+  },
+  "learningPaths": [
+    {
+      "path": "string",
+      "durationMonths": number,
+      "outcome": "string",
+      "courses": [
+        {
+          "title": "string",
+          "platform": "string",
+          "link": "string"
+        }
+      ],
+      "books": [
+        {
+          "title": "string",
+          "author": "string"
+        }
+      ]
+    }
+  ],
+  "growthScore": number
+}
 
-    IMPORTANT: Return ONLY the JSON. No additional text, notes, or markdown formatting.
-    Include at least 5 common roles for salary ranges in Pakistani rupees (Rs.).
-    Growth rate should be a percentage.
-    Include at least 5 skills and trends.
-  `;
+IMPORTANT RULES:
+Return ONLY valid JSON and Real Time Data.
+Do not include markdown or extra text.
+Base insights on the Pakistani job market where possible.
+Include at least 5 industry trends and 5 top skills..
+Demand score and Growth score should be between 0 and 100.
+Provide correct course links in the courses section.
+Include at least 5 common roles for salary ranges in Pakistani rupees (Rs.).
+`;
 
-  const result = await model.generateContent(prompt);
-  const response = result.response;
-  const text = response.text();
 
-  const cleanedText = text.replace(/```(?:json)?\n?/g, "").trim();
+  const result = await generateAIResponse(prompt);
+
+  const cleanedText = result.replace(/```(?:json)?\n?/g, "").trim();
   return JSON.parse(cleanedText);
 }
 
@@ -56,16 +103,7 @@ export const generateAIInsightFn = inngest.createFunction(
 
 // Regular server action (for Clerk + Prisma flow)
 export async function getIndustryInsight() {
-  const { userId } = await auth();
-
-  if (!userId) throw new Error("Unauthorized");
-
-  const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
-    include: { industryInsight: true },
-  });
-
-  if (!user) throw new Error("User not found");
+  const user = await checkAuth();
 
   if (!user.industryInsight) {
     const insights = await generateAIInsight(user.industry);

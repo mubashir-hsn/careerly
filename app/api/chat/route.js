@@ -1,38 +1,84 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { db } from '@/lib/prisma';
+import { checkAuth } from '@/services/authCheck';
 
 export async function POST(req) {
     try {
-        const { prompt } = await req.json();
 
-        // Initialize the Generative AI model
+        const user = await checkAuth();
+
+        const { prompt, chatId } = await req.json();
+
+        // Initialize the AI model
+        const systemInstruction = "You are an AI career guide. Your purpose is to provide helpful and brief information on technology, skills, career paths, and industry trends. Be friendly and encouraging, but keep your answers brief , professional and to the point.";
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-
-        // Define the system instruction for the AI's role
-        const systemInstruction = "You are an AI career guide. Your purpose is to provide helpful and concise information on technology skills, career paths, and industry trends. Be friendly and encouraging, but keep your answers brief and to the point. Avoid lengthy explanations.";
-
-        const result = await model.generateContent({
-            contents: [{
-                role: "user",
-                parts: [{ text: prompt }]
-            }],
-            systemInstruction: {
-                parts: [{ text: systemInstruction }]
-            }
+        const model = genAI.getGenerativeModel({
+            model: "gemini-3-flash-preview",
+            systemInstruction: systemInstruction
         });
 
-        // Extract the text from the API response
+        // Fetch History & Context
+        let currentChatId = chatId;
+        let history = [];
+
+        if (currentChatId) {
+            const previousMessages = await db.message.findMany({
+                where: {
+                    chatId: currentChatId
+                  },
+                  orderBy: {
+                    createdAt: "asc"
+                  },
+                  take: 10
+            })
+            history = previousMessages.map(msg => ({
+                role: msg?.role === "USER" ? 'user' : 'model',
+                parts: [{ text: msg.content }]
+            }))
+        }
+        // generate chat session
+        const chatSession = model.startChat({ history })
+        const result = await chatSession.sendMessage(prompt);
         const textResponse = result.response.text();
 
         if (!textResponse) {
-            return NextResponse.json({ error: 'No response received from the model.' }, { status: 500 });
+            return NextResponse.json({ error: 'No response received. Please try again' }, { status: 500 });
         }
 
-        return NextResponse.json({ response: textResponse });
+        let generatedTitle = null
+        if (!currentChatId) {
+            const titleResult = await model.generateContent(`Generate a short, 3-4 word title for this conversation: "${prompt}". Return only the title text.`);
+            generatedTitle = titleResult.response.text().trim().replace(/[*"']/g, "");
+
+            //create new chat
+            const newChat = await db.chat.create({
+                data: {
+                    userId: user.id,
+                    title: generatedTitle || 'New Conversation'
+                }
+            })
+
+            currentChatId = newChat.id
+        }
+
+        // save messages in database
+        await db.message.createMany({
+            data: [
+                { chatId: currentChatId, role: "USER", content: prompt },
+                { chatId: currentChatId, role: "MODEL", content: textResponse },
+            ]
+        })
+
+
+        return NextResponse.json({
+            chatId: currentChatId,
+            response: textResponse,
+            title: generatedTitle
+        });
 
     } catch (error) {
-        console.error('API Route Error:', error);
+        console.error('Chat API Route Error:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }

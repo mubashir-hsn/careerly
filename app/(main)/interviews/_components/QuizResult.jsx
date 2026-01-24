@@ -9,7 +9,7 @@ const QuizResult = ({ result, onStartNew, hideStartNew = false }) => {
         return null;
     }
     return (
-        <div className='mx-auto bg-gray-100'>
+        <div className='mx-auto w-full bg-slate-100'>
             <h1 className='flex items-center gap-2 text-3xl gradient-subtitle p-3'>
                 <Trophy className='w-6 h-6 text-yellow-500' />
                 Quiz Result
@@ -40,9 +40,9 @@ const QuizResult = ({ result, onStartNew, hideStartNew = false }) => {
                                 <p className='font-medium'>Q{index+1}. {q.question}</p>
                                 {
                                     q.isCorrect ? (
-                                        <CheckCircle2 className='w-5 h-5 text-green-500 flex-shrink-0' />
+                                        <CheckCircle2 className='w-5 h-5 text-green-500 shrink-0' />
                                     ) : (
-                                        <XCircle className='w-5 h-5 text-red-500 flex-shrink-0' />
+                                        <XCircle className='w-5 h-5 text-red-500 shrink-0' />
                                     )
                                 }
                             </div>
@@ -52,7 +52,7 @@ const QuizResult = ({ result, onStartNew, hideStartNew = false }) => {
                                 {!q.isCorrect && <p><b className='text-gray-800'>Correct Answer:</b> {q.answer}</p>}
                             </div>
 
-                            <div className='text-sm max-w-4xl border-l-2 border-green-500 bg-slate-100 text-slate-500 p-3 rounded'>
+                            <div className='text-sm max-w5xl border-l-2 border-green-500 bg-slate-100 text-slate-500 p-3 rounded'>
                                 <p className='font-bold'>Explanation:</p>
                                 <p className='text-sm'>{q.explanation}</p>
                             </div>
@@ -64,7 +64,7 @@ const QuizResult = ({ result, onStartNew, hideStartNew = false }) => {
             {
                 !hideStartNew && (
                     <CardFooter>
-                        <Button onClick={onStartNew} className={'w-full'}>
+                        <Button onClick={onStartNew} className={'w-full mt-4'}>
                             Start New Quiz
                         </Button>
                     </CardFooter>

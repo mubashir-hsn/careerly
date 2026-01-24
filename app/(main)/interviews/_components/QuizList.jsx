@@ -23,7 +23,7 @@ const QuizList = ({ assessments }) => {
     return (
         <>
             <div className='space-y-5 max-w-6xl mx-auto mt-5'>
-                <div className={'flex flex-col items-start justify-start gap-2 md:flex-row md:items-center md:justify-between pt-5 px-2 md:px-0'}>
+                <div className={'flex flex-col items-start justify-start gap-2 px-2 md:flex-row md:items-center md:justify-between pt-5 md:px-4'}>
                     <div>
                         <h1 className={'text-2xl md:text-3xl gradient-subtitle'}>Recent Quiz's</h1>
                         <p className='text-sm text-slate-500 font-normal -mt-2'>Review your past quiz performance.</p>
@@ -34,11 +34,11 @@ const QuizList = ({ assessments }) => {
                     </Button>
                 </div>
 
-                <div className="md:space-y-4 grid md:grid-cols-2 gap-3 md:gap-5">
+                <div className="md:space-y-2 flex flex-col gap-3 shrink-0">
                     {assessments?.map((assessment, i) => (
                         <Card
                             key={assessment.id}
-                            className="cursor-pointer hover:bg-muted/50 transition-colors"
+                            className="w-full cursor-pointer hover:bg-muted/50 transition-colors shrink-0"
                             onClick={() => setSelectedQuiz(assessment)}
                         >
                             <CardHeader>

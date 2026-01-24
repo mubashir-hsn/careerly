@@ -1,91 +1,58 @@
 "use server"
 
 import { db } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server"
 import { generateAIInsight } from "./dashboard.js";
+import { checkAuth } from "@/services/authCheck.js";
 
 export async function userProfile(){
-  const { userId } = await auth();
 
-  if (!userId) throw new Error('Unauthorized');
-
-  const user = await db.user.findUnique({
-    where: {
-      clerkUserId: userId
-    }
-  });
-
-  if (!user) throw new Error('User not found');
-    
-  return user;
-  
+  const user = await checkAuth(); 
+  return user; 
 }
 
 export const updateUser = async (data) => {
-  const { userId } = await auth();
-  if (!userId) throw new Error('Unauthorized');
-
-  const user = await db.user.findUnique({
-    where: { clerkUserId: userId }
-  });
-  if (!user) throw new Error('User not found');
+  const user = await checkAuth();
 
   try {
-    
-    const updatedUser = await db.$transaction(async (tx) => {
-      return await tx.user.update({
-        where: { id: user.id },
-        data: {
-          industry: data.industry,
-          experience: data.experience,
-          bio: data.bio,
-          skills: data.skills
-        }
-      });
+    // Ensure industry exists
+    let industryInsight = await db.industryInsight.findUnique({
+      where: { industry: data.industry },
     });
 
-    (async () => {
-      try {
-        // check if industryInsight exists
-        let industryInsight = await db.industryInsight.findUnique({
-          where: { industry: data.industry }
-        });
+    if (!industryInsight) {
+      const insights = await generateAIInsight(data);
+      industryInsight = await db.industryInsight.create({
+        data: {
+          industry: data.industry,
+          ...insights,
+          lastUpdated: new Date(),
+          nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        },
+      });
+    }
 
-        if (!industryInsight) {
-          const insights = await generateAIInsight(data.industry);
-
-          await db.industryInsight.create({
-            data: {
-              industry: data.industry,
-              ...insights,
-              lastUpdated: new Date(),
-              nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-            }
-          });
-        }
-      } catch (aiError) {
-        console.log("AI / industry insight failed:", aiError.message);
-      }
-    })();
+    // Now update user safely
+    const updatedUser = await db.user.update({
+      where: { id: user.id },
+      data: {
+        industry: data.industry,
+        experience: data.experience,
+        bio: data.bio,
+        skills: data.skills,
+      },
+    });
 
     return { success: true, updatedUser };
-
   } catch (error) {
-    console.log("Error updating user", error.message);
-    throw new Error('Failed to update profile. ' + error.message);
+    console.log("Error updating user:", error.message);
+    throw new Error("Failed to update profile. " + error.message);
   }
 };
 
 
 export async function userOnboardingStatus() {
   try {
-    const { userId } = await auth();
-    if (!userId) return { isOnboarded: false };
-
-    const user = await db.user.findUnique({
-      where: { clerkUserId: userId },
-      select: { industry: true }
-    });
+    const user = await checkAuth();
 
     if (!user) return { isOnboarded: false };
 
@@ -105,21 +72,12 @@ export async function userOnboardingStatus() {
 }
 
 export async function updateIndustryInsights() {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
-
-  const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
-    include: {
-      industryInsight: true,
-    },
-  });
-
-  if (!user) throw new Error("User not found");
+  const user = await checkAuth();
+  
   if (!user.industry) throw new Error("User has no industry defined");
 
   // Generate new insights based on the user's industry
-  const insights = await generateAIInsight(user.industry);
+  const insights = await generateAIInsight(user);
 
   const updatedInsight = await db.industryInsight.update({
     where: {

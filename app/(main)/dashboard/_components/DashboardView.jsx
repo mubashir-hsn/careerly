@@ -1,16 +1,15 @@
 "use client"
 import { updateIndustryInsights } from '@/actions/user';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import useFetch from '@/hooks/useFetch';
 import { format, formatDistanceToNow } from 'date-fns';
-import { Brain, BriefcaseIcon, LineChart, Loader2, TrendingDown, TrendingUp, Zap } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React from 'react'
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { toast } from 'sonner';
+import { Loader2, RefreshCcw } from 'lucide-react';
+import MarketOverviewCards from './MarketOverviewCards';
+import ChartAndSkills from './ChartAndSkills';
+import LearningPath from './LearningPath';
 
 const DashboardView = ({ insights }) => {
 
@@ -29,44 +28,6 @@ const DashboardView = ({ insights }) => {
         }
     }, [updatedData, updating]);
 
-
-    // Transform salary data for the chart
-    const salaryData = insights.salaryRanges.map((range) => ({
-        name: range.role,
-        min: range.min / 1000,
-        max: range.max / 1000,
-        median: range.median / 1000,
-    }));
-
-    const getDemandLevelColor = (level) => {
-        switch (level.toLowerCase()) {
-            case "high":
-                return "bg-green-500";
-            case "medium":
-                return "bg-yellow-500";
-            case "low":
-                return "bg-red-500";
-            default:
-                return "bg-gray-500";
-        }
-    };
-
-    const getMarketOutlookInfo = (outlook) => {
-        switch (outlook.toLowerCase()) {
-            case "positive":
-                return { icon: TrendingUp, color: "text-green-500" };
-            case "neutral":
-                return { icon: LineChart, color: "text-yellow-500" };
-            case "negative":
-                return { icon: TrendingDown, color: "text-red-500" };
-            default:
-                return { icon: LineChart, color: "text-gray-500" };
-        }
-    };
-
-    const OutlookIcon = getMarketOutlookInfo(insights.marketOutlook).icon;
-    const outlookColor = getMarketOutlookInfo(insights.marketOutlook).color;
-
     const canUpdate = new Date() >= new Date(insights.nextUpdate);
     // Format dates using date-fns
     const lastUpdatedDate = format(new Date(insights.lastUpdated), "dd/MM/yyyy");
@@ -74,9 +35,6 @@ const DashboardView = ({ insights }) => {
         new Date(insights.nextUpdate),
         { addSuffix: true }
     );
-
-
-
 
     const handleSubmit = async () => {
         try {
@@ -104,7 +62,10 @@ const DashboardView = ({ insights }) => {
                     ) : !canUpdate ? (
                         `Next update ${nextUpdateDistance}`
                     ) : (
-                        "Update Insights"
+                        <>
+                            <RefreshCcw size={16} />
+                            Update Insights
+                        </>
                     )}
                 </Button>
 
@@ -112,158 +73,14 @@ const DashboardView = ({ insights }) => {
             </div>
 
             {/* Market Overview Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm text-slate-500 font-medium">
-                            Market Outlook
-                        </CardTitle>
-                        <OutlookIcon className={`h-4 w-4 ${outlookColor}`} />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">{insights.marketOutlook}</div>
-                        <p className="text-xs text-slate-500">
-                          Sustain Growth Expected
-                        </p>
-                    </CardContent>
-                </Card>
+           <MarketOverviewCards insights={insights}/>
 
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium text-slate-500 ">
-                            Industry Growth
-                        </CardTitle>
-                        <TrendingUp className="h-4 w-4 text-blue-500 " />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">
-                            {insights.growthRate.toFixed(1)}%
-                        </div>
-                        <Progress value={insights.growthRate} className="mt-2 text-slate-500 " />
-                    </CardContent>
-                </Card>
+            {/* Chart and Skills */}
+            <ChartAndSkills insights={insights}/>
 
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium text-slate-500 ">Demand Level</CardTitle>
-                        <BriefcaseIcon className="h-4 w-4 text-slate-500" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">{insights.demandLevel}</div>
-                        <div
-                            className={`h-2 w-full rounded-full mt-2 ${getDemandLevelColor(
-                                insights.demandLevel
-                            )}`}
-                        />
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium text-slate-500 ">Top Skills</CardTitle>
-                        <Brain className="h-4 w-4 text-slate-500" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="flex flex-wrap gap-2">
-                            {insights.topSkills.map((skill) => (
-                                <Badge key={skill} variant="secondary" className={'text-slate-500 bg-slate-100 px-2 py-1'}>
-                                    {skill}
-                                </Badge>
-                            ))}
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-
-            {/* charts */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>Salary Ranges By Role</CardTitle>
-                    <CardDescription className={'text-slate-500'}>
-                        Displaying minimum, median and maximum salaries (in thousands)
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <div className='h-100'>
-                        <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={salaryData}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="name" />
-                                <YAxis />
-                                <Tooltip
-                                    content={({ active, payload, label }) => {
-                                        if (active && payload && payload.length) {
-                                            return (
-                                                <div className="bg-background border rounded-lg p-2 shadow-md">
-                                                    <p className="font-medium">{label}</p>
-                                                    {payload.map((item) => (
-                                                        <p key={item.name} className="text-sm text-slate-600">
-                                                            {item.name}: Rs. {item.value}K
-                                                        </p>
-                                                    ))}
-                                                </div>
-                                            );
-                                        }
-                                        return null;
-                                    }}
-                                />
-                                <Bar dataKey="min" fill="#94a3b8" name="Min Salary (K)" />
-                                <Bar dataKey="median" fill="#64748b" name="Median Salary (K)" />
-                                <Bar dataKey="max" fill="#475569" name="Max Salary (K)" />
-                            </BarChart>
-                        </ResponsiveContainer>
-
-                    </div>
-                </CardContent>
-            </Card>
-
-            {/* other section */}
-
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-
-                <Card>
-                    <CardHeader>
-                        <CardTitle className={'flex items-center gap-2'}> <Zap className='w-5 h-8'/> Key Industry Trends</CardTitle>
-                        <CardDescription>
-                            Current trends shapping the industry
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <ul className='space-y-4'>
-                            {
-                                insights?.keyTrends.map((trend, index) => (
-                                    <li key={index} className='flex items-start space-x-2'>
-                                        <div className='w-2 h-2 rounded-full bg-primary mt-2'></div>
-                                        <span className='text-slate-800'>{trend}</span>
-                                    </li>
-                                ))
-                            }
-                        </ul>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Recomended Skills</CardTitle>
-                        <CardDescription>
-                            Skills to consider developing
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <div className='flex flex-wrap gap-2'>
-                            {
-                                insights?.recommendedSkills.map((skill) => (
-                                    <Badge key={skill} variant={'outline'} className={'bg-slate-100 text-slate-600 px-3 py-2 rounded-full'}>
-                                        {skill}
-                                    </Badge>
-                                ))
-                            }
-                        </div>
-                    </CardContent>
-                </Card>
-
-
-            </div>
+            {/* Learning path section */}
+            <LearningPath learningPaths={insights.learningPaths}/>
+        
         </div>
     )
 }

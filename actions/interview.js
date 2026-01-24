@@ -1,27 +1,18 @@
 "use server";
 
 import { db } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+import { checkAuth } from "@/services/authCheck";
+import { generateAIResponse } from "@/services/geminiService";
 
 export async function generateQuiz(data) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
-
-  const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
-    select: {
-      industry: true,
-      skills: true,
-    },
-  });
-
-  if (!user) throw new Error("User not found");
+  const user = await checkAuth();
 
   const prompt = `
+  You are a senior interviewer who designs real interview questions.
+  Questions must be realistic and job focused.
+  Do not generate trivial or irrelevant questions.
+  Questions must reflect real interview scenarios
+
   Generate ${data.quizQuestion} ${data.interviewType} ${data.difficultyLevel} level interview questions for a ${data.jobRole} with ${data.experienceLevel} experience${
     data.skills?.length ? ` and expertise in ${data.skills.join(", ")}` : ""
   }.
@@ -66,10 +57,8 @@ export async function generateQuiz(data) {
   `;
 
   try {
-    const result = await model.generateContent(prompt);
-    const response = result.response;
-    const text = response.text();
-    const cleanedText = text.replace(/```(?:json)?\n?/g, "").trim();
+    const result = await generateAIResponse(prompt)
+    const cleanedText = result.replace(/```(?:json)?\n?/g, "").trim();
     const quiz = JSON.parse(cleanedText);
 
     return quiz.questions;
@@ -79,17 +68,8 @@ export async function generateQuiz(data) {
   }
 }
 
-
-
-export async function saveQuizResult(questions, answers, score, quizDetail) {
-    const { userId } = await auth();
-    if (!userId) throw new Error("Unauthorized");
-  
-    const user = await db.user.findUnique({
-      where: { clerkUserId: userId },
-    });
-  
-    if (!user) throw new Error("User not found");
+export async function saveQuizResult({questions, answers, score, quizDetail}) {
+  const user = await checkAuth();
   
     const questionResults = questions.map((q, index) => ({
       question: q.question,
@@ -126,7 +106,7 @@ export async function saveQuizResult(questions, answers, score, quizDetail) {
     
   
       try {
-        const tipResult = await model.generateContent(improvementPrompt);
+        const tipResult = await generateAIResponse(improvementPrompt);
   
         improvementTip = tipResult.response.text().trim();
         console.log(improvementTip);
@@ -154,17 +134,9 @@ export async function saveQuizResult(questions, answers, score, quizDetail) {
       throw new Error("Failed to save quiz result");
     }
   }
-
-  
+ 
 export async function getAssessments() {
-    const { userId } = await auth();
-    if (!userId) throw new Error("Unauthorized");
-  
-    const user = await db.user.findUnique({
-      where: { clerkUserId: userId },
-    });
-  
-    if (!user) throw new Error("User not found");
+  const user = await checkAuth();
   
     try {
       const assessments = await db.assessment.findMany({

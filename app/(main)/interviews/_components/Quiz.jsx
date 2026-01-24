@@ -31,7 +31,7 @@ const Quiz = () => {
     // User input states
     const [jobRole, setJobRole] = useState("");
     const [experienceLevel, setExperienceLevel] = useState("fresher");
-    const [skills, setSkills] = useState(""); // comma-separated
+    const [skills, setSkills] = useState("");
     const [interviewType, setInterviewType] = useState("technical");
 
     const {
@@ -91,7 +91,12 @@ const Quiz = () => {
         }
 
         try {
-            await saveQuizResultFn(quizData, answers, score, quizDetail);
+            await saveQuizResultFn({
+                questions: quizData,
+                answers,
+                score,
+                quizDetail,
+              });
             toast.success("Quiz Completed.");
         } catch (error) {
             toast.error(error.message || "Failed to save quiz results.")
@@ -259,7 +264,7 @@ const Quiz = () => {
 
     return (
         <div>
-            <Card className={'mx-2 bg-white'}>
+            <Card className={'mx-2 bg-white mt-2'}>
                 <CardHeader>
                     <CardTitle>Question {currentQuestion + 1} of {quizData.length}</CardTitle>
                 </CardHeader>
@@ -276,7 +281,7 @@ const Quiz = () => {
                         {question.options.map((option, index) => (
                             <div key={index} className="flex items-center space-x-2">
                                 <RadioGroupItem value={option} id={`option-${index}`} />
-                                <Label htmlFor={`option-${index}`}>{option}</Label>
+                                <Label className={'text-slate-600'} htmlFor={`option-${index}`}>{option}</Label>
                             </div>
                         ))}
                     </RadioGroup>

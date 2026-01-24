@@ -242,7 +242,7 @@ export default function Home() {
             <h2 className="text-3xl font-bold mb-4">
               Frequently Asked Questions
             </h2>
-            <p className="text-muted-foreground">
+            <p className="text-slate-500">
               Find answers to common questions about our platform
             </p>
           </div>
@@ -254,7 +254,7 @@ export default function Home() {
                   <AccordionTrigger className="text-left cursor-pointer font-medium text-[17px] hover:no-underline [&>svg]:w-7 [&>svg]:h-7 [&>svg]:text-slate-600">
                     {faq.question}
                   </AccordionTrigger>
-                  <AccordionContent className=" text-muted-foreground font-normal text-justify text-[16px] leading-relaxed">
+                  <AccordionContent className="text-slate-500 font-normal text-justify text-[16px] leading-relaxed">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>

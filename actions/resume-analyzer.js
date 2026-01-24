@@ -1,8 +1,8 @@
 "use server";
 
 import { db } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { checkAuth } from "@/services/authCheck";
+import { generateAIResponse } from "@/services/geminiService";
 import fs from 'fs';
 import { createRequire } from "module";
 import path from "path";
@@ -10,27 +10,12 @@ import path from "path";
 
 const require = createRequire(import.meta.url);
 const pdfParse = require("pdf-parse-new");
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
 
 
 export async function generateResumeFeedback(formData) {
 
-  const { userId } = await auth();
-
-  if (!userId) {
-    throw new Error('Unauthorized access');
-  }
-
-  const user = await db.user.findUnique({
-    where: {
-      clerkUserId: userId
-    }
-  })
-
-  if (!user) {
-    throw new Error("User not found")
-  }
+  const user = await checkAuth();
 
   // FormData values
   const companyName = formData.get("companyName");
@@ -70,22 +55,34 @@ export async function generateResumeFeedback(formData) {
   const resumeText = (pdfData.text || "").trim().slice(0, 6000);
 
   const prompt = `
-    You are an expert in ATS (Applicant Tracking System) and resume analysis.
-    Please analyze and rate this resume and suggest how to improve it.
-    The rating can be low if the resume is bad.
-    Be thorough and detailed. Don't be afraid to point out any mistakes or areas for improvement.
-    If there is a lot to improve, don't hesitate to give low scores. This is to help the user to improve their resume.
-    If available, use the job description for the job user is applying to to give more detailed feedback.
-    If provided, take the job description into consideration.
-    The job title is: ${jobTitle}
-    The job description is: ${jobDescription}
+  You are an expert ATS and hiring manager. Your task is to analyze resumes for real hiring scenarios.
+   Be honest and critical. Do not inflate scores. Focus on skills, relevance, and ATS friendliness.
 
-    Focus strongly on skills analysis.
-    Match resume skills with job required skills.
-    Identify missing skills based on the job description.
-    Recommend which skills the user should improve first.
-    Recommend new skills and tools the user should learn to better fit this role.
-    Explain why each missing skill matters for this job.
+  Job Title:
+  ${jobTitle}
+  
+  Job Description:
+  ${jobDescription}
+  
+  Resume Content:
+  ${resumeText}
+  
+  Evaluation rules:
+  - Give scores from 0 to 100
+  - Low quality resumes must receive low scores
+  - Be specific and actionable in suggestions
+  - Prioritize skills and experience gaps
+  - Recommendations must be realistic for the role level
+  
+  Output rules:
+  - Return ONLY valid JSON
+  - Match the exact schema below
+  - Do not add extra fields
+  - Do not use markdown
+  - Do not add comments
+  - Do not write text outside JSON
+  
+  Required JSON schema:
     
     When giving tips, write the tip in a short concise sentence, and provide detailed explanation in the "explanation" field But For "ATS" give detailed explanation tips.
     Return ONLY valid JSON in the exact structure below.
@@ -139,15 +136,14 @@ Resume text
 ${resumeText}
 `;
 
-
   try {
-    const result = await model.generateContent(prompt);
-    const aiFeedback = result.response.text().replace(/```json|```/g, "").trim();
+    const result = await generateAIResponse(prompt);
+
+    const aiFeedback = result.replace(/```json|```/g, "").trim();
 
     const parsed = JSON.parse(aiFeedback);
 
     // save analysis in db
-
     const analysis = await db.resumeAnalysis.create({
       data: {
         userId: user.id,
@@ -175,14 +171,7 @@ ${resumeText}
 }
 
 export async function getResumeFeedback(id) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
-
-  const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
-  });
-
-  if (!user) throw new Error("User not found");
+  const user = await checkAuth();
 
   return await db.resumeAnalysis.findUnique({
     where: {
@@ -193,14 +182,7 @@ export async function getResumeFeedback(id) {
 }
 
 export async function getAllResumeFeedbacks() {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
-
-  const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
-  });
-
-  if (!user) throw new Error("User not found");
+  const user = await checkAuth();
 
   return await db.resumeAnalysis.findMany({
     where: {
@@ -215,14 +197,7 @@ export async function getAllResumeFeedbacks() {
 
 export async function deleteResumeFeedback(id) {
 
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized access");
-
-  const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
-  });
-
-  if (!user) throw new Error("User not found");
+  const user = await checkAuth();
 
   return await db.resumeAnalysis.delete({
     where: {

@@ -14,127 +14,149 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(uuid())
-  clerkUserId   String    @unique // clerk user id
-  email         String    @unique
-  name          String?
-  imageUrl      String?
-  industry      String?    // Combined industry-subindustry (e.g., "tech-software-development")
+  id              String           @id @default(uuid())
+  clerkUserId     String           @unique // clerk user id
+  email           String           @unique
+  name            String?
+  imageUrl        String?
+  industry        String? // Combined industry-subindustry (e.g., "tech-software-development")
   industryInsight IndustryInsight? @relation(fields: [industry], references: [industry])
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
 
   // Profile fields
-  bio           String?
-  experience    Int?      // Years of experience
-  
+  bio        String?
+  experience Int? // Years of experience
+
   // Relations
-  skills        String[]  // Array of skills
-  assessments   Assessment[]
-  resume        Resume?
-  coverLetter   CoverLetter[]
+  skills         String[] // Array of skills
+  assessments    Assessment[]
+  resume         Resume?
+  coverLetter    CoverLetter[]
   resumeAnalysis ResumeAnalysis[]
+  chats          Chat[]
 }
 
-
-
 model Assessment {
-  id            String    @id @default(cuid())
-  userId        String
-  user          User      @relation(fields: [userId], references: [id])
-  quizScore     Float     // Overall quiz score
-  questions     Json[]    // Array of {question, answer, userAnswer, isCorrect}
-  category      String    // "Technical", "Behavioral", etc.
-  improvementTip String?  // AI-generated improvement tip
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  quizScore      Float // Overall quiz score
+  questions      Json[] // Array of {question, answer, userAnswer, isCorrect}
+  category       String // "Technical", "Behavioral", etc.
+  improvementTip String? // AI-generated improvement tip
   title          String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@index([userId])
 }
 
 model Resume {
-  id          String    @id @default(cuid())
-  userId      String    @unique    // One resume per user
-  user        User      @relation(fields: [userId], references: [id])
-  content     String    @db.Text // Markdown content
-  atsScore    Float?
-  feedback    String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id        String   @id @default(cuid())
+  userId    String   @unique // One resume per user
+  user      User     @relation(fields: [userId], references: [id])
+  content   String   @db.Text // Markdown content
+  atsScore  Float?
+  feedback  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model CoverLetter {
-  id              String    @id @default(cuid())
-  userId          String
-  user            User      @relation(fields: [userId], references: [id])
-  content         String    // Markdown content
-  jobDescription  String?
-  companyName     String    // Name of the company applying to
-  jobTitle        String    // Position applying for
-  status          String    @default("draft") // draft, completed
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  content        String // Markdown content
+  jobDescription String?
+  companyName    String // Name of the company applying to
+  jobTitle       String // Position applying for
+  status         String   @default("draft") // draft, completed
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@index([userId])
 }
 
 // Combined Industry Trends and Salary Insights
 model IndustryInsight {
-  id            String    @id @default(cuid())
-  industry      String    @unique  // The industry this data belongs to (e.g., "tech-software-development")
-  
-  // Users in this industry
-  users         User[]
-  
-  // Salary data
-  salaryRanges  Json[]    // Array of { role: string, min: float, max: float, median: float, location: string? }
-  
-  // Industry trends
-  growthRate    Float     // Industry growth rate
-  demandLevel   String    // "High", "Medium", "Low"
-  topSkills     String[]  // Most in-demand skills
-  
-  // Market conditions
-  marketOutlook String    // "Positive", "Neutral", "Negative"
-  keyTrends     String[]  // Array of current industry trends
-  
-  // Learning suggestions
-  recommendedSkills String[]  // Skills recommended for the industry
-  
-  lastUpdated   DateTime  @default(now())
-  nextUpdate    DateTime  // Scheduled update time
+  id        String   @id @default(cuid())
+  industry  String   @unique
+
+   // Users in this industry
+  users User[]
+
+
+  // From prompt schema
+  salaryRanges   Json   // [{ role, min, max, median, location }]
+  marketOutlook  Json   // { summary, demandLevel, automationRisk }
+  industryTrends Json   // [{ trend, impact }]
+  topSkills      Json   // [{ skill, demandScore }]
+  skillGap       Json   // { matched: [], missing: [], matchPercentage }
+  learningPaths  Json   // [{ path, durationMonths, outcome, courses: [], books: [] }]
+  growthScore    Int    // 0 to 100
+
+  lastUpdated DateTime @default(now())
+  nextUpdate  DateTime
 
   @@index([industry])
 }
 
 model ResumeAnalysis {
-  id              String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  userId          String
-  user            User      @relation(fields: [userId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
   // Resume info
-  resumeUrl       String    // PDF or file link
+  resumeUrl String // PDF or file link
 
   // Job info
-  companyName     String?
-  jobTitle        String
-  jobDescription  String    @db.Text
+  companyName    String?
+  jobTitle       String
+  jobDescription String  @db.Text
 
   // Scores
-  overallScore    Float
-  atsScore        Float
+  overallScore Float
+  atsScore     Float
 
   // Skills analysis
-  matchedSkills   String[]
-  missingSkills   String[]
+  matchedSkills String[]
+  missingSkills String[]
 
   // AI JSON response
-  aiFeedback      Json
+  aiFeedback Json
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userId])
+}
+
+model Chat {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  messages  Message[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  chatId    String
+  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  content   String   @db.Text
+  role      Role
+  createdAt DateTime @default(now())
+
+  @@index([chatId])
+}
+
+enum Role {
+  USER
+  MODEL
 }
