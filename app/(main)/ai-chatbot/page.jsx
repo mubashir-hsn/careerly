@@ -3,9 +3,9 @@ import Chat from './_components/chat'
 
 const AiChatbotPage = () => {
     return (
-        <div className=''>
+        <>
             <Chat />
-        </div>
+        </>
     )
 }
 
