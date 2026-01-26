@@ -4,6 +4,8 @@ import { checkAuth } from "@/services/authCheck";
 import { generateAIResponse } from "@/services/geminiService";
 
 
+const modelName = process.env.GEMINI_MODEL_C;
+
 // Utility: Generate raw AI insights
 export async function generateAIInsight(data) {
 
@@ -79,8 +81,7 @@ If available , Provide free correct course links in the courses section.
 Include at least 5 common roles for salary ranges in Pakistani rupees (Rs.).
 `;
 
-
-  const result = await generateAIResponse(prompt);
+  const result = await generateAIResponse(prompt,modelName);
 
   const cleanedText = result.replace(/```(?:json)?\n?/g, "").trim();
   return JSON.parse(cleanedText);

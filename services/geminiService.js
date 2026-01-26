@@ -4,18 +4,17 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-const model = genAI.getGenerativeModel({
-  model: `${process.env.GEMINI_MODEL}`,
-});
-
-export async function generateAIResponse(userPrompt) {
+export async function generateAIResponse(userPrompt,modelName) {
   try {
+  
+    const model = genAI.getGenerativeModel({ model: modelName });
     const result = await model.generateContent({
         contents: [
           { role: "user", parts: [{ text: userPrompt }] }
         ],
         generationConfig: {
           temperature: 0.4,
+          maxOutputTokens: 1000,
         }
       });
 

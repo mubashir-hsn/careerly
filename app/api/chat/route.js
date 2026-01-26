@@ -14,7 +14,7 @@ export async function POST(req) {
         const systemInstruction = "You are an AI career guide. Your purpose is to provide helpful and brief information on technology, skills, career paths, and industry trends. Be friendly and encouraging, but keep your answers brief , professional and to the point.";
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
         const model = genAI.getGenerativeModel({
-            model: "gemini-3-flash-preview",
+            model: `${process.env.GEMINI_MODEL_C}`,
             systemInstruction: systemInstruction
         });
 

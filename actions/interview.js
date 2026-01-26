@@ -4,6 +4,8 @@ import { db } from "@/lib/prisma";
 import { checkAuth } from "@/services/authCheck";
 import { generateAIResponse } from "@/services/geminiService";
 
+const modelName = process.env.GEMINI_MODEL_B;
+
 export async function generateQuiz(data) {
   const user = await checkAuth();
 
@@ -57,7 +59,7 @@ export async function generateQuiz(data) {
   `;
 
   try {
-    const result = await generateAIResponse(prompt)
+    const result = await generateAIResponse(prompt,modelName)
     const cleanedText = result.replace(/```(?:json)?\n?/g, "").trim();
     const quiz = JSON.parse(cleanedText);
 
@@ -106,7 +108,7 @@ export async function saveQuizResult({questions, answers, score, quizDetail}) {
     
   
       try {
-        const tipResult = await generateAIResponse(improvementPrompt);
+        const tipResult = await generateAIResponse(improvementPrompt,modelName);
   
         improvementTip = tipResult.response.text().trim();
         console.log(improvementTip);

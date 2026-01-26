@@ -61,7 +61,7 @@ export default function CoverLetterList({ coverLetters }) {
                   <LetterText className="w-8 h-8 text-indigo-500" />
                 </div>
                   <CardTitle className="text-lg gradient-subtitle flex flex-col gap-0 pt-2">
-                    <p>{letter.jobTitle}</p> <p className="text-sm text-indigo-500">at  {letter.companyName}</p>
+                    <p className="capitalize">{letter.jobTitle}</p> <p className="text-sm text-indigo-500">at <span className="capitalize">{letter.companyName}</span> </p>
                   </CardTitle>
               </div>
                <div className={'text-slate-500 text-xs font-medium flex items-center gap-1'}>

@@ -3,7 +3,7 @@ import { BarLoader } from 'react-spinners'
 
 const ChatLayout = ({children}) => {
   return (
-    <div className='px-0 md:px-0 py-4'>
+    <div className='px-0'>
       <Suspense 
        fallback={<BarLoader className='mt-4' width={'100%'} color='gray'/>}
       >{children}</Suspense>

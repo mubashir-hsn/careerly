@@ -18,7 +18,7 @@ const CoverLetterPage = async ({ params }) => {
           </Button>
         </Link>
 
-        <h1 className='font-bold text-2xl md:text-4xl gradient-subtitle pl-3 md:pl-0'>{coverLetter?.jobTitle} at {coverLetter?.companyName}</h1>
+        <h1 className='font-bold capitalize text-2xl md:text-4xl gradient-subtitle pl-3 md:pl-0'>{coverLetter?.jobTitle} <span className='lowercase'>at</span> <span className='text-blue-500'>{coverLetter?.companyName}</span></h1>
       </div>
 
       <CoverLetterPreview content={coverLetter?.content}/>

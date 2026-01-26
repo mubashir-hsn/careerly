@@ -11,6 +11,7 @@ import path from "path";
 const require = createRequire(import.meta.url);
 const pdfParse = require("pdf-parse-new");
 
+const modelName = process.env.GEMINI_MODEL_B;
 
 
 export async function generateResumeFeedback(formData) {
@@ -137,7 +138,7 @@ ${resumeText}
 `;
 
   try {
-    const result = await generateAIResponse(prompt);
+    const result = await generateAIResponse(prompt, modelName);
 
     const aiFeedback = result.replace(/```json|```/g, "").trim();
 

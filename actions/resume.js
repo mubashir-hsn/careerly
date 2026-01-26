@@ -4,6 +4,7 @@ import { checkAuth } from "@/services/authCheck";
 import { generateAIResponse } from "@/services/geminiService";
 import { revalidatePath } from "next/cache";
 
+const modelName = process.env.GEMINI_MODEL_A;
 
 export const saveResume = async(content)=>{
   const user = await checkAuth();
@@ -35,7 +36,6 @@ export const saveResume = async(content)=>{
     }
 }
 
-
 export const getResume = async()=>{
   const user = await checkAuth();
 
@@ -45,7 +45,6 @@ export const getResume = async()=>{
         }
     })
 }
-
 
 export async function improveWithAI({ current, type }) {
   const user = await checkAuth();
@@ -93,7 +92,7 @@ export async function improveWithAI({ current, type }) {
   }
 
   try {
-    const response = await generateAIResponse(prompt)
+    const response = await generateAIResponse(prompt, modelName)
     return response.trim();
   } catch (error) {
     console.error("Error improving content:", error);

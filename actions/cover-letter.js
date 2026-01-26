@@ -4,6 +4,8 @@ import { db } from "@/lib/prisma";
 import { checkAuth } from "@/services/authCheck";
 import { generateAIResponse } from "@/services/geminiService";
 
+const modelName = process.env.GEMINI_MODEL_B;
+
 export async function generateCoverLetter(data) {
   const user = await checkAuth();
 
@@ -34,7 +36,7 @@ export async function generateCoverLetter(data) {
   `;
 
   try {
-    const result = await generateAIResponse(prompt)
+    const result = await generateAIResponse(prompt,modelName)
     const content = result.trim();
 
     const coverLetter = await db.coverLetter.create({
