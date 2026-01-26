@@ -6,8 +6,13 @@ import { checkAuth } from "@/services/authCheck.js";
 
 export async function userProfile(){
 
-  const user = await checkAuth(); 
-  return user; 
+  try {
+    const user = await checkAuth(); 
+    if(!user) return null
+    return user; 
+  } catch (error) {
+    return null;
+  }
 }
 
 export const updateUser = async (data) => {

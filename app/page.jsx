@@ -47,7 +47,7 @@ export default function Home() {
       </section>
 
        {/* Stats Section */}
-       <section className="w-full py-12 md:py-24 bg-blue-100/50">
+       <section className="w-full py-12 md:py-24 bg-indigo-50">
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto font-medium text-center">
             <div className="flex flex-col items-center justify-center space-y-2">

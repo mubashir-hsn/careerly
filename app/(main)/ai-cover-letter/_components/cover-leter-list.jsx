@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
-import { Calendar, Eye, Trash2 } from "lucide-react";
+import { Calendar, Eye, FileText, LetterText, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   Card,
@@ -52,31 +52,39 @@ export default function CoverLetterList({ coverLetters }) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 grid grid-cols-1 md:grid-cols-2 gap-2">
       {coverLetters.map((letter) => (
-        <Card key={letter.id} className="group relative ">
-          <CardHeader>
-            <div className="flex items-start justify-between">
-              <div>
-                <CardTitle className="text-lg gradient-subtitle">
-                  {letter.jobTitle} <br className="block md:hidden" /> at  {letter.companyName}
-                </CardTitle>
-                <CardDescription className={'text-slate-400 flex items-center gap-2'}>
-                  <Calendar className="w-4 h-4"/> {format(new Date(letter.createdAt), "PPP")}
-                </CardDescription>
+        <Card key={letter.id} className="group relative w-full h-fit">
+          <CardHeader className={'flex justify-between items-center gap-2'}>
+              <div className="flex items-center gap-2">
+                <div className="bg-slate-100 px-2 py-3 rounded-md">
+                  <LetterText className="w-8 h-8 text-indigo-500" />
+                </div>
+                  <CardTitle className="text-lg gradient-subtitle flex flex-col gap-0 pt-2">
+                    <p>{letter.jobTitle}</p> <p className="text-sm text-indigo-500">at  {letter.companyName}</p>
+                  </CardTitle>
               </div>
-              <div className="flex space-x-2">
+               <div className={'text-slate-500 text-xs font-medium flex items-center gap-1'}>
+                  <Calendar className="w-4 h-4" /> {format(new Date(letter.createdAt), "PPP")}
+               </div>
+          </CardHeader>
+          <CardContent className={'space-y-4'}>
+            <div className=" bg-slate-100 text-slate-500 border-l-2 border-blue-500 rounded-lg p-4">
+              <p className='font-bold'>Requirements:</p>
+              <p className="line-clamp-2 text-sm">{letter.jobDescription} </p>
+            </div>
+            <div className="flex space-x-2">
                 <AlertDialog>
                   <Button
-                    variant="outline"
                     size="icon"
                     onClick={() => router.push(`/ai-cover-letter/${letter.id}`)}
+                    className={'w-1/2 bg-blue-500 text-white hover:bg-blue-400'}
                   >
-                    <Eye className="h-4 w-4" />
+                    <Eye className="h-4 w-4" /> View Letter
                   </Button>
                   <AlertDialogTrigger asChild>
-                    <Button variant="outline" size="icon">
-                      <Trash2 className="h-4 w-4" />
+                    <Button variant="default" size="icon" className={'w-1/2 bg-red-500 text-white hover:bg-red-400'}>
+                      <Trash2 className="h-4 w-4" /> Delete Letter
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
@@ -100,13 +108,6 @@ export default function CoverLetterList({ coverLetters }) {
                   </AlertDialogContent>
                 </AlertDialog>
               </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-          <div className=" bg-slate-100 text-slate-500 border-l-2 border-blue-500 rounded-lg p-4">
-              <p className='font-bold'>Requirements:</p>
-              <p className="line-clamp-2 text-sm">{letter.jobDescription} </p>
-            </div>
           </CardContent>
         </Card>
       ))}

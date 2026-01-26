@@ -75,7 +75,7 @@ Do not include markdown or extra text.
 Base insights on the Pakistani job market where possible.
 Include at least 5 industry trends and 5 top skills..
 Demand score and Growth score should be between 0 and 100.
-Provide correct course links in the courses section.
+If available , Provide free correct course links in the courses section.
 Include at least 5 common roles for salary ranges in Pakistani rupees (Rs.).
 `;
 

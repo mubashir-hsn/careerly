@@ -22,7 +22,7 @@ const Header = async () => {
           href="/"
           className="uppercase flex items-center text-xl bg-linear-to-l from-gray-600 via-gray-700 to-gray-800 font-extrabold text-transparent bg-clip-text"
         >
-          <Image src={'/careerly.jpg'} alt='careerly' width={130} height={140}/>
+          <Image src={'/careerly.jpg'} alt='careerly' width={120} height={130}/>
         </Link>
 
         {/* Navigation & User Controls */}

@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
 import QuizResult from './QuizResult';
 import { Badge } from '@/components/ui/badge';
-import { X } from 'lucide-react';
+import { Calendar, X } from 'lucide-react';
 
 const QuizList = ({ assessments }) => {
     const router = useRouter();
@@ -34,11 +34,11 @@ const QuizList = ({ assessments }) => {
                     </Button>
                 </div>
 
-                <div className="md:space-y-2 flex flex-col gap-3 shrink-0">
+                <div className="md:space-y-2 grid grid-cols-1 md:grid-cols-2 gap-3 shrink-0">
                     {assessments?.map((assessment, i) => (
                         <Card
                             key={assessment.id}
-                            className="w-full cursor-pointer hover:bg-muted/50 transition-colors shrink-0"
+                            className="w-full h-fit cursor-pointer hover:bg-muted/50 transition-colors shrink-0"
                             onClick={() => setSelectedQuiz(assessment)}
                         >
                             <CardHeader>
@@ -50,10 +50,11 @@ const QuizList = ({ assessments }) => {
                                     <div className={` font-medium ${assessment.quizScore === 100 ? 'text-green-500' : assessment.quizScore >= 50 ? 'text-blue-500' : 'text-red-500'}`}>
                                         Score: {assessment.quizScore.toFixed(1)}%
                                     </div>
-                                    <div className='text-slate-500 text-xs sm:text-sm'>
+                                    <div className='text-slate-500 text-xs flex items-center'>
+                                        <Calendar className='w-4 h-4 mr-1'/>
                                         {format(
                                             new Date(assessment.createdAt),
-                                            "MMMM dd, yyyy HH:mm"
+                                            "MMMM dd, yyyy"
                                         )}
                                     </div>
                                 </CardDescription>
