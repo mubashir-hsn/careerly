@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
-import { Calendar, Eye, FileText, LetterText, Trash2 } from "lucide-react";
+import { Calendar, Eye, LetterText, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   Card,

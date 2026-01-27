@@ -118,6 +118,14 @@ const Quiz = () => {
             setError("Please fill all interview details.")
             return
         }
+        if(jobRole.length > 40){
+            setError('Job role too long')
+            return
+        }
+        if(skills.length > 150){
+            setError('Skills too long')
+            return
+        }
 
         setError("");
 

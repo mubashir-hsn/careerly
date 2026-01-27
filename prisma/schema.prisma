@@ -67,6 +67,9 @@ model CoverLetter {
   id             String   @id @default(cuid())
   userId         String
   user           User     @relation(fields: [userId], references: [id])
+  name           String
+  email          String?
+  contact        String?
   content        String // Markdown content
   jobDescription String?
   companyName    String // Name of the company applying to
