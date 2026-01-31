@@ -11,7 +11,7 @@ export const onboardingSchema = z.object({
 
   bio: z
     .string()
-    .max(200, "Bio too long, write a short intro under 200 characters")
+    .max(300, "Bio too long, write a short intro under 300 characters")
     .optional(),
 
   experience: z

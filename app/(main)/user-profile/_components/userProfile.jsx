@@ -160,7 +160,7 @@ export default function UserProfilePage({ user }) {
                                     </div>
                                 </div>
                                 {/* Last Updated */}
-                                <div className="flex items-center gap-3 border-b border-slate-200 pb-4">
+                                <div className="flex items-center gap-3 pb-4">
                                     <div className="w-12 h-12 rounded-full bg-slate-100 text-blue-500 flex items-center justify-center p-2">
                                         <History className="h-5 w-5 font-bold text-slate-600" />
                                     </div>

@@ -82,7 +82,7 @@ export async function updateIndustryInsights() {
   if (!user.industry) throw new Error("User has no industry defined");
 
   // Generate new insights based on the user's industry
-  const insights = await generateAIInsight(user);
+  const insights = await generateAIInsight(user, process.env.GEMINI_MODEL_C);
 
   const updatedInsight = await db.industryInsight.update({
     where: {

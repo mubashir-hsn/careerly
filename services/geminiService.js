@@ -20,7 +20,6 @@ export async function generateAIResponse(userPrompt,modelName) {
       if (!result?.response) {
         throw new Error("Empty AI response");
       }
-      console.log(result)
   
       return result.response.text();
   } catch (error) {
