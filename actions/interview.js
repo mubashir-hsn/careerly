@@ -1,8 +1,8 @@
 "use server";
-
 import { db } from "@/lib/prisma";
 import { checkAuth } from "@/services/authCheck";
 import { generateAIResponse } from "@/services/geminiService";
+import { NextResponse } from "next/server";
 
 const modelName = process.env.GEMINI_MODEL_B;
 
@@ -15,9 +15,8 @@ export async function generateQuiz(data) {
   Do not generate trivial or irrelevant questions.
   Questions must reflect real interview scenarios
 
-  Generate ${data.quizQuestion} ${data.interviewType} ${data.difficultyLevel} level interview questions for a ${data.jobRole} with ${data.experienceLevel} experience${
-    data.skills?.length ? ` and expertise in ${data.skills.join(", ")}` : ""
-  }.
+  Generate ${data.quizQuestion} ${data.interviewType} ${data.difficultyLevel} level interview questions for a ${data.jobRole} with ${data.experienceLevel} experience${data.skills?.length ? ` and expertise in ${data.skills.join(", ")}` : ""
+    }.
   
   Technology Stack: ${data.skills?.length ? data.skills.join(", ") : "Not specified"}  
   Interview Type: ${data.interviewType} (Technical / HR / Behavioral / Mixed)  
@@ -59,42 +58,48 @@ export async function generateQuiz(data) {
   `;
 
   try {
-    const result = await generateAIResponse(prompt,modelName)
+    const result = await generateAIResponse(prompt, modelName)
     const cleanedText = result.replace(/```(?:json)?\n?/g, "").trim();
     const quiz = JSON.parse(cleanedText);
 
     return quiz.questions;
   } catch (error) {
     console.error("Error generating quiz:", error);
-    throw new Error("Failed to generate quiz questions");
-  }
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Failed to generate quiz questions"
+      },
+      { status: 502 }
+    )
+      }
 }
 
-export async function saveQuizResult({questions, answers, score, quizDetail}) {
+export async function saveQuizResult({ questions, answers, score, quizDetail }) {
   const user = await checkAuth();
-  
-    const questionResults = questions.map((q, index) => ({
-      question: q.question,
-      answer: q.correctAnswer,
-      userAnswer: answers[index],
-      isCorrect: q.correctAnswer === answers[index],
-      explanation: q.explanation,
-    }));
-  
-    // Get wrong answers
-    const wrongAnswers = questionResults.filter((q) => !q.isCorrect);
-  
-    // Only generate improvement tips if there are wrong answers
-    let improvementTip = null;
-    if (wrongAnswers.length > 0) {
-      const wrongQuestionsText = wrongAnswers
-        .map(
-          (q) =>
-            `Question: "${q.question}"\nCorrect Answer: "${q.answer}"\nUser Answer: "${q.userAnswer}"`
-        )
-        .join("\n\n");
-  
-        const improvementPrompt = `
+
+  const questionResults = questions.map((q, index) => ({
+    question: q.question,
+    answer: q.correctAnswer,
+    userAnswer: answers[index],
+    isCorrect: q.correctAnswer === answers[index],
+    explanation: q.explanation,
+  }));
+
+  // Get wrong answers
+  const wrongAnswers = questionResults.filter((q) => !q.isCorrect);
+
+  // Only generate improvement tips if there are wrong answers
+  let improvementTip = null;
+  if (wrongAnswers.length > 0) {
+    const wrongQuestionsText = wrongAnswers
+      .map(
+        (q) =>
+          `Question: "${q.question}"\nCorrect Answer: "${q.answer}"\nUser Answer: "${q.userAnswer}"`
+      )
+      .join("\n\n");
+
+    const improvementPrompt = `
         The user got the following ${quizDetail.interviewType} questions for the role of ${quizDetail.jobRole} wrong:
     
         ${wrongQuestionsText}
@@ -105,54 +110,65 @@ export async function saveQuizResult({questions, answers, score, quizDetail}) {
         You can suggest practicing topics related to these skills: ${quizDetail.skills.join(", ")}.
         Don't explicitly mention the mistakes, instead focus on what to learn/practice.
     `;
-    
-  
-      try {
-        const tipResult = await generateAIResponse(improvementPrompt,modelName);
-  
-        improvementTip = tipResult.response.text().trim();
-        console.log(improvementTip);
-      } catch (error) {
-        console.error("Error generating improvement tip:", error);
-        // Continue without improvement tip if generation fails
-      }
-    }
-  
+
+
     try {
-      const assessment = await db.assessment.create({
-        data: {
-          userId: user.id,
-          quizScore: score,
-          questions: questionResults,
-          category: quizDetail.interviewType.toLowerCase() === 'mixed' ? 'Mixed(technical.hr,behavioral)' : quizDetail?.interviewType,
-          improvementTip,
-          title: quizDetail?.jobRole
-        },
-      });
-  
-      return assessment;
+      const tipResult = await generateAIResponse(improvementPrompt, modelName);
+
+      improvementTip = tipResult.response.text().trim();
     } catch (error) {
-      console.error("Error saving quiz result:", error);
-      throw new Error("Failed to save quiz result");
+      console.error("Error generating improvement tip:", error);
+      // Continue without improvement tip if generation fails
     }
   }
- 
+
+  try {
+    const assessment = await db.assessment.create({
+      data: {
+        userId: user.id,
+        quizScore: score,
+        questions: questionResults,
+        category: quizDetail.interviewType.toLowerCase() === 'mixed' ? 'Mixed(technical.hr,behavioral)' : quizDetail?.interviewType,
+        improvementTip,
+        title: quizDetail?.jobRole
+      },
+    });
+
+    return assessment;
+  } catch (error) {
+    console.error("Error saving quiz result:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Failed to save quiz result"
+      },
+      { status: 500 }
+    )
+  }
+}
+
 export async function getAssessments() {
   const user = await checkAuth();
-  
-    try {
-      const assessments = await db.assessment.findMany({
-        where: {
-          userId: user.id,
-        },
-        orderBy: {
-          createdAt: "asc",
-        },
-      });
-  
-      return assessments;
-    } catch (error) {
-      console.error("Error fetching assessments:", error);
-      throw new Error("Failed to fetch assessments");
-    }
+
+  try {
+    const assessments = await db.assessment.findMany({
+      where: {
+        userId: user.id,
+      },
+      orderBy: {
+        createdAt: "asc",
+      },
+    });
+
+    return assessments;
+  } catch (error) {
+    console.error("Error fetching assessments:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Failed to fetch assessments"
+      },
+      { status: 500 }
+    )
   }
+}

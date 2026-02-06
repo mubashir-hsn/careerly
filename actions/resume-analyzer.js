@@ -5,6 +5,7 @@ import { checkAuth } from "@/services/authCheck";
 import { generateAIResponse } from "@/services/geminiService";
 import fs from 'fs';
 import { createRequire } from "module";
+import { NextResponse } from "next/server";
 import path from "path";
 
 
@@ -166,7 +167,13 @@ ${resumeText}
 
   } catch (error) {
     console.log("Error while analyzing resume", error)
-    throw new Error("Error while analyzing resume");
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Error while analyzing resume"
+      },
+      { status: 502 }
+    )
   }
 
 }
@@ -194,7 +201,6 @@ export async function getAllResumeFeedbacks() {
     },
   });
 }
-
 
 export async function deleteResumeFeedback(id) {
 

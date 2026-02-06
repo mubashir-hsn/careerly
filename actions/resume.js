@@ -3,6 +3,7 @@ import { db } from "@/lib/prisma.js";
 import { checkAuth } from "@/services/authCheck";
 import { generateAIResponse } from "@/services/geminiService";
 import { revalidatePath } from "next/cache";
+import { NextResponse } from "next/server";
 
 const modelName = process.env.GEMINI_MODEL_A;
 
@@ -32,8 +33,14 @@ export const saveResume = async(content)=>{
         
     } catch (error) {
         console.log("Error while saving resume:" , error);
-        throw new Error("Failed to save resume")
-    }
+        return NextResponse.json(
+          {
+            success: false,
+            message: "Failed to save resume"
+          },
+          { status: 500 }
+        )
+            }
 }
 
 export const getResume = async()=>{
@@ -105,7 +112,13 @@ export async function improveWithAI({ current, type }) {
     return response.trim();
   } catch (error) {
     console.error("Error improving content:", error);
-    throw new Error("Failed to improve content");
-  }
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Failed to improve content"
+      },
+      { status: 502 }
+    )
+      }
 }
 

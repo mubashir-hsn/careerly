@@ -1,6 +1,7 @@
 'use server'
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { NextResponse } from "next/server";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
@@ -18,12 +19,19 @@ export async function generateAIResponse(userPrompt,modelName) {
       });
 
       if (!result?.response) {
-        throw new Error("Empty AI response");
+        return NextResponse.json({
+          success: false,
+          message:"Empty AI response"
+        }, {status: 502});
       }
   
       return result.response.text();
   } catch (error) {
     console.error("Gemini Service Error:", error);
-    throw new Error("AI generation failed");
+    return NextResponse.json(
+      {
+        success: false,
+        message: error.message || "Something went wrong"
+      }, { status: 502 })
   }
 }

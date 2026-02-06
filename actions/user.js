@@ -3,6 +3,7 @@
 import { db } from "@/lib/prisma";
 import { generateAIInsight } from "./dashboard.js";
 import { checkAuth } from "@/services/authCheck.js";
+import { NextResponse } from "next/server.js";
 
 export async function userProfile(){
 
@@ -50,10 +51,16 @@ export const updateUser = async (data) => {
     return { success: true, updatedUser };
   } catch (error) {
     console.log("Error updating user:", error.message);
-    throw new Error("Failed to update profile. " + error.message);
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Failed to update profile"
+      },
+      { status: 500 }
+    )
+    
   }
 };
-
 
 export async function userOnboardingStatus() {
   try {

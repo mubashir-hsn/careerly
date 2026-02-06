@@ -3,6 +3,7 @@
 import { db } from "@/lib/prisma";
 import { checkAuth } from "@/services/authCheck";
 import { generateAIResponse } from "@/services/geminiService";
+import { NextResponse } from "next/server";
 
 const modelName = process.env.GEMINI_MODEL_A;
 
@@ -40,7 +41,6 @@ export async function generateCoverLetter(data) {
 
   try {
     const result = await generateAIResponse(prompt, modelName)
-    console.log('Trim result',result)
     const content = result.trim();
 
     const coverLetter = await db.coverLetter.create({
@@ -60,7 +60,11 @@ export async function generateCoverLetter(data) {
     return coverLetter;
   } catch (error) {
     console.error("Error generating cover letter:", error.message);
-    throw new Error("Failed to generate cover letter");
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Failed to generate cover letter"
+      },{ status: 502 })
   }
 }
 
