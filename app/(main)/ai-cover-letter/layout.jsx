@@ -14,3 +14,10 @@ const CoverLetter = ({children}) => {
 }
 
 export default CoverLetter
+
+export async function generateMetadata() {
+  return {
+    title: "AI Cover Letter Generator for Jobs | Careerly",
+    description: "Create job ready cover letters using AI. Personalized, role based cover letters that help you stand out."
+  }
+}

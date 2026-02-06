@@ -19,3 +19,10 @@ const onBoardingPage = async() => {
 
 
 export default onBoardingPage
+
+export async function generateMetadata() {
+  return {
+    title: "Career Onboarding and Profile Setup | Careerly AI Career Coach",
+    description: "Complete your career profile to get personalized AI guidance and recommendations."
+  }
+}

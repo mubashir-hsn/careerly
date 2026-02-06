@@ -12,3 +12,10 @@ const ProfileLayout = ({children}) => {
 }
 
 export default ProfileLayout
+
+export async function generateMetadata() {
+  return {
+    title: "User Profile and Career Details | Careerly",
+    description: "Manage your career profile, skills, experience, and preferences in one place."
+  }
+}

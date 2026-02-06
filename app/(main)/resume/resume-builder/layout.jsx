@@ -12,3 +12,10 @@ const ResumeBuilderLayout = ({children}) => {
 }
 
 export default ResumeBuilderLayout
+
+export async function generateMetadata() {
+  return {
+    title: "AI Resume Builder for Modern Jobs | Careerly",
+    description: "Build professional resumes using AI. Clean formats, role based content, and ATS friendly resumes."
+  }
+}

@@ -12,3 +12,11 @@ const ChatLayout = ({children}) => {
 }
 
 export default ChatLayout
+
+export async function generateMetadata() {
+  return {
+    title: "AI Career Chatbot Assistant | Careerly",
+    description: "Chat with an AI career assistant for job advice, interview prep, resume help, and career planning."
+  }
+}
+

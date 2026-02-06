@@ -12,3 +12,11 @@ const InterviewLayout = ({children}) => {
 }
 
 export default InterviewLayout
+
+export async function generateMetadata() {
+  return {
+    title: "AI Mock Interview Practice | Careerly",
+    description: "Practice real job interviews with AI. Improve answers, confidence, and interview performance."
+  }
+}
+

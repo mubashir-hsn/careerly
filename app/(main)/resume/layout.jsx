@@ -14,3 +14,11 @@ const ResumeLayout = ({children}) => {
 }
 
 export default ResumeLayout
+
+export async function generateMetadata() {
+  return {
+    title: "Resume | Careerly AI Career Coach",
+    description: "View, edit, and manage your professional resume and feedbacks powered by AI career tools."
+  }
+}
+

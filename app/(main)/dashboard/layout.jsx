@@ -16,3 +16,11 @@ const DashboardLayout = ({children}) => {
 }
 
 export default DashboardLayout
+
+export async function generateMetadata() {
+  return {
+    title: "AI Industry Insights for Jobs and Careers | Careerly",
+    description: "Latest AI industry insights, job trends, skills demand, and career guidance to help you grow faster in tech."
+  }
+}
+

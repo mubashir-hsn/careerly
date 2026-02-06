@@ -14,3 +14,10 @@ const ResumeAnalyzer = ({children}) => {
 }
 
 export default ResumeAnalyzer
+
+export async function generateMetadata() {
+  return {
+    title: "AI Resume Analyzer for Jobs | Careerly",
+    description: "Analyze your resume with AI. Get instant feedback, improvements, and job match suggestions."
+  }
+}
