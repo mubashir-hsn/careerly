@@ -115,7 +115,7 @@ export async function saveQuizResult({ questions, answers, score, quizDetail }) 
     try {
       const tipResult = await generateAIResponse(improvementPrompt, modelName);
 
-      improvementTip = tipResult.response.text().trim();
+      improvementTip = tipResult.response.trim();
     } catch (error) {
       console.error("Error generating improvement tip:", error);
       // Continue without improvement tip if generation fails

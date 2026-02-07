@@ -1,5 +1,4 @@
 "use server";
-
 import { db } from "@/lib/prisma";
 import { checkAuth } from "@/services/authCheck";
 import { generateAIResponse } from "@/services/geminiService";
