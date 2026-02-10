@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,7 +17,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 import { industries } from "@/data/industries";
 import useFetch from "@/hooks/useFetch";
 import { updateUser } from "@/actions/user";
@@ -85,6 +83,7 @@ const UpdateProfileForm = ({ user, setIsEditing, industry, subIndustry }) => {
     <Card>
       <CardContent>
         <form className="space-y-6 my-4" onSubmit={handleSubmit(onSubmit)}>
+          
           {/* Industry Select */}
           <div className="space-y-2">
             <Label>Industry</Label>
@@ -142,9 +141,8 @@ const UpdateProfileForm = ({ user, setIsEditing, industry, subIndustry }) => {
           <div className="space-y-2">
             <Label>Years of Experience</Label>
             <Input
-              type="number"
-              min={0}
-              max={50}
+              type="text"
+              inputMode="numeric"
               {...register("experience")}
               className={'bg-slate-100 text-slate-600'}
             />
