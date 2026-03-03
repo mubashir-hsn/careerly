@@ -18,6 +18,7 @@ import PdfButton from '@/components/PdfButton'
 
 const initialData = {
     contactInfo: {
+        name: '',
         email: '',
         mobile: '',
         linkedin: '',
@@ -99,6 +100,20 @@ const ResumeBuilder = ({ initialContent }) => {
     } = useFetch(improveWithAI);
 
     useEffect(() => {
+      if (!user) return;
+
+      const currentName = watch("contactInfo.name");
+
+      if (!currentName && user.fullName) {
+        setValue("contactInfo.name", user.fullName, {
+          shouldDirty: false,
+          shouldTouch: false,
+          shouldValidate: false,
+        });
+      }
+    }, [user, setValue, watch]);
+    
+    useEffect(() => {
         if (improvedContent && !isImproving) {
             setValue("summary", improvedContent);
             toast.success("Summary improved!");
@@ -155,6 +170,21 @@ const ResumeBuilder = ({ initialContent }) => {
                         <div className="space-y-4 mt-4 w-full">
                             <h3 className="text-lg font-medium">Contact Information</h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded-lg bg-white">
+                                <div className="space-y-3">
+                                    <label className="text-sm font-medium">Name</label>
+                                    <Input
+                                        className={'bg-slate-100 text-slate-500'}
+                                        {...register("contactInfo.name")}
+                                        type="text"
+                                        placeholder="enter name"
+                                        error={errors.contactInfo?.name}
+                                    />
+                                    {errors.contactInfo?.name && (
+                                        <p className="text-sm text-red-500">
+                                            {errors.contactInfo?.name.message}
+                                        </p>
+                                    )}
+                                </div>
                                 <div className="space-y-3">
                                     <label className="text-sm font-medium">Email</label>
                                     <Input
@@ -399,7 +429,7 @@ const ResumeBuilder = ({ initialContent }) => {
                                 </button>
                             ))}
                         </div>
-                        <Template data={formValues} user={user} activeStyle={activeStyle} />
+                        <Template data={formValues} activeStyle={activeStyle} />
                     </div>
                 </TabsContent>
             </Tabs>

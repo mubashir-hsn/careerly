@@ -39,35 +39,23 @@ export const onboardingSchema = z.object({
 });
 
 export const contactSchema = z.object({
-  email: z
+  name: z
     .string()
-    .email("Enter a valid email")
-    .max(80, "Email too long"),
-
+    .min(1, "Name must be more than 3 characters")
+    .max(40, "Name too long"),
+  email: z.string().email("Enter a valid email").max(80, "Email too long"),
   mobile: z
     .string()
     .min(1, "Mobile number required")
     .max(20, "Mobile number too long"),
 
-  profession: z
-    .string()
-    .max(40, "Profession name too long")
-    .optional(),
+  profession: z.string().max(40, "Profession name too long").optional(),
 
-  linkedin: z
-    .string()
-    .max(50, "LinkedIn link too long")
-    .optional(),
+  linkedin: z.string().max(50, "LinkedIn link too long").optional(),
 
-  twitter: z
-    .string()
-    .max(50, "Twitter link too long")
-    .optional(),
+  twitter: z.string().max(50, "Twitter link too long").optional(),
 
-  portfolio: z
-    .string()
-    .max(50, "Portfolio link too long")
-    .optional(),
+  portfolio: z.string().max(50, "Portfolio link too long").optional(),
 });
 
 export const entrySchema = z

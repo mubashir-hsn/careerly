@@ -110,35 +110,44 @@ export async function POST(req) {
 
 
             const resumeTemplates = {
-
-                ats: `
+              ats: `
             <div class="bg-white p-[45px_55px] font-sans text-[10pt] text-[#374151]">
                 <header class="mb-5 border-b border-gray-900 pb-2">
-                    <h1 class="text-[26px] font-bold text-[#111827] tracking-tight">${user?.fullName}</h1>
+                    <h1 class="text-[26px] font-bold text-[#111827] tracking-tight">${contactInfo?.name}</h1>
                     <div class="text-[11px] flex flex-wrap gap-4 font-medium uppercase mt-1">
-                        ${getHeaderLinks('ats')}
+                        ${getHeaderLinks("ats")}
                     </div>
                 </header>
-                ${summary ? `
+                ${
+                  summary
+                    ? `
                    <section class="mb-4">
                       <h2 class="text-[14px] font-bold border-b border-gray-900 mb-1 uppercase tracking-widest">Professional Summary</h2>
                       <p class="leading-relaxed">${summary}</p>
-                    </section>` : ''}
+                    </section>`
+                    : ""
+                }
 
                 <section class="mb-4">
                     <h2 class="text-[14px] font-bold border-b border-gray-900 mb-2 mt-4 uppercase tracking-widest">Experience</h2>
-                    ${experience?.map(exp => `
+                    ${experience
+                      ?.map(
+                        (exp) => `
                       <div class="mb-4">
                          <div class="flex justify-between font-bold text-black">
                              <span>${exp.organization}</span><span>${exp.startDate} — ${exp.endDate}</span>
                          </div>
                           <div class="italic text-[#4B5563]">${exp.title}</div>
                           <p class="text-[10.5pt]">${exp.description}</p>
-                      </div>`).join('')}
+                      </div>`,
+                      )
+                      .join("")}
                 </section>
 
                 <section class="mb-4"><h2 class="text-[14px] font-bold border-b border-gray-900 mb-2 mt-4 uppercase tracking-widest">Technical Projects</h2>
-                        ${projects?.map(proj => `
+                        ${projects
+                          ?.map(
+                            (proj) => `
                             <div class="mb-3">
                                 <div class="flex justify-between font-bold text-black">
                                     <span>${proj.title}</span>
@@ -146,50 +155,57 @@ export async function POST(req) {
                                 </div>
                                 <p>${proj.description}</p>
                             </div>
-                        `).join('')}
+                        `,
+                          )
+                          .join("")}
                     </section>
                 <section class="mb-4">
                     <h2 class="text-[14px] font-bold border-b border-gray-900 mb-2 mt-4 uppercase tracking-widest">Education</h2>
-                    ${education?.map(edu => `
+                    ${education
+                      ?.map(
+                        (edu) => `
                        <div class="mb-2">
                           <div class="flex justify-between font-bold text-black">
                              <span>${edu.organization}</span><span>${edu.startDate} — ${edu.endDate}</span>
                           </div>
                            <div class="italic text-[#4B5563]">${edu.title}</div>
-                        </div>`).join('')
-                    }
+                        </div>`,
+                      )
+                      .join("")}
                 </section>
 
                 <section>
                     <h2 class="text-[14px] font-bold border-b border-gray-900 mb-2 mt-4 uppercase tracking-widest">Core Skills</h2>
-                    <p class="font-medium">${userSkills.join('  •  ')}</p>
+                    <p class="font-medium">${userSkills.join("  •  ")}</p>
                 </section>
             </div>`,
 
-                academic: `
+              academic: `
                 <div class="bg-white p-[35px_45px] text-[#334155] leading-normal font-sans text-[10.5pt]">
                     <header class="mb-4 text-center">
-                        <h1 class="text-[24px] font-serif font-semibold underline underline-offset-[6px] mb-1 uppercase text-[#0f172a]">${user?.fullName}</h1>
+                        <h1 class="text-[24px] font-serif font-semibold underline underline-offset-[6px] mb-1 uppercase text-[#0f172a]">${contactInfo?.name}</h1>
                         <p class="text-[14px] italic text-black font-serif mb-1.5">${contactInfo?.profession}</p>
                         <div class="text-[10px] text-black font-medium flex justify-center uppercase">
-                            ${getHeaderLinks('academic')}
+                            ${getHeaderLinks("academic")}
                         </div>
                     </header>
 
-                    ${summary ? `<section class="mb-2"><h2 class="text-[15px] font-serif font-bold border-b-[1.5px] border-[#cbd5e1] mt-4 mb-1 uppercase text-[#0f172a]">Profile Summary</h2><p class="text-justify text-[12.5px] text-[#475569]">${summary}</p></section>` : ''}
+                    ${summary ? `<section class="mb-2"><h2 class="text-[15px] font-serif font-bold border-b-[1.5px] border-[#cbd5e1] mt-4 mb-1 uppercase text-[#0f172a]">Profile Summary</h2><p class="text-justify text-[12.5px] text-[#475569]">${summary}</p></section>` : ""}
 
                     <section class="mb-2">
                         <h2 class="text-[15px] font-serif font-bold border-b-[1.5px] border-[#cbd5e1] mt-4 mb-2 pb-0.5 uppercase text-[#0f172a]">Education</h2>
-                        ${education?.map(edu => `<div class="mb-2"><div class="flex justify-between font-semibold"><span>${edu.organization}</span><span class="text-[#4f46e5] text-[9pt]">${edu.startDate} – ${edu.endDate}</span></div><div class="text-[#64748b] italic text-[12px]">${edu.title}</div></div>`).join('')}
+                        ${education?.map((edu) => `<div class="mb-2"><div class="flex justify-between font-semibold"><span>${edu.organization}</span><span class="text-[#4f46e5] text-[9pt]">${edu.startDate} – ${edu.endDate}</span></div><div class="text-[#64748b] italic text-[12px]">${edu.title}</div></div>`).join("")}
                     </section>
 
                     <section class="mb-2">
                         <h2 class="text-[15px] font-serif font-bold border-b-[1.5px] border-[#cbd5e1] mt-4 mb-2 pb-0.5 uppercase text-[#0f172a]">Experience</h2>
-                        ${experience?.map(exp => `<div class="mb-3"><div class="flex justify-between font-semibold"><span>${exp.organization}</span><span class="text-[9pt] bg-[#f0f4ff] text-[#4f46e5] px-1.5 py-0.5 rounded">${exp.startDate} – ${exp.endDate}</span></div><div class="text-[#4f46e5] uppercase font-bold text-[10px] tracking-wider">${exp.title}</div><p class="text-[12.5px] border-l-2 border-[#e2e8f0] pl-3 text-justify">${exp.description}</p></div>`).join('')}
+                        ${experience?.map((exp) => `<div class="mb-3"><div class="flex justify-between font-semibold"><span>${exp.organization}</span><span class="text-[9pt] bg-[#f0f4ff] text-[#4f46e5] px-1.5 py-0.5 rounded">${exp.startDate} – ${exp.endDate}</span></div><div class="text-[#4f46e5] uppercase font-bold text-[10px] tracking-wider">${exp.title}</div><p class="text-[12.5px] border-l-2 border-[#e2e8f0] pl-3 text-justify">${exp.description}</p></div>`).join("")}
                     </section>
 
                     <section class="mb-2"><h2 class="text-[15px] font-serif font-bold border-b-[1.5px] border-[#cbd5e1] mt-4 mb-2 pb-0.5 uppercase text-[#0f172a]">Projects</h2>
-                        ${projects?.map(proj => `
+                        ${projects
+                          ?.map(
+                            (proj) => `
                             <div class="mb-2">
                                 <div class="flex justify-between items-baseline font-semibold text-[#1e293b]">
                                     <span>${proj.title}</span>
@@ -197,27 +213,31 @@ export async function POST(req) {
                                 </div>
                                 <p class="text-[14px] text-[#475569] italic">${proj.description}</p>
                             </div>
-                        `).join('')}
+                        `,
+                          )
+                          .join("")}
                     </section>
 
                     <section>
                         <h2 class="text-[15px] font-serif font-bold border-b-[1.5px] border-[#cbd5e1] mt-4 mb-2 pb-0.5 uppercase text-[#0f172a]">Technical Skills</h2>
-                        <div class="flex flex-wrap gap-1.5">${userSkills.map(s => `<span class="px-2.5 py-1 border border-[#e2e8f0] text-[10px] uppercase font-semibold text-[#334155]">${s.trim()}</span>`).join('')}</div>
+                        <div class="flex flex-wrap gap-1.5">${userSkills.map((s) => `<span class="px-2.5 py-1 border border-[#e2e8f0] text-[10px] uppercase font-semibold text-[#334155]">${s.trim()}</span>`).join("")}</div>
                     </section>
                 </div>`,
 
-                corporate: `
+              corporate: `
                 <div class="bg-white p-[35px_45px] text-[#334155] font-sans text-[10.5pt]">
                     <header class="mb-6 border-l-8 border-[#4f46e5] pl-5">
-                        <h1 class="text-[24px] font-black uppercase text-[#0f172a] tracking-tighter">${user?.fullName}</h1>
+                        <h1 class="text-[24px] font-black uppercase text-[#0f172a] tracking-tighter">${contactInfo?.name}</h1>
                         <p class="text-[14px] font-bold text-[#4f46e5] uppercase">${contactInfo?.profession}</p>
                         <div class="text-[10px] text-[#64748b] flex flex-wrap gap-y-1 font-bold uppercase mt-2">
-                            ${getHeaderLinks('corporate')}
+                            ${getHeaderLinks("corporate")}
                         </div>
                     </header>
                     <section class="mb-4">
                         <h2 class="text-[15px] font-black border-b-2 border-[#e2e8f0] mb-3 uppercase text-[#1e293b]">Experience</h2>
-                        ${experience?.map(exp => `
+                        ${experience
+                          ?.map(
+                            (exp) => `
                             <div class="mb-4">
                                <div class="flex justify-between font-bold">
                                   <span>${exp.organization}</span>
@@ -225,11 +245,14 @@ export async function POST(req) {
                                 </div>
                                 <div class="text-[#64748b] text-[10px] font-bold italic uppercase mb-1">${exp.title}</div>
                                 <p class="text-[12.5px] border-l-2 border-[#f1f5f9] pl-3">${exp.description}</p>
-                            </div>`).join('')
-                    }
+                            </div>`,
+                          )
+                          .join("")}
                     </section>
                     <section class="mb-4"><h2 class="text-[15px] font-black border-b-2 border-[#e2e8f0] mb-3 uppercase text-[#1e293b]">Key Projects</h2>
-                        ${projects?.map(proj => `
+                        ${projects
+                          ?.map(
+                            (proj) => `
                             <div class="mb-3 border-l-2 border-[#4f46e5] pl-3">
                                 <div class="flex justify-between font-bold">
                                     <span>${proj.title}</span>
@@ -237,44 +260,54 @@ export async function POST(req) {
                                 </div>
                                 <p class="text-[12.5px] mt-1">${proj.description}</p>
                             </div>
-                        `).join('')}
+                        `,
+                          )
+                          .join("")}
                     </section>
                     <section class="mb-4">
                         <h2 class="text-[15px] font-black border-b-2 border-[#e2e8f0] mb-3 uppercase text-[#1e293b]">Education</h2>
-                        ${education?.map(edu => `
+                        ${education
+                          ?.map(
+                            (edu) => `
                            <div class="flex justify-between mb-2">
                               <div>
                                  <div class="font-bold">${edu.organization}</div>
                                  <div class="text-[12px] italic text-[#4f46e5] font-bold">${edu.title}</div>
                               </div>
                               <div class="font-bold text-[#4f46e5] text-[10px] uppercase">${edu.startDate} – ${edu.endDate}</div>
-                          </div>`).join('')
-                    }
+                          </div>`,
+                          )
+                          .join("")}
                     </section>
                     <section>
                        <h2 class="text-[15px] font-black border-b-2 border-[#e2e8f0] mb-3 uppercase text-[#1e293b]">Skills</h2>
                        <div class="flex flex-wrap gap-1.5">
-                         ${userSkills.map(s => `
+                         ${userSkills
+                           .map(
+                             (s) => `
                               <span class="px-2.5 py-1 text-[10px] bg-[#1e293b] text-white font-bold uppercase">${s.trim()}</span>
-                              `).join('')
-                    }
+                              `,
+                           )
+                           .join("")}
                       </div>
                    </section>
                 </div>`,
 
-                executive: `
+              executive: `
                 <div class="bg-white p-[35px_45px] font-serif text-[10.5pt] text-[#3f3f46]">
                     <header class="text-center mb-8">
-                        <h1 class="text-[28px] font-light text-[#18181b]">${user?.fullName}</h1>
+                        <h1 class="text-[28px] font-light text-[#18181b]">${contactInfo?.name}</h1>
                         <div class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#a1a1aa] mb-2">${contactInfo?.profession}</div>
                         <div class="flex justify-center gap-x-1 text-[10px] font-sans border-y py-2 uppercase border-[#f4f4f5]">
-                            ${getHeaderLinks('executive')}
+                            ${getHeaderLinks("executive")}
                         </div>
                     </header>
                     
                     <section class="mb-3">
                        <h2 class="text-[15px] font-bold text-center mb-4 uppercase tracking-[0.15em] flex items-center before:flex-1 before:border-b before:mr-4 after:flex-1 after:border-b after:ml-4">Experience</h2>
-                        ${experience?.map(exp => `
+                        ${experience
+                          ?.map(
+                            (exp) => `
                         <div class="mb-2">
                           <div class="flex justify-between font-bold text-[#18181b]">
                              <span>${exp.title}</span>
@@ -282,12 +315,16 @@ export async function POST(req) {
                           </div>
                           <div class="text-[12px] uppercase mb-2 text-[#71717a] font-sans font-bold">${exp.organization}</div>
                           <p class="text-[12.5px] leading-relaxed text-justify">${exp.description}</p>
-                        </div>`).join('')}
+                        </div>`,
+                          )
+                          .join("")}
                     </section>
                    
                     <section class="mb-3">
                        <h2 class="text-[15px] font-bold text-center mb-4 uppercase tracking-[0.15em] flex items-center before:flex-1 before:border-b before:mr-4 after:flex-1 after:border-b after:ml-4">Strategic Projects</h2>
-                        ${projects?.map(proj => `
+                        ${projects
+                          ?.map(
+                            (proj) => `
                             <div class="mb-2">
                                 <div class="flex justify-between font-bold italic">
                                     <span>${proj.title}</span>
@@ -295,32 +332,39 @@ export async function POST(req) {
                                 </div>
                                 <p class="text-[12px] italic pr-4 border-r-2 border-[#f4f4f5] text-right">${proj.description}</p>
                             </div>
-                        `).join('')}
+                        `,
+                          )
+                          .join("")}
                     </section>
 
                     <section class="mb-3">
                        <h2 class="text-[15px] font-bold text-center mb-4 uppercase tracking-[0.15em] flex items-center before:flex-1 before:border-b before:mr-4 after:flex-1 after:border-b after:ml-4">Academic Credentials</h2>
                         <div class="grid grid-cols-2 gap-4">
-                        ${education?.map(edu => `
+                        ${education
+                          ?.map(
+                            (edu) => `
                                <div class="border-l border-gray-200 pl-4">
                                   <div class="font-bold text-[#18181b] text-[13px]">${edu.organization}</div>
                                   <div class="text-[11px] italic text-[#a16207]">${edu.title}</div>
                                   <div class="text-[9px] font-sans text-[#a1a1aa]">${edu.startDate} — ${edu.endDate}</div>
-                                </div>`).join('')
-                    }</div>
+                                </div>`,
+                          )
+                          .join("")}</div>
                     </section>
 
                     <section>
                       <h2 class="text-[15px] font-bold text-center mb-4 uppercase tracking-[0.15em] flex items-center before:flex-1 before:border-b before:mr-4 after:flex-1 after:border-b after:ml-4">Expertise</h2>
                       <div class="text-center text-[11.5px] uppercase tracking-widest">
-                          ${userSkills.map((s, i) => `
-                             <span>${s.trim()}${i < userSkills.length - 1 ? ' <span style="color:#d4d4d8; margin: 0 8px;">/</span> ' : ''}</span>
-                             `).join('')
-                    }
+                          ${userSkills
+                            .map(
+                              (s, i) => `
+                             <span>${s.trim()}${i < userSkills.length - 1 ? ' <span style="color:#d4d4d8; margin: 0 8px;">/</span> ' : ""}</span>
+                             `,
+                            )
+                            .join("")}
                         </div>
                     </section>
                 </div>`,
-
             };
             contentHtml = resumeTemplates[activeStyle] || resumeTemplates.ats;
         }
