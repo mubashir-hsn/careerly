@@ -105,6 +105,7 @@ export const generateAIInsightFn = inngest.createFunction(
 // Regular server action (for Clerk + Prisma flow)
 export async function getIndustryInsight() {
   const user = await checkAuth();
+  if (!user) throw new Error("Unauthorized");
 
   if (!user.industryInsight) {
     const insights = await generateAIInsight(user.industry);

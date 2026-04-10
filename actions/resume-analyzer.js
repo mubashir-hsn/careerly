@@ -18,6 +18,7 @@ const modelName = process.env.GEMINI_MODEL_B;
 export async function generateResumeFeedback(formData) {
 
   const user = await checkAuth();
+  if (!user) throw new Error("Unauthorized");
 
   // FormData values
   const companyName = formData.get("companyName");
@@ -180,6 +181,7 @@ ${resumeText}
 
 export async function getResumeFeedback(id) {
   const user = await checkAuth();
+  if (!user) throw new Error("Unauthorized");
 
   return await db.resumeAnalysis.findUnique({
     where: {
@@ -191,6 +193,7 @@ export async function getResumeFeedback(id) {
 
 export async function getAllResumeFeedbacks() {
   const user = await checkAuth();
+  if (!user) throw new Error("Unauthorized");
 
   return await db.resumeAnalysis.findMany({
     where: {
@@ -205,6 +208,7 @@ export async function getAllResumeFeedbacks() {
 export async function deleteResumeFeedback(id) {
 
   const user = await checkAuth();
+  if (!user) throw new Error("Unauthorized");
 
   return await db.resumeAnalysis.delete({
     where: {

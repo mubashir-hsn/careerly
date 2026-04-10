@@ -18,6 +18,7 @@ export async function userProfile(){
 
 export const updateUser = async (data) => {
   const user = await checkAuth();
+  if (!user) throw new Error("Unauthorized");
 
   try {
     // Ensure industry exists
@@ -85,6 +86,7 @@ export async function userOnboardingStatus() {
 
 export async function updateIndustryInsights() {
   const user = await checkAuth();
+  if (!user) throw new Error("Unauthorized");
   
   if (!user.industry) throw new Error("User has no industry defined");
 

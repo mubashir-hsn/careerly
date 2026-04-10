@@ -7,6 +7,7 @@ export async function GET( _ , { params }){
         const { id } = await params;
     
         const user = await checkAuth();
+        if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         
        const chats = await db.chat.findUnique({
         where:{
@@ -36,7 +37,8 @@ export async function GET( _ , { params }){
 export async function DELETE(_,{ params }){
     try{
         const { id } = await params;
-        const user = await checkAuth()
+        const user = await checkAuth();
+        if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const deleteChat = await db.chat.delete({
             where:{

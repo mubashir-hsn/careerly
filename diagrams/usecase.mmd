@@ -1,0 +1,35 @@
+graph TD
+    subgraph "Actors"
+        USER[User]
+        AI[AI System]
+    end
+    
+    subgraph "Use Cases"
+        UC1[Authenticate & Onboard]
+        UC2[Build & Improve Resume with AI]
+        UC3[Analyze Resume vs Job Description]
+        UC4[Generate Cover Letters]
+        UC5[AI Chat for Career Advice]
+        UC6[Take Assessments & Quizzes]
+        UC7[View Industry Insights]
+        UC8[Manage Profile]
+    end
+    
+    USER --> UC1
+    USER --> UC2
+    USER --> UC3
+    USER --> UC4
+    USER --> UC5
+    USER --> UC6
+    USER --> UC7
+    USER --> UC8
+    
+    UC2 -.-> AI
+    UC3 -.-> AI
+    UC4 -.-> AI
+    UC5 -.-> AI
+    UC6 -.-> AI
+    
+    style USER fill:#e1f5fe
+    style AI fill:#f3e5f5
+

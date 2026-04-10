@@ -6,6 +6,7 @@ export async function GET(){
     try {
     
         const user = await checkAuth();
+        if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const chats = await db.chat.findMany({
             where:{ userId: user.id },

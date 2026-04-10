@@ -5,7 +5,7 @@ export async function POST(req) {
         const body = await req.json();
         const { user, activeStyle, data } = body;
 
-        const browser = await puppeteer.launch({ headless: "new" });
+        const browser = await puppeteer.launch({ headless: true });
         const page = await browser.newPage();
 
         let contentHtml = "";

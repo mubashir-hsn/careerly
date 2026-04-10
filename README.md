@@ -1,100 +1,153 @@
-# Careerly - AI Career Coach
+# Careerly - AI-Powered Career Coach
 
-[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org)
+[![React](https://img.shields.io/badge/React-19-blue?logo=react)](https://react.dev)
+[![Google Gemini](https://img.shields.io/badge/Google%20Gemini-AI-orange?logo=google)](https://ai.google.dev)
+[![Prisma](https://img.shields.io/badge/Prisma-PostgreSQL-brightgreen?logo=prisma)](https://prisma.io)
+[![Clerk](https://img.shields.io/badge/Clerk-Auth-purple?logo=clerk)](https://clerk.com)
+[![Tailwind](https://img.shields.io/badge/Tailwind-CSS-blue?logo=tailwind)](https://tailwindcss.com)
+[![MIT License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
----
+## 📖 Table of Contents
 
-## **Project Overview**
+- [Overview](#-overview)
+- [✨ Features](#-features)
+- [🏗️ Project Structure](#️-project-structure)
+- [🛠️ Tech Stack](#️-tech-stack)
 
-AI Career Assistant is a **full-stack, AI-powered platform** that helps professionals optimize their careers.  
-It provides **resume analysis, AI-powered content improvement, cover letter generation, interview quizzes, industrial insights, and a career guidance chatbot**.  
+- [🚀 Setup & Run](#-setup--run)
+- [🏗️ Architecture](#️-architecture)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
 
-This project demonstrates **production-ready web development skills** using **Next.js, Node.js, React, and AI integrations**.
+## 🎯 Overview
 
----
+**Careerly** is a full-stack AI-powered career coaching platform designed to help professionals advance their careers. Key capabilities include:
 
-## **Key Features**
+- AI-driven resume analysis and optimization (ATS scoring)
+- Personalized cover letter generation
+- Role-specific interview quiz preparation
+- Industry insights (salaries, trends, skills)
+- Intelligent career guidance chatbot
 
-### 1. Resume Analyzer
-- Upload PDF resumes (validated, max 2MB)
-- ATS analysis and scoring
-- Skill matching with job descriptions
-- Actionable improvement suggestions
+Built with production-grade tools, Careerly demonstrates modern web development best practices.
 
-### 2. AI Content Improvement
-- Improve summaries, experience, and project descriptions
-- Professional, result-oriented tone
-- Personalized to user profile and industry
+[GitHub Repo](https://github.com/mubashir-hsn/careerly)
 
-### 3. Cover Letter Generator
-- Personalized letters based on profile + job description
-- Professional tone, max 400 words
-- Markdown formatting for easy export
+## ✨ Features
 
-### 4. Interview Quiz Generator
-- Role-specific MCQs (Technical / HR / Behavioral / Mixed)
-- Tailored to experience, skills, and difficulty level
-- JSON format ready for UI
+| Feature                    | Description                                                      | Tech                    |
+| -------------------------- | ---------------------------------------------------------------- | ----------------------- |
+| **Resume Analyzer**        | PDF upload, ATS scoring, skill matching, improvement suggestions | PDF.js, Google Gemini   |
+| **Content Improver**       | Optimize experience bullets, summaries for impact                | AI Prompt Engineering   |
+| **Cover Letter Generator** | Personalized for job desc/company, exportable Markdown/PDF       | Gemini AI               |
+| **Interview Quizzes**      | Technical/Behavioral MCQs by role & experience level             | Dynamic JSON Generation |
+| **Industry Insights**      | Salary data, trends, top skills, learning paths                  | Cached DB + AI          |
+| **Career Chatbot**         | Session-based, context-aware career advice                       | Streaming Chat API      |
 
-### 5. Industrial Insights
-- Industry-neutral (works for tech, medical, business, etc.)
-- Salary ranges, growth rate, top skills, market outlook
-- Visualization-ready data for charts and tables
+## 🏗️ Project Structure
 
-### 6. AI Career Chatbot
-- Context-aware, session-based conversations
-- Provides guidance on skills, roles, and industry trends
-- Friendly and professional responses
+```
+d:/careerly/
+├── app/                  # Next.js 15 App Router
+│   ├── (auth)/           # Auth pages
+│   ├── (main)/           # Main app pages
+│   ├── api/              # API Routes (chat, resume-analysis, pdf-gen)
+│   ├── lib/              # App-specific utils
+│   └── globals.css
+├── actions/              # Server Actions (resume.js, cover-letter.js, etc.)
+├── components/           # React Components
+│   └── ui/               # shadcn/ui Components
+├── lib/                  # Shared utils, Prisma client, Inngest
+├── prisma/               # Schema & migrations (PostgreSQL)
+├── public/               # Assets, uploads/
+├── data/                 # Static data (industries.js, features.js)
+├── services/             # GeminiService.js, authCheck.js
+├── diagrams/             # Mermaid diagrams (ERD, sequences)
+└── package.json          # Dependencies
+```
 
----
+## 🛠️ Tech Stack
 
-## **Authentication & Forms**
-- **Authentication:** Clerk for signup/signin
-- **Forms & Validation:** React Hook Form + Zod for type-safe, validated user input
+### Frontend
 
----
+- **Next.js 15** (App Router, Turbopack)
+- **React 19** + React Hook Form + Zod
+- **shadcn/ui** + Tailwind CSS 4 + Lucide Icons
+- **Recharts** for data visualization
 
-## **Tech Stack**
-- **Frontend:** Next.js, React, TailwindCSS
-- **Backend:** Node.js, Next.js API Routes
-- **Database:** Prisma + PostgreSQL
-- **AI Integration:** OpenAI / Google Gemini (Generative AI)
-- **Form Validation:** Zod + React Hook Form
-- **Authentication:** Clerk
+### Backend & AI
 
----
+- **Next.js API Routes** + Server Actions
+- **Prisma ORM** + PostgreSQL
+- **Google Gemini AI** (generative-ai)
+- **Inngest** for background jobs
 
-## **Architecture Overview**
+### Tools & Utils
 
-Frontend UI (Resume Builder, Quiz, Cover Letter, AI Chat)
-│
-▼
-Next.js API Layer (Auth via Clerk, Validation via Zod)
-│
-▼
-AI Feature Handlers (Resume Analyzer, Cover Letter, Quiz, Industrial Insights, Chatbot)
-│
-▼
-AI Model Layer (OpenAI / Gemini)
-│
-▼
-Database Layer (Users, Resumes, Cover Letters, Chat Messages)
+- **Clerk** Authentication
+- **Puppeteer + html2pdf** for PDF generation
+- **PDF.js + pdf-parse** for resume parsing
 
----
-
-## **Setup & Run**
+## 🚀 Setup & Run
 
 ### Prerequisites
-- Node.js v20+
-- PostgreSQL database
-- Clerk account for auth
-- AI API Key (OpenAI / Google Gemini)
 
-### Install
+- Node.js ≥20
+- PostgreSQL (local or cloud)
+- [Clerk Account](https://clerk.com) (free tier)
+- [Google Gemini API Key](https://aistudio.google.com/app/apikey)
+
+### Environment Variables
+
+Create `.env.local`:
+
+```
+DATABASE_URL="postgresql://..."
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_...
+CLERK_SECRET_KEY=sk_...
+GEMINI_API_KEY="your-gemini-key"
+NEXT_PUBLIC_GEMINI_API_KEY="your-public-key"
+```
+
+### Installation
+
 ```bash
 git clone https://github.com/mubashir-hsn/careerly.git
-cd ai-career-coach
+cd careerly
 npm install
+
+# Database setup
+npx prisma generate
+npx prisma db push  # or migrate dev
+npx prisma studio   # Optional: view DB
+
 npm run dev
 ```
 
+Open [http://localhost:3000](http://localhost:3000)
+
+## 🏗️ Architecture
+
+```
+User (Clerk Auth) → Next.js UI → API Routes/Actions
+                          ↓
+Prisma DB Models: User, Resume, CoverLetter, Assessment, Chat, IndustryInsight
+                          ↓
+AI Layer: GeminiService.js (analysis, generation)
+Background: Inngest functions
+Export: Puppeteer PDF
+```
+
+See [diagrams/erd.mmd](diagrams/erd.mmd) for full ERD.
+
+## 🤝 Contributing
+
+1. Fork & clone
+2. Create feature branch
+3. `npm run lint`
+4. Submit PR
+
+## 📄 License
+
+MIT - See [LICENSE](LICENSE)

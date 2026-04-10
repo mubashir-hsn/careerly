@@ -7,10 +7,7 @@ export async function checkAuth() {
     try {
 
         const { userId } = await auth();
-        if (!userId) return NextResponse.json({
-            success: false,
-            message:"Unauthorized Access"
-        }, {status: 401});
+        if (!userId) return null;
 
         const user = await db.user.findUnique({
             where: { clerkUserId: userId },
@@ -19,22 +16,11 @@ export async function checkAuth() {
             }
         });
 
-        if (!user) {
-            return NextResponse.json(
-              {
-                success: false,
-                message: "User not found"
-              }, { status: 404 })
-          }
-
         return user;
 
 
     } catch (error) {
-        console.log("Error while check auth: ", error)
-        return NextResponse.json({ 
-            success: false,
-            mesage: 'Failed to check users authentication'
-        }, {status: 500})
+        console.error("Error while check auth: ", error);
+        return null;
     }
 }

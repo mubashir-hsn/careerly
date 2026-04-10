@@ -1,0 +1,80 @@
+classDiagram
+    class UserService {
+        +id: String
+        +email: String
+        +name: String
+        +skills: String[]
+        -clerkUserId: String
+        +createUser(userData)
+        +getUserById(id)
+        +updateProfile(userId, data)
+        +getUserResumes(userId)
+    }
+    class ResumeService {
+        +id: String
+        +content: String
+        +atsScore: Float
+        -feedback: String
+        +saveResume(content)
+        +getResume()
+        +improveWithAI(current, type)
+    }
+    class CoverLetterService {
+        +id: String
+        +jobTitle: String
+        +companyName: String
+        +content: String
+        -status: String
+        +generateCoverLetter(data)
+        +updateCoverLetter(id, data)
+    }
+    class AnalysisService {
+        +overallScore: Float
+        +matchedSkills: String[]
+        +missingSkills: String[]
+        +aiFeedback: JSON
+        +analyzeResume(jobData)
+        +getAnalysisHistory()
+    }
+    class ChatService {
+        +id: String
+        +title: String
+        +userId: String
+        +messages: Message[]
+        +createChat(title)
+        +sendMessage(chatId, content)
+        +getChatHistory()
+    }
+    class PrismaDB {
+        -connection: PostgreSQL
+        +models: Map~Entity, Data~
+        +query(sql)
+        +upsert(model, data)
+    }
+    class GeminiAI {
+        -apiKey: String
+        +model: String
+        +generateResponse(prompt)
+        +improveContent(type, content)
+    }
+    class AuthService {
+        +userId: String
+        -token: String
+        +isAuthenticated: Boolean
+        +checkAuth()
+        +getCurrentUser()
+    }
+    
+    UserService --> PrismaDB : uses
+    ResumeService --> PrismaDB
+    ResumeService --> GeminiAI
+    CoverLetterService --> PrismaDB : saves
+    CoverLetterService --> GeminiAI
+    AnalysisService --> GeminiAI
+    AnalysisService --> PrismaDB
+    ChatService --> PrismaDB
+    AuthService --> PrismaDB
+    
+    note for UserService "Handles user CRUD, onboarding"
+    note for ResumeService "Server actions: actions/resume.js"
+    note for GeminiAI "Google Generative AI service"

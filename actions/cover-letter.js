@@ -8,6 +8,7 @@ const modelName = process.env.GEMINI_MODEL_A;
 
 export async function generateCoverLetter(data) {
   const user = await checkAuth();
+  if (!user) throw new Error("Unauthorized");
 
   const prompt = `
   You are an expert career consultant. Your task is to write ONLY the core body paragraphs for a professional cover letter. 
@@ -69,6 +70,7 @@ export async function generateCoverLetter(data) {
 
 export async function getCoverLetters() {
   const user = await checkAuth();
+  if (!user) throw new Error("Unauthorized");
 
   return await db.coverLetter.findMany({
     where: {
@@ -82,6 +84,7 @@ export async function getCoverLetters() {
 
 export async function getCoverLetter(id) {
   const user = await checkAuth();
+  if (!user) throw new Error("Unauthorized");
 
   return await db.coverLetter.findUnique({
     where: {
@@ -93,6 +96,7 @@ export async function getCoverLetter(id) {
 
 export async function deleteCoverLetter(id) {
   const user = await checkAuth();
+  if (!user) throw new Error("Unauthorized");
 
   return await db.coverLetter.delete({
     where: {
@@ -106,6 +110,7 @@ export async function saveCoverLetter(coverLetter) {
   try {
 
     const user = await checkAuth();
+  if (!user) throw new Error("Unauthorized");
 
     const updateCoverLetter = await db.coverLetter.update({
       where: {

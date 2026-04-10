@@ -9,6 +9,7 @@ const modelName = process.env.GEMINI_MODEL_A;
 
 export const saveResume = async(content)=>{
   const user = await checkAuth();
+  if (!user) throw new Error("Unauthorized");
 
     try {
 
@@ -45,6 +46,7 @@ export const saveResume = async(content)=>{
 
 export const getResume = async()=>{
   const user = await checkAuth();
+  if (!user) throw new Error("Unauthorized");
 
     return await db.resume.findUnique({
         where:{
@@ -55,6 +57,7 @@ export const getResume = async()=>{
 
 export async function improveWithAI({ current, type }) {
   const user = await checkAuth();
+  if (!user) throw new Error("Unauthorized");
 
   let prompt = "";
 

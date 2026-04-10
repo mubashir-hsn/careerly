@@ -8,6 +8,7 @@ const modelName = process.env.GEMINI_MODEL_B;
 
 export async function generateQuiz(data) {
   const user = await checkAuth();
+  if (!user) throw new Error("Unauthorized");
 
   const prompt = `
   You are a senior interviewer who designs real interview questions.
@@ -77,6 +78,7 @@ export async function generateQuiz(data) {
 
 export async function saveQuizResult({ questions, answers, score, quizDetail }) {
   const user = await checkAuth();
+  if (!user) throw new Error("Unauthorized");
 
   const questionResults = questions.map((q, index) => ({
     question: q.question,
@@ -149,6 +151,7 @@ export async function saveQuizResult({ questions, answers, score, quizDetail }) 
 
 export async function getAssessments() {
   const user = await checkAuth();
+  if (!user) throw new Error("Unauthorized");
 
   try {
     const assessments = await db.assessment.findMany({
