@@ -12,14 +12,24 @@ const PdfButton = ({ data, user, activeStyle, fileName }) => {
     setIsGenerating(true)
 
     try {
-      // API call to generate PDF
       const response = await fetch("/api/generate-pdf", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ data, user, activeStyle }),
       })
 
-      if (!response.ok) throw new Error("PDF generation failed")
+      if (!response.ok) {
+        let message = "PDF generation failed"
+
+        try {
+          const errorPayload = await response.json()
+          message = errorPayload?.error || message
+        } catch {
+          // Keep the fallback message if the server response isn't JSON.
+        }
+
+        throw new Error(message)
+      }
 
       const blob = await response.blob()
       const url = window.URL.createObjectURL(blob)
@@ -35,7 +45,7 @@ const PdfButton = ({ data, user, activeStyle, fileName }) => {
 
     } catch (err) {
       console.error(err)
-      toast.error("Failed to generate PDF. Try again!")
+      toast.error(err.message || "Failed to generate PDF. Try again!")
     } finally {
       setIsGenerating(false)
     }
