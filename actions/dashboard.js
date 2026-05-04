@@ -2,6 +2,7 @@ import { db } from "@/lib/prisma.js";
 import { inngest } from "@/lib/inngest/client";
 import { checkAuth } from "@/services/authCheck";
 import { generateAIResponse } from "@/services/geminiService";
+import { checkTokenBalance, deductTokens, estimateTokens } from "@/services/subscriptionService";
 
 
 const modelName = process.env.GEMINI_MODEL_C;
@@ -9,82 +10,43 @@ const modelName = process.env.GEMINI_MODEL_C;
 // Utility: Generate raw AI insights
 export async function generateAIInsight(data) {
 
-  const prompt = `
-You are a market analyst AI that gives realistic and practical industry insights.
+  const prompt = `Analyze the ${data.industry} industry for this user:
+Skills: ${data.skills}, Exp: ${data.experience}, Bio: ${data.bio}
 
-Analyze the current state of the ${data.industry} industry and user's information and return data in ONLY the following JSON format.
-
-Here is user information:
-User Industry: ${data.industry},
-User Skills: ${data.skills},
-User Experience: ${data.experience},
-User Bio: ${data.bio}
-
-Do not add explanations, notes, or extra text.
-
+Output ONLY valid JSON with real-time Pakistan market data:
 {
-  "salaryRanges": [
-    { "role": "string", "min": number, "max": number, "median": number, "location": "string" }
-  ],
-  "marketOutlook": {
-    "summary": "string",
-    "demandLevel": "Low" | "Medium" | "High",
-    "automationRisk": "Low" | "Medium" | "High"
-  },
-  "industryTrends": [
-    {
-      "trend": "string",
-      "impact": "Low" | "Medium" | "High"
-    }
-  ],
-  "topSkills": [
-    {
-      "skill": "string",
-      "demandScore": number
-    }
-  ],
-  "skillGap": {
-    "matched": ["string"],
-    "missing": ["string"],
-    "matchPercentage": number
-  },
-  "learningPaths": [
-    {
-      "path": "string",
-      "durationMonths": number,
-      "outcome": "string",
-      "courses": [
-        {
-          "title": "string",
-          "platform": "string",
-          "link": "string"
-        }
-      ],
-      "books": [
-        {
-          "title": "string",
-          "author": "string"
-        }
-      ]
-    }
-  ],
-  "growthScore": number
+  "salaryRanges": [{ "role": "", "min": 0, "max": 0, "median": 0, "location": "Pakistan" }],
+  "marketOutlook": { "summary": "", "demandLevel": "Low|Medium|High", "automationRisk": "Low|Medium|High" },
+  "industryTrends": [{ "trend": "", "impact": "Low|Medium|High" }],
+  "topSkills": [{ "skill": "", "demandScore": 0 }],
+  "skillGap": { "matched": [""], "missing": [""], "matchPercentage": 0 },
+  "learningPaths": [{ 
+    "path": "", "durationMonths": 0, "outcome": "",
+    "courses": [{ "title": "", "platform": "", "link": "" }],
+    "books": [{ "title": "", "author": "" }]
+  }],
+  "growthScore": 0
 }
 
-IMPORTANT RULES:
-Return ONLY valid JSON and Real Time Data.
-Do not include markdown or extra text.
-Base insights on the Pakistani job market where possible.
-Include at least 5 industry trends and 5 top skills..
-Demand score and Growth score should be between 0 and 100.
-If available , Provide free correct course links in the courses section.
-Include at least 5 common roles for salary ranges in Pakistani rupees (Rs.).
-`;
+Rules: 5+ trends/skills, 5 common roles (PKR), real free course links if possible. 0-100 scores.`;
 
   const result = await generateAIResponse(prompt,modelName);
 
   const cleanedText = result.replace(/```(?:json)?\n?/g, "").trim();
   return JSON.parse(cleanedText);
+}
+
+// Wrapper that adds token tracking to insight generation
+export async function generateAIInsightWithTokens(data, userId) {
+  await checkTokenBalance(userId);
+
+  const insights = await generateAIInsight(data);
+
+  // Estimate tokens from the data (rough estimate based on output size)
+  const tokensUsed = await estimateTokens(JSON.stringify(insights));
+  await deductTokens(userId, "INSIGHTS", tokensUsed);
+
+  return insights;
 }
 
 // Inngest function: Runs when triggered
@@ -108,7 +70,7 @@ export async function getIndustryInsight() {
   if (!user) throw new Error("Unauthorized");
 
   if (!user.industryInsight) {
-    const insights = await generateAIInsight(user.industry);
+    const insights = await generateAIInsightWithTokens(user, user.id);
 
     const industryInsight = await db.industryInsight.create({
       data: {
@@ -123,3 +85,4 @@ export async function getIndustryInsight() {
 
   return user.industryInsight;
 }
+

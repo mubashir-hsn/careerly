@@ -2,6 +2,7 @@
 import { db } from "@/lib/prisma";
 import { checkAuth } from "@/services/authCheck";
 import { generateAIResponse } from "@/services/geminiService";
+import { checkTokenBalance, deductTokens, estimateTokens } from "@/services/subscriptionService";
 import { NextResponse } from "next/server";
 
 const modelName = process.env.GEMINI_MODEL_A;
@@ -9,39 +10,35 @@ const modelName = process.env.GEMINI_MODEL_A;
 export async function generateCoverLetter(data) {
   const user = await checkAuth();
   if (!user) throw new Error("Unauthorized");
+ 
+  const cleanJD = data.jobDescription?.toString().replace(/\s+/g, " ").trim().slice(0, 2000);
+  const cleanBio = user.bio?.toString().replace(/\s+/g, " ").trim().slice(0, 1000);
 
-  const prompt = `
-  You are an expert career consultant. Your task is to write ONLY the core body paragraphs for a professional cover letter. 
-  
-  IMPORTANT: Do NOT include any headers, addresses, dates, subject lines, contact information (email/phone), or sign-offs (like "Sincerely"). 
-  Start directly after "Dear Hiring Manager," and end immediately after the final paragraph.Donot write "Dear Hiring Manager,". Only write coverletter body. 
+  const prompt = `Write only 2-3 body paragraphs for a cover letter for the role of ${data.jobTitle} at ${data.companyName}.
+No headers, addresses, sign-offs, or "Dear Hiring Manager". 
 
-  Context for the Letter:
-  - Role: ${data.jobTitle}
-  - Company: ${data.companyName}
-  - Candidate Industry: ${user.industry}
-  - Years of Experience: ${user.experience}
-  - Key Skills: ${user.skills?.join(", ")}
-  - Professional Background: ${user.bio}
-  - Job Description: ${data.jobDescription}
+Context:
+- Industry: ${user.industry} (${user.experience} yrs exp)
+- Skills: ${user.skills?.join(", ")}
+- Bio: ${cleanBio}
+- JD: ${cleanJD}
 
-  Writing Rules:
-  1. Structure: Exactly 2 to 3 professional paragraphs.
-  3. Content: 
-     - Para 1: Hook the reader by connecting ${user.experience} years of experience in ${user.industry} to the specific needs of ${data.companyName}.
-     - Para 2: Demonstrate value by explaining how skills like ${user.skills?.slice(0, 3).join(", ")} will solve challenges mentioned in the Job Description.
-     - Para 3: Professional closing statement about contributing to the team's success.
-  4. Avoid Clichés: Do not use "I am the perfect candidate." Instead, use "My track record in [X] aligns with your goal of [Y]."
-  5. Formatting Rules:
-      - Use plain text only.
-      - Do not use hyphens or dashes.No Markdown bolding (**), no headers (#).
-      - Use spaces instead of hyphens for compound words.
-  Output ONLY the body text after from "Dear Hiring Manager,".
-`;
+Rules:
+1. Para 1: Connect exp to ${data.companyName} needs.
+2. Para 2: Show value using skills: ${user.skills?.slice(0, 3).join(", ")}.
+3. Para 3: Professional closing.
+4. No clichés or markdown. Plain text only.`;
 
   try {
+    // Check token balance before AI call
+    await checkTokenBalance(user.id);
+
     const result = await generateAIResponse(prompt, modelName)
     const content = result.trim();
+
+    // Deduct tokens after successful AI call
+    const tokensUsed = await estimateTokens(prompt + content);
+    await deductTokens(user.id, "COVER_LETTER", tokensUsed);
 
     const coverLetter = await db.coverLetter.create({
       data: {

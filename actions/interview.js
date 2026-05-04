@@ -2,6 +2,7 @@
 import { db } from "@/lib/prisma";
 import { checkAuth } from "@/services/authCheck";
 import { generateAIResponse } from "@/services/geminiService";
+import { checkTokenBalance, deductTokens, estimateTokens } from "@/services/subscriptionService";
 import { NextResponse } from "next/server";
 
 const modelName = process.env.GEMINI_MODEL_B;
@@ -10,58 +11,32 @@ export async function generateQuiz(data) {
   const user = await checkAuth();
   if (!user) throw new Error("Unauthorized");
 
-  const prompt = `
-  You are a senior interviewer who designs real interview questions.
-  Questions must be realistic and job focused.
-  Do not generate trivial or irrelevant questions.
-  Questions must reflect real interview scenarios
+  const prompt = `Generate ${data.quizQuestion} ${data.interviewType} questions for a ${data.jobRole} (${data.experienceLevel} exp) at ${data.difficultyLevel} level.
+Stack: ${data.skills?.join(", ") || "General"}
 
-  Generate ${data.quizQuestion} ${data.interviewType} ${data.difficultyLevel} level interview questions for a ${data.jobRole} with ${data.experienceLevel} experience${data.skills?.length ? ` and expertise in ${data.skills.join(", ")}` : ""
-    }.
-  
-  Technology Stack: ${data.skills?.length ? data.skills.join(", ") : "Not specified"}  
-  Interview Type: ${data.interviewType} (Technical / HR / Behavioral / Mixed)  
-  Experience Level: ${data.experienceLevel}  
-  
-  Generate questions based on the **difficulty level** as follows:
-  - **Beginner:** Mostly simple and conceptual questions, with 1-2 basic scenario questions.  
-  - **Intermediate:** Balanced mix of simple, conceptual, and scenario/problem-solving questions.  
-  - **Advanced:** Mostly scenario/problem-solving questions, with few conceptual questions for depth.
-  
-  For **Mixed Interview Type**, ensure the questions include:
-  - Scenario-based questions
-  - Conceptual questions
-  - Simple practical questions
-  - Problem-solving based questions
-  
-  All questions must strictly match:
-  - Selected Job Role
-  - Experience Level
-  - Technology Stack
-  - Interview Type
+Difficulty Rules:
+- Beginner: Conceptual + basic scenarios
+- Intermediate: Balanced mix
+- Advanced: High-level scenario/problem solving
 
-  
-  Each question should be multiple choice with exactly **4 options**.
-  
-  Return the response in this JSON format only, no additional text:
-  {
-    "questions": [
-      {
-        "question": "string",
-        "options": ["string", "string", "string", "string"],
-        "correctAnswer": "string",
-        "explanation": "string"
-      }
-    ]
-  }
-  
-  
-  `;
+Output: Return ONLY valid JSON with 4 options per question.
+{
+  "questions": [
+    { "question": "", "options": ["", "", "", ""], "correctAnswer": "", "explanation": "" }
+  ]
+}`;
 
   try {
+    // Check token balance before AI call
+    await checkTokenBalance(user.id);
+
     const result = await generateAIResponse(prompt, modelName)
     const cleanedText = result.replace(/```(?:json)?\n?/g, "").trim();
     const quiz = JSON.parse(cleanedText);
+
+    // Deduct tokens after successful AI call
+    const tokensUsed = await estimateTokens(prompt + cleanedText);
+    await deductTokens(user.id, "INTERVIEW", tokensUsed);
 
     return quiz.questions;
   } catch (error) {
@@ -101,21 +76,18 @@ export async function saveQuizResult({ questions, answers, score, quizDetail }) 
       )
       .join("\n\n");
 
-    const improvementPrompt = `
-        The user got the following ${quizDetail.interviewType} questions for the role of ${quizDetail.jobRole} wrong:
-    
-        ${wrongQuestionsText}
-    
-        Based on these mistakes, provide a concise, specific improvement tip.
-        Focus on the knowledge gaps revealed by these wrong answers.
-        Keep the response under 2 sentences and make it encouraging.
-        You can suggest practicing topics related to these skills: ${quizDetail.skills.join(", ")}.
-        Don't explicitly mention the mistakes, instead focus on what to learn/practice.
-    `;
+    const improvementPrompt = `User failed these ${quizDetail.interviewType} questions for ${quizDetail.jobRole}:
+${wrongQuestionsText}
+
+Provide 1-2 encouraging sentences on what to learn/practice next. No mention of mistakes.`;
 
 
     try {
       const tipResult = await generateAIResponse(improvementPrompt, modelName);
+
+      // Deduct tokens for improvement tip
+      const tipTokens = await estimateTokens(improvementPrompt + (tipResult?.response || tipResult));
+      await deductTokens(user.id, "INTERVIEW", tipTokens);
 
       improvementTip = tipResult.response.trim();
     } catch (error) {

@@ -35,6 +35,12 @@ model User {
   coverLetter    CoverLetter[]
   resumeAnalysis ResumeAnalysis[]
   chats          Chat[]
+
+  // Subscription & Token Relations
+  subscription   UserSubscription?
+  tokenUsageLogs TokenUsageLog[]
+  payments       Payment[]
+  adminUser      AdminUser?
 }
 
 model Assessment {
@@ -162,4 +168,113 @@ model Message {
 enum Role {
   USER
   MODEL
+}
+
+// ========================
+// SUBSCRIPTION & ADMIN
+// ========================
+
+enum PlanType {
+  FREE
+  PRO
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+
+enum Feature {
+  COVER_LETTER
+  INTERVIEW
+  RESUME_ANALYSIS
+  INSIGHTS
+  CHATBOT
+  CONTENT_IMPROVER
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+}
+
+model SubscriptionPlan {
+  id              String             @id @default(cuid())
+  name            String             // "Free", "Pro - Starter", etc.
+  type            PlanType           // FREE or PRO
+  tier            String?            // null for Free, "Starter"/"Standard"/"Business"/"Enterprise"/"Ultimate" for Pro
+  tokensIncluded  Int                // Number of tokens included in the plan
+  price           Int                @default(0) // Price in PKR
+  features        Json?              // List of allowed features
+  isActive        Boolean            @default(true)
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  // Relations
+  subscriptions   UserSubscription[]
+  payments        Payment[]
+
+  @@unique([type, tier])
+}
+
+model UserSubscription {
+  id                  String             @id @default(cuid())
+  userId              String             @unique
+  user                User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId              String
+  plan                SubscriptionPlan   @relation(fields: [planId], references: [id])
+  tokensUsed          Int                @default(0)
+  tokensRemaining     Int                // Initialized from plan's tokensIncluded
+  status              SubscriptionStatus @default(ACTIVE)
+  startDate           DateTime           @default(now())
+  endDate             DateTime?
+  clerkSubscriptionId String?            // Clerk payment reference
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  @@index([userId])
+  @@index([planId])
+}
+
+model TokenUsageLog {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  feature    Feature  // Which AI feature was used
+  tokensUsed Int      // Number of tokens consumed in this call
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([feature])
+  @@index([createdAt])
+}
+
+model AdminUser {
+  id     String    @id @default(cuid())
+  userId String    @unique
+  user   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role   AdminRole @default(ADMIN)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Payment {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stripeSessionId String   @unique
+  amount          Int      // Amount in PKR
+  currency        String   @default("pkr")
+  tokens          Int      // Tokens bought
+  planId          String?  // Plan associated with this purchase (if any)
+  plan            SubscriptionPlan?  @relation(fields: [planId], references: [id])
+  status          String   // "paid", "failed"
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@index([planId])
+  @@index([stripeSessionId])
 }

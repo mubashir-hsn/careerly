@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { db } from '@/lib/prisma';
 import { checkAuth } from '@/services/authCheck';
+import { checkTokenBalance, deductTokens, estimateTokens } from '@/services/subscriptionService';
 
 export async function POST(req) {
     try {
@@ -11,8 +12,11 @@ export async function POST(req) {
 
         const { prompt, chatId } = await req.json();
 
+        // Check token balance before AI call
+        await checkTokenBalance(user.id);
+
         // Initialize the AI model
-        const systemInstruction = "You are an AI career guide. Your purpose is to provide helpful and brief information on technology, skills, career paths, and industry trends. Be friendly and encouraging, but keep your answers brief , professional and to the point.";
+        const systemInstruction = "AI career guide. Brief, helpful info on tech, careers, and trends. Professional and concise.";
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
         const model = genAI.getGenerativeModel({
             model: `${process.env.GEMINI_MODEL_C}`,
@@ -49,7 +53,7 @@ export async function POST(req) {
 
         let generatedTitle = null
         if (!currentChatId) {
-            const titleResult = await model.generateContent(`Generate a short, 3-4 word title for this conversation: "${prompt}". Return only the title text.`);
+            const titleResult = await model.generateContent(`Generate a 3-4 word title for: "${prompt}". Return ONLY the title.`);
             generatedTitle = titleResult.response.text().trim().replace(/[*"']/g, "");
 
             //create new chat
@@ -70,6 +74,10 @@ export async function POST(req) {
                 { chatId: currentChatId, role: "MODEL", content: textResponse },
             ]
         })
+
+        // Deduct tokens after successful AI call
+        const tokensUsed = await estimateTokens(prompt + textResponse);
+        await deductTokens(user.id, "CHATBOT", tokensUsed);
 
 
         return NextResponse.json({

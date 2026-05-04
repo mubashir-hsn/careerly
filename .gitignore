@@ -42,4 +42,5 @@ next-env.d.ts
 
 /lib/generated/prisma
 /docs/
+/diagrams/
 .gitignore

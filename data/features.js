@@ -18,7 +18,7 @@ export const features = [
   {
     icon: <LineChart className="w-10 h-10 mb-4 text-green-500" />,
     title: "Industry Insights",
-    link: "/dashboard",
+    link: "/insights",
     description: "See current market trends, salaries, and related data.",
     bg: "bg-green-100",
   },

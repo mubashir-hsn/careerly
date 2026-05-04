@@ -2,6 +2,7 @@
 import { db } from "@/lib/prisma.js";
 import { checkAuth } from "@/services/authCheck";
 import { generateAIResponse } from "@/services/geminiService";
+import { checkTokenBalance, deductTokens, estimateTokens } from "@/services/subscriptionService";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
@@ -65,53 +66,30 @@ export async function improveWithAI({ current, type }) {
 
     const skillsText = user.skills.join(", ");
   
-    prompt = `
-    As an expert resume writer, create a professional summary for a user using the provided data.
-  
-    User details
-    Bio ${current || user?.bio}
-    Industry ${user?.industry}
-    Skills ${skillsText}
-    Experience ${user?.experience || 0} years
-  
-    Writing rules
-    1. Length: Exactly 3 to 4 high-impact lines.
-    2. Content: Synthesize the highest degree, core technical skills, and key work highlights. 
-    3. Tone: Professional, third-person, and result-oriented.
-    4. Avoid buzzwords, hype, and complex terms.
-    5. Write in third person.Suitable for both technical and non technical roles.
-    6. Make it sound human, not AI written.
-  
-    Output format
-    Return only paragraph.
-    Do not add headings or extra text.
-    `;
+    prompt = `Create a 3-4 line professional summary for a ${user.industry} professional (${user.experience} yrs exp).
+Bio: ${ (current || user.bio)?.toString().replace(/\s+/g, " ").trim().slice(0, 1000) }
+Skills: ${user.skills.join(", ")}
+
+Rules: Professional, 3rd person, result-oriented. No clichés. Output ONLY the paragraph.`;
   } else {
   
-    prompt = `
-    Improve the following ${type} section for a resume.
-  
-    Current content
-    Title ${current?.title || ""}
-    Organization ${current?.organization || ""}
-    Description ${current?.description || ""}
-  
-    Writing rules
-    1. Length: Exactly 2 to 3 lines of high-impact text.
-    2. No Bullets: Provide 2 to 3 powerful, fluid sentences. 
-    3. Requirements: First read current content then use action verbs, include quantifiable metrics (e.g., %, Rs.), and focus on achievements.
-    4. Tone: Professional and third-person. Avoid buzzwords, hype, and complex terms.
-    5. Suitable for ATS parsing and easy reading.
-  
-    Output format
-    Return only one paragraph.
-    Do not add bullets, headings, or explanations.
-    `;
+    prompt = `Improve this ${type} section for a resume:
+Title: ${current?.title}, Org: ${current?.organization}, Desc: ${current?.description?.toString().replace(/\s+/g, " ").trim().slice(0, 1000)}
+
+Rules: 2-3 high-impact sentences. Use action verbs and metrics. 3rd person. No bullets or markdown. Output ONLY the paragraph.`;
   }
   
 
   try {
+    // Check token balance before AI call
+    await checkTokenBalance(user.id);
+
     const response = await generateAIResponse(prompt, modelName)
+
+    // Deduct tokens after successful AI call
+    const tokensUsed = await estimateTokens(prompt + response);
+    await deductTokens(user.id, "CONTENT_IMPROVER", tokensUsed);
+
     return response.trim();
   } catch (error) {
     console.error("Error improving content:", error);

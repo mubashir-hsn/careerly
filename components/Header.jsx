@@ -2,7 +2,7 @@ import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@cl
 import Link from 'next/link'
 import React from 'react'
 import { Button } from './ui/button'
-import { BrainCircuit, ChevronDown, FileText, GraduationCap, LayoutDashboard, PenBox, StarIcon } from 'lucide-react'
+import { BrainCircuit, ChevronDown, CreditCard, FileText, GraduationCap, LayoutDashboard, PenBox, StarIcon } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { checkUser } from '@/lib/checkUser.js';
 import Image from 'next/image'
@@ -10,7 +10,7 @@ import Image from 'next/image'
 const Header = async () => {
 
   // Ensure user check runs before rendering
-  await checkUser()
+  const user = await checkUser()
 
 
 
@@ -19,10 +19,10 @@ const Header = async () => {
       <nav className="container md:max-w-7xl mx-auto h-16 flex items-center justify-between px-4 md:px-10">
         {/* Logo / Brand */}
         <Link
-          href="/"
+          href={user ? "/dashboard" : "/"}
           className="uppercase flex items-center text-xl bg-linear-to-l from-gray-600 via-gray-700 to-gray-800 font-extrabold text-transparent bg-clip-text"
         >
-          <Image src={'/careerly.jpg'} alt='careerly' width={120} height={130}/>
+          <Image src={'/careerly.jpg'} alt='careerly' width={120} height={130} />
         </Link>
 
         {/* Navigation & User Controls */}
@@ -32,9 +32,19 @@ const Header = async () => {
             <Link href="/dashboard">
               <Button variant="outline">
                 <LayoutDashboard className="w-4 h-4" />
-                <span className="hidden md:block">Industry Insights</span>
+                <span className="hidden md:block">Dashboard</span>
               </Button>
             </Link>
+
+            {/* Admin Button (Only for Admins) */}
+            {user?.adminUser && (
+              <Link href="/admin">
+                <Button variant="destructive" className="bg-red-600 hover:bg-red-700">
+                  <LayoutDashboard className="w-4 h-4" />
+                  <span className="hidden md:block">Admin Panel</span>
+                </Button>
+              </Link>
+            )}
 
             {/* Dropdown Menu */}
             <DropdownMenu>
@@ -46,11 +56,19 @@ const Header = async () => {
                 </Button>
               </DropdownMenuTrigger>
 
+
               <DropdownMenuContent>
                 <DropdownMenuItem>
                   <Link href="/ai-chatbot" className="flex items-center gap-2">
                     <BrainCircuit className="w-4 h-4" />
                     <span>AI Chat</span>
+                  </Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem>
+                  <Link href="/insights" className="flex items-center gap-2">
+                    <StarIcon className="w-4 h-4" />
+                    <span>Industry Insights</span>
                   </Link>
                 </DropdownMenuItem>
 
@@ -71,6 +89,13 @@ const Header = async () => {
                   <Link href="/resume" className="flex items-center gap-2">
                     <FileText className="w-4 h-4" />
                     <span>Resume</span>
+                  </Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem>
+                  <Link href="/pricing" className="flex items-center gap-2">
+                    <CreditCard className="w-4 h-4" />
+                    <span>Pricing</span>
                   </Link>
                 </DropdownMenuItem>
 

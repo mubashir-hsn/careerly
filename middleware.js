@@ -9,14 +9,19 @@ const isProtectedRoute = createRouteMatcher([
   "/onboarding(.*)",
   "/ai-chatbot(.*)",
   "/user-profile(.*)",
+  "/pricing(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  const { userId } = await auth();
+  const { userId, redirectToSignIn } = await auth();
 
   if (!userId && isProtectedRoute(req)) {
-    const { redirectToSignIn } = await auth();
     return redirectToSignIn();
+  }
+
+  // Redirect to dashboard after login if accessing home page
+  if (userId && req.nextUrl.pathname === "/") {
+    return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
   return NextResponse.next();
