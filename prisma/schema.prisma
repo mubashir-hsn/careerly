@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,130 +8,119 @@ datasource db {
 }
 
 model User {
-  id              String           @id @default(uuid())
-  clerkUserId     String           @unique // clerk user id
-  email           String           @unique
+  id              String            @id @default(uuid())
+  clerkUserId     String            @unique
+  email           String            @unique
   name            String?
   imageUrl        String?
-  industry        String? // Combined industry-subindustry (e.g., "tech-software-development")
-  industryInsight IndustryInsight? @relation(fields: [industry], references: [industry])
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
+  industry        String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  bio             String?
+  experience      Int?
+  skills          String[]
+  adminUser       AdminUser?
+  assessments     Assessment[]
+  chats           Chat[]
+  coverLetter     CoverLetter[]
+  payments        Payment[]
+  resume          Resume?
+  resumeAnalysis  ResumeAnalysis[]
+  tokenUsageLogs  TokenUsageLog[]
+  industryInsight IndustryInsight?  @relation(fields: [industry], references: [industry])
+  subscription    UserSubscription?
+  feedbacks       Feedback[]
+}
 
-  // Profile fields
-  bio        String?
-  experience Int? // Years of experience
+model Feedback {
+  id        String   @id @default(cuid())
+  userId    String
+  subject   String
+  message   String
+  status    String   @default("pending") // pending, resolved, in_progress
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Relations
-  skills         String[] // Array of skills
-  assessments    Assessment[]
-  resume         Resume?
-  coverLetter    CoverLetter[]
-  resumeAnalysis ResumeAnalysis[]
-  chats          Chat[]
-
-  // Subscription & Token Relations
-  subscription   UserSubscription?
-  tokenUsageLogs TokenUsageLog[]
-  payments       Payment[]
-  adminUser      AdminUser?
+  @@index([userId])
 }
 
 model Assessment {
   id             String   @id @default(cuid())
   userId         String
-  user           User     @relation(fields: [userId], references: [id])
-  quizScore      Float // Overall quiz score
-  questions      Json[] // Array of {question, answer, userAnswer, isCorrect}
-  category       String // "Technical", "Behavioral", etc.
-  improvementTip String? // AI-generated improvement tip
-  title          String?
+  quizScore      Float
+  questions      Json[]
+  category       String
+  improvementTip String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+  title          String?
+  user           User     @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }
 
 model Resume {
   id        String   @id @default(cuid())
-  userId    String   @unique // One resume per user
-  user      User     @relation(fields: [userId], references: [id])
-  content   String   @db.Text // Markdown content
+  userId    String   @unique
+  content   String
   atsScore  Float?
   feedback  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model CoverLetter {
   id             String   @id @default(cuid())
   userId         String
-  user           User     @relation(fields: [userId], references: [id])
-  name           String
-  email          String?
-  contact        String?
-  content        String // Markdown content
+  content        String
   jobDescription String?
-  companyName    String // Name of the company applying to
-  jobTitle       String // Position applying for
-  status         String   @default("draft") // draft, completed
+  companyName    String
+  jobTitle       String
+  status         String   @default("draft")
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+  contact        String?
+  email          String?
+  name           String
+  user           User     @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }
 
-// Combined Industry Trends and Salary Insights
 model IndustryInsight {
-  id        String   @id @default(cuid())
-  industry  String   @unique
-
-   // Users in this industry
-  users User[]
-
-
-  // From prompt schema
-  salaryRanges   Json   // [{ role, min, max, median, location }]
-  marketOutlook  Json   // { summary, demandLevel, automationRisk }
-  industryTrends Json   // [{ trend, impact }]
-  topSkills      Json   // [{ skill, demandScore }]
-  skillGap       Json   // { matched: [], missing: [], matchPercentage }
-  learningPaths  Json   // [{ path, durationMonths, outcome, courses: [], books: [] }]
-  growthScore    Int    // 0 to 100
-
-  lastUpdated DateTime @default(now())
-  nextUpdate  DateTime
+  id             String   @id @default(cuid())
+  industry       String   @unique
+  lastUpdated    DateTime @default(now())
+  nextUpdate     DateTime
+  growthScore    Int
+  industryTrends Json
+  learningPaths  Json
+  skillGap       Json
+  salaryRanges   Json
+  topSkills      Json
+  marketOutlook  Json
+  users          User[]
 
   @@index([industry])
 }
 
 model ResumeAnalysis {
-  id String @id @default(cuid())
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  // Resume info
-  resumeUrl String // PDF or file link
-
-  // Job info
+  id             String   @id @default(cuid())
+  userId         String
+  resumeUrl      String
   companyName    String?
   jobTitle       String
-  jobDescription String  @db.Text
-
-  // Scores
-  overallScore Float
-  atsScore     Float
-
-  // Skills analysis
-  matchedSkills String[]
-  missingSkills String[]
-
-  // AI JSON response
-  aiFeedback Json
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  jobDescription String
+  overallScore   Float
+  atsScore       Float
+  matchedSkills  String[]
+  missingSkills  String[]
+  aiFeedback     Json
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  user           User     @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }
@@ -145,11 +128,11 @@ model ResumeAnalysis {
 model Chat {
   id        String    @id @default(uuid())
   userId    String
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  title     String
-  messages  Message[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  title     String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  Message[]
 
   @@index([userId])
 }
@@ -157,22 +140,109 @@ model Chat {
 model Message {
   id        String   @id @default(uuid())
   chatId    String
-  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
-  content   String   @db.Text
+  content   String
   role      Role
   createdAt DateTime @default(now())
+  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
 
   @@index([chatId])
+}
+
+model SubscriptionPlan {
+  id             String             @id @default(cuid())
+  name           String
+  type           PlanType
+  tier           String?
+  tokensIncluded Int
+  price          Int                @default(0)
+  features       Json?
+  isActive       Boolean            @default(true)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  payments       Payment[]
+  subscriptions  UserSubscription[]
+
+  @@unique([type, tier])
+}
+
+model UserSubscription {
+  id                  String             @id @default(cuid())
+  userId              String             @unique
+  planId              String
+  tokensUsed          Int                @default(0)
+  tokensRemaining     Int
+  status              SubscriptionStatus @default(ACTIVE)
+  startDate           DateTime           @default(now())
+  endDate             DateTime?
+  clerkSubscriptionId String?
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+  plan                SubscriptionPlan   @relation(fields: [planId], references: [id])
+  user                User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([planId])
+}
+
+model TokenUsageLog {
+  id         String   @id @default(cuid())
+  userId     String
+  feature    Feature
+  tokensUsed Int
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([feature])
+  @@index([createdAt])
+}
+
+model AdminUser {
+  id        String    @id @default(cuid())
+  userId    String    @unique
+  role      AdminRole @default(ADMIN)
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Payment {
+  id              String            @id @default(cuid())
+  userId          String
+  stripeSessionId String            @unique
+  amount          Int
+  currency        String            @default("pkr")
+  tokens          Int
+  planId          String?
+  status          String
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  plan            SubscriptionPlan? @relation(fields: [planId], references: [id])
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([planId])
+  @@index([stripeSessionId])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+  link      String?
+  createdAt DateTime         @default(now())
+
+  @@index([isRead])
+  @@index([createdAt])
 }
 
 enum Role {
   USER
   MODEL
 }
-
-// ========================
-// SUBSCRIPTION & ADMIN
-// ========================
 
 enum PlanType {
   FREE
@@ -199,82 +269,11 @@ enum AdminRole {
   ADMIN
 }
 
-model SubscriptionPlan {
-  id              String             @id @default(cuid())
-  name            String             // "Free", "Pro - Starter", etc.
-  type            PlanType           // FREE or PRO
-  tier            String?            // null for Free, "Starter"/"Standard"/"Business"/"Enterprise"/"Ultimate" for Pro
-  tokensIncluded  Int                // Number of tokens included in the plan
-  price           Int                @default(0) // Price in PKR
-  features        Json?              // List of allowed features
-  isActive        Boolean            @default(true)
-  createdAt       DateTime           @default(now())
-  updatedAt       DateTime           @updatedAt
-
-  // Relations
-  subscriptions   UserSubscription[]
-  payments        Payment[]
-
-  @@unique([type, tier])
-}
-
-model UserSubscription {
-  id                  String             @id @default(cuid())
-  userId              String             @unique
-  user                User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  planId              String
-  plan                SubscriptionPlan   @relation(fields: [planId], references: [id])
-  tokensUsed          Int                @default(0)
-  tokensRemaining     Int                // Initialized from plan's tokensIncluded
-  status              SubscriptionStatus @default(ACTIVE)
-  startDate           DateTime           @default(now())
-  endDate             DateTime?
-  clerkSubscriptionId String?            // Clerk payment reference
-  createdAt           DateTime           @default(now())
-  updatedAt           DateTime           @updatedAt
-
-  @@index([userId])
-  @@index([planId])
-}
-
-model TokenUsageLog {
-  id         String   @id @default(cuid())
-  userId     String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  feature    Feature  // Which AI feature was used
-  tokensUsed Int      // Number of tokens consumed in this call
-  createdAt  DateTime @default(now())
-
-  @@index([userId])
-  @@index([feature])
-  @@index([createdAt])
-}
-
-model AdminUser {
-  id     String    @id @default(cuid())
-  userId String    @unique
-  user   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  role   AdminRole @default(ADMIN)
-  createdAt DateTime @default(now())
-
-  @@index([userId])
-}
-
-model Payment {
-  id              String   @id @default(cuid())
-  userId          String
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  stripeSessionId String   @unique
-  amount          Int      // Amount in PKR
-  currency        String   @default("pkr")
-  tokens          Int      // Tokens bought
-  planId          String?  // Plan associated with this purchase (if any)
-  plan            SubscriptionPlan?  @relation(fields: [planId], references: [id])
-  status          String   // "paid", "failed"
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  @@index([userId])
-  @@index([planId])
-  @@index([stripeSessionId])
+enum NotificationType {
+  NEW_USER
+  PAYMENT_SUCCESS
+  PLAN_CHANGE
+  PLAN_CREATED
+  PLAN_DELETED
+  NEW_FEEDBACK
 }

@@ -89,7 +89,7 @@ export async function getAllUsers(page = 1, pageSize = 20) {
 export async function createSubscriptionPlan(data) {
   await checkAdmin();
 
-  return await db.subscriptionPlan.create({
+  const plan = await db.subscriptionPlan.create({
     data: {
       name: data.name,
       type: data.type,
@@ -100,6 +100,21 @@ export async function createSubscriptionPlan(data) {
       isActive: data.isActive !== undefined ? data.isActive : true,
     },
   });
+
+  // Trigger notification
+  try {
+    const { createNotification } = await import("./notifications");
+    await createNotification({
+      type: "PLAN_CREATED",
+      title: "New Plan Created",
+      message: `Administrator has created a new subscription plan: "${data.name}"`,
+      link: "/admin/subscriptions",
+    });
+  } catch (err) {
+    console.error("Notification failed", err);
+  }
+
+  return plan;
 }
 
 /**
@@ -108,7 +123,7 @@ export async function createSubscriptionPlan(data) {
 export async function updateSubscriptionPlan(planId, data) {
   await checkAdmin();
 
-  return await db.subscriptionPlan.update({
+  const plan = await db.subscriptionPlan.update({
     where: { id: planId },
     data: {
       name: data.name,
@@ -120,6 +135,21 @@ export async function updateSubscriptionPlan(planId, data) {
       isActive: data.isActive,
     },
   });
+
+  // Trigger notification
+  try {
+    const { createNotification } = await import("./notifications");
+    await createNotification({
+      type: "PLAN_CHANGE",
+      title: "Plan Updated",
+      message: `The configuration for plan "${data.name}" has been modified.`,
+      link: "/admin/subscriptions",
+    });
+  } catch (err) {
+    console.error("Notification failed", err);
+  }
+
+  return plan;
 }
 
 /**
@@ -137,9 +167,24 @@ export async function deleteSubscriptionPlan(planId) {
     throw new Error(`Cannot delete plan: ${activeUserCount} users are currently subscribed to it. Deactivate it instead.`);
   }
 
-  return await db.subscriptionPlan.delete({
+  const plan = await db.subscriptionPlan.delete({
     where: { id: planId },
   });
+
+  // Trigger notification
+  try {
+    const { createNotification } = await import("./notifications");
+    await createNotification({
+      type: "PLAN_DELETED",
+      title: "Plan Removed",
+      message: `A subscription plan (ID: ${planId}) has been deleted from the platform.`,
+      link: "/admin/subscriptions",
+    });
+  } catch (err) {
+    console.error("Notification failed", err);
+  }
+
+  return plan;
 }
 
 /**

@@ -3,7 +3,6 @@ import { db } from "@/lib/prisma";
 import { checkAuth } from "@/services/authCheck";
 import { generateAIResponse } from "@/services/geminiService";
 import { checkTokenBalance, deductTokens, estimateTokens } from "@/services/subscriptionService";
-import { NextResponse } from "next/server";
 
 const modelName = process.env.GEMINI_MODEL_A;
 
@@ -57,11 +56,7 @@ Rules:
     return coverLetter;
   } catch (error) {
     console.error("Error generating cover letter:", error.message);
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Failed to generate cover letter"
-      },{ status: 502 })
+    throw new Error(error.message || "Failed to generate cover letter. AI service might be unavailable.");
   }
 }
 

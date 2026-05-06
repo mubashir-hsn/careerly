@@ -5,33 +5,29 @@ import { NextResponse } from "next/server";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-export async function generateAIResponse(userPrompt,modelName) {
+export async function generateAIResponse(userPrompt, modelName) {
   try {
-  
     const model = genAI.getGenerativeModel({ model: modelName });
     const result = await model.generateContent({
-        contents: [
-          { role: "user", parts: [{ text: userPrompt }] }
-        ],
-        generationConfig: {
-          temperature: 0.4,
-        }
-      });
-
-      if (!result?.response) {
-        return NextResponse.json({
-          success: false,
-          message:"Empty AI response"
-        }, {status: 502});
+      contents: [
+        { role: "user", parts: [{ text: userPrompt }] }
+      ],
+      generationConfig: {
+        temperature: 0.4,
       }
-  
-      return result.response.text();
+    });
+
+    const responseText = result?.response?.text();
+    if (!responseText) {
+      throw new Error("Empty AI response received from Gemini.");
+    }
+
+    return responseText;
   } catch (error) {
+    if (error.status === 503 || error.message?.includes("503") || error.message?.includes("high demand")) {
+      throw new Error("AI services are currently overloaded. Please try again in 30 seconds.");
+    }
     console.error("Gemini Service Error:", error);
-    return NextResponse.json(
-      {
-        success: false,
-        message: error.message || "Something went wrong"
-      }, { status: 502 })
+    throw error;
   }
 }

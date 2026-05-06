@@ -34,7 +34,7 @@ export default function HeroSection() {
 
 
     return (
-        <section className="relative py-36 p-10 overflow-hidden w-full mx-auto">
+        <section className="relative py-20 p-10 overflow-hidden w-full mx-auto">
             {/* Background blobs */}
             <div className="absolute inset-0 overflow-hidden">
                 <div className="absolute -top-20 -left-20 w-64 sm:w-72 h-64 sm:h-72 bg-purple-200 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-2xl sm:blur-3xl opacity-60 animate-blob"></div>
@@ -52,21 +52,20 @@ export default function HeroSection() {
                         </span>
                     </div>
 
-                    <h1 className="text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900 mb-3 leading-tight">
-                        Grow your <br />
-                        <span className="bg-linear-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
-                            Professional
-                        </span>{" "}
-                        path
+                    <h1 className="text-5xl lg:text-7xl font-black tracking-tight text-gray-900 mb-4 leading-tight">
+                        Your Personal <br />
+                        <span className="bg-linear-to-r from-indigo-600 to-purple-500 bg-clip-text text-transparent italic">
+                            AI Career Coach
+                        </span>
                     </h1>
 
-                    <p className="text-text-muted-light md:text-lg pb-5 leading-relaxed max-w-xs sm:max-w-sm md:max-w-md mx-auto md:mx-0">
-                        Advance your career with personalized guidance, interview prep and AI-powered tools for job success
+                    <p className="text-slate-500 md:text-xl pb-8 leading-relaxed max-w-md mx-auto md:mx-0 font-medium">
+                        Build your resume, practice interviews, and get AI tools to reach your career goals.
                     </p>
 
                     <Link href={'/dashboard'}>
-                        <button className="bg-gray-800 mx-auto md:m-0 text-white px-6 py-3.5 rounded-xl font-bold text-sm sm:text-base shadow-xl shadow-purple-900/10 hover:shadow-purple-900/20 active:scale-[0.98] transition-all flex items-center gap-2 group mt-3 sm:mt-0">
-                            Start Free
+                        <button className="bg-slate-900 mx-auto md:m-0 text-white px-8 py-4 rounded-2xl font-black text-lg shadow-2xl shadow-indigo-600/20 hover:shadow-indigo-600/30 active:scale-[0.98] transition-all flex items-center gap-2 group mt-3 sm:mt-0 uppercase tracking-widest">
+                            Get Started
                             <ArrowRight />
                         </button>
                     </Link>

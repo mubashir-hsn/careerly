@@ -84,8 +84,13 @@ export default async function BillingPage() {
                   </span>
                 </div>
                 <div className="flex items-baseline gap-2">
-                  <p className="text-3xl font-black text-slate-900 tracking-tighter">{tokensRemaining.toLocaleString()}</p>
-                  <p className="text-xs text-slate-400 font-bold uppercase tracking-tight">Available</p>
+                  <p className="text-3xl font-black text-slate-900 tracking-tighter flex items-center gap-2">
+                    {tokensRemaining.toLocaleString()}
+                    <span className="text-[10px] font-black uppercase tracking-tighter bg-emerald-600 text-white px-2 py-0.5 rounded shadow-sm">
+                      Cumulative
+                    </span>
+                  </p>
+                  <p className="text-xs text-slate-400 font-bold uppercase tracking-tight">Total Accumulated Balance</p>
                 </div>
                 <div className="mt-3 space-y-1.5">
                    <div className="flex justify-between text-[9px] font-black text-slate-400 uppercase tracking-widest">

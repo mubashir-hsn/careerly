@@ -9,36 +9,36 @@ import {
     {
       step: "1",
       icon: Users,
-      title: "Professional Onboarding",
+      title: "Set up your profile",
       description:
-        "Share your industry and expertise for personalized guidance tailored specifically to your goals.",
+        "Tell us about your career goals so we can give you better advice.",
       color: "bg-indigo-500/10 text-indigo-600",
       dot: "bg-indigo-500",
     },
     {
       step: "2",
       icon: FileText,
-      title: "Craft Your Documents",
+      title: "Build your resume",
       description:
-        "Create ATS optimized resumes and compelling cover letters that stand out to top recruiters.",
+        "Create resumes and cover letters that stand out to top recruiters.",
       color: "bg-pink-500/10 text-pink-600",
       dot: "border-indigo-500",
     },
     {
       step: "3",
       icon: Mic,
-      title: "Prepare for Interviews",
+      title: "Practice Interviews",
       description:
-        "Practice with AI powered mock interviews tailored to your role and gain real time feedback.",
+        "Practice with AI interviews tailored to your role and get instant tips.",
       color: "bg-blue-500/10 text-blue-600",
       dot: "border-indigo-500",
     },
     {
       step: "4",
       icon: TrendingUp,
-      title: "Track Your Progress",
+      title: "See your growth",
       description:
-        "Monitor improvements with detailed performance analytics and adjust your strategy dynamically.",
+        "See how you're doing and get better with detailed stats.",
       color: "bg-emerald-500/10 text-emerald-600",
       dot: "border-indigo-500",
     },

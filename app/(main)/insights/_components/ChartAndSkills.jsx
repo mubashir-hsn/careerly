@@ -23,7 +23,7 @@ const ChartAndSkills = ({ insights }) => {
 
     return (
         <div className="space-y-8">
-           
+
             {/* Summary Section */}
             <Card className="glass p-4 md:py-6 md:px-12 border-0 shadow-none rounded-xl">
                 <div className='w-full'>

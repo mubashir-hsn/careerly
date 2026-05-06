@@ -22,7 +22,7 @@ const features = [
 
 export default function PricingCards({ currentPlan, plans = [] }) {
   const [loading, setLoading] = useState(null);
-  
+
   // Dynamic Plans from Database
   const freePlan = plans.find(p => p.type === "FREE");
   const proPlans = plans.filter(p => p.type === "PRO" && p.isActive).sort((a, b) => a.price - b.price);
@@ -32,8 +32,8 @@ export default function PricingCards({ currentPlan, plans = [] }) {
 
   const handleUpgrade = async () => {
     if (!selectedTier?.id) {
-       toast.error("Please select a tier to recharge");
-       return;
+      toast.error("Please select a tier to recharge");
+      return;
     }
     try {
       setLoading("upgrade");
@@ -67,163 +67,185 @@ export default function PricingCards({ currentPlan, plans = [] }) {
   const maxProTokens = proPlans.length > 0 ? proPlans[proPlans.length - 1].tokensIncluded : 1;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-6xl mx-auto">
       {/* Free Plan Card */}
-      <div className="relative rounded-2xl border-2 border-slate-200 bg-linear-to-b from-slate-50 to-white p-8 flex flex-col transition-all hover:shadow-xl hover:border-slate-300">
+      <div className="relative rounded-[2.5rem] border-0 bg-white p-10 flex flex-col transition-all duration-500 hover:shadow-[0_40px_80px_rgba(0,0,0,0.1)] hover:-translate-y-2 group shadow-xl">
+        <div className="absolute top-0 right-0 w-48 h-48 bg-slate-50 rounded-bl-full -mr-12 -mt-12 opacity-50 group-hover:scale-110 transition-transform duration-700" />
+
         {!isFree && (
-          <div className="absolute -top-3 right-4">
-            <Badge className="bg-slate-400 text-white px-3 py-1 text-xs font-bold tracking-wider">
-              BASIC ACCESS
+          <div className="absolute top-6 right-8">
+            <Badge className="bg-slate-100 text-slate-400 border-0 px-4 py-1 text-[10px] font-black uppercase tracking-[0.2em] shadow-none">
+              Basic Access
             </Badge>
           </div>
         )}
         {isFree && (
-          <div className="absolute -top-3 right-4">
-            <Badge className="bg-emerald-600 text-white px-3 py-1 text-xs font-bold tracking-wider">
-              CURRENT PLAN
+          <div className="absolute top-6 right-8">
+            <Badge className="bg-emerald-500 text-white border-0 px-4 py-1 text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-emerald-100">
+              Active Plan
             </Badge>
           </div>
         )}
 
-        <div className="flex items-center gap-4 mb-8">
-          <div className="p-4 rounded-2xl bg-white shadow-sm border border-slate-100 text-slate-600">
+        <div className="flex items-center gap-5 mb-10 relative z-10">
+          <div className="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 shadow-sm transition-transform group-hover:rotate-12">
             <Sparkles className="w-8 h-8" />
           </div>
           <div>
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight">{freePlan?.name || "Free Tier"}</h3>
-            <p className="text-sm text-slate-400 font-bold uppercase tracking-widest">Lifetime Access</p>
+            <h3 className="text-3xl font-black text-slate-900 tracking-tighter">{freePlan?.name || "Tier 0"}</h3>
+            <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.3em]">Foundation Level</p>
           </div>
         </div>
 
-        <div className="mb-8">
-          <div className="flex items-baseline gap-1">
-            <span className="text-5xl font-black text-slate-900">Rs. 0</span>
-            <span className="text-slate-400 font-bold">/mo</span>
+        <div className="mb-10 relative z-10">
+          <div className="flex items-baseline gap-2">
+            <span className="text-6xl font-black text-slate-900 tracking-tighter">Rs. 0</span>
+            <span className="text-slate-300 font-black text-lg uppercase">/ Life</span>
           </div>
-          <p className="text-sm text-slate-500 mt-2 font-medium">
-            Includes <span className="text-black font-bold underline decoration-emerald-400">{freePlan?.tokensIncluded.toLocaleString() || "1,000"} Free Tokens</span> monthly
+          <p className="text-sm text-slate-500 mt-4 font-medium leading-relaxed">
+            Allocated <span className="text-slate-900 font-black px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-lg">{freePlan?.tokensIncluded.toLocaleString() || "1,000"} Credits</span> per cycle for ecosystem exploration.
           </p>
         </div>
 
-        <div className="flex-1 mb-10">
-          <ul className="space-y-4">
+        <div className="flex-1 mb-12 relative z-10">
+          <ul className="space-y-5">
             {(freePlan?.features?.length > 0 ? freePlan.features : features).map((feature) => (
-              <li key={feature} className="flex items-center gap-3 text-sm text-slate-600 font-medium">
-                <div className="w-5 h-5 rounded-full bg-emerald-50 flex items-center justify-center">
-                  <Check className="w-3 h-3 text-emerald-600" />
+              <li key={feature} className="flex items-center gap-4 text-sm text-slate-600 font-bold">
+                <div className="w-6 h-6 rounded-full bg-emerald-50 flex items-center justify-center shrink-0">
+                  <Check className="w-3.5 h-3.5 text-emerald-600" />
                 </div>
                 {feature}
               </li>
             ))}
+            <li className="flex items-center gap-4 text-sm text-slate-300 font-bold line-through italic">
+              <div className="w-6 h-6 rounded-full bg-slate-50 flex items-center justify-center shrink-0 opacity-50">
+                <Crown className="w-3 h-3 text-slate-400" />
+              </div>
+              Priority AI Orchestration
+            </li>
           </ul>
         </div>
 
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={handleDowngrade}
           disabled={isFree || loading === "downgrade"}
-          className="w-full py-7 text-lg font-black rounded-2xl bg-white border-2 border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all text-slate-700"
+          className="w-full h-16 text-xs font-black uppercase tracking-[0.2em] rounded-2xl bg-white border-2 border-slate-100 hover:bg-slate-50 hover:border-slate-200 transition-all text-slate-700 relative z-10 active:scale-[0.98]"
         >
-          {loading === "downgrade" ? "Switching..." : isFree ? "Standard Free Active" : "Downgrade to Free"}
+          {loading === "downgrade" ? "Synchronizing..." : isFree ? "Standard tier active" : "Revert to standard"}
         </Button>
       </div>
 
       {/* Pro Plan Card */}
-      <div className="relative rounded-2xl border-2 border-indigo-600 bg-linear-to-b from-indigo-50 to-white p-8 flex flex-col transition-all hover:shadow-2xl ring-8 ring-indigo-50/50">
-        <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-          <Badge className="bg-indigo-600 text-white px-6 py-2 text-xs font-black uppercase tracking-widest shadow-lg shadow-indigo-200">
-            Pro Powerhouse
+      <div className="relative rounded-[2.5rem] border-0 bg-slate-900 text-white p-10 flex flex-col transition-all duration-500 hover:shadow-[0_50px_100px_rgba(79,70,229,0.25)] hover:-translate-y-2 group shadow-2xl overflow-hidden">
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-[100px] -mr-48 -mt-48 transition-all duration-1000 group-hover:bg-indigo-600/20" />
+
+        <div className="absolute top-6 right-8 z-10">
+          <Badge className="bg-indigo-500 text-white border-0 px-5 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/20">
+            Pro Plan
           </Badge>
         </div>
 
-        <div className="flex items-center gap-4 mb-8">
-          <div className="p-4 rounded-2xl bg-indigo-600 text-white shadow-xl shadow-indigo-100">
+        <div className="flex items-center gap-5 mb-10 relative z-10">
+          <div className="w-16 h-16 rounded-2xl bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center shadow-[0_0_20px_rgba(99,102,241,0.2)] transition-transform group-hover:rotate-12">
             <Crown className="w-8 h-8" />
           </div>
           <div>
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight">Pro Plan</h3>
-            <p className="text-sm text-indigo-600 font-black uppercase tracking-widest">Select Your Recharge</p>
+            <h3 className="text-3xl font-black text-white tracking-tighter">Pro Pack</h3>
+            <p className="text-[10px] text-indigo-400 font-black uppercase tracking-[0.3em]">Credits Included</p>
           </div>
         </div>
 
         {/* Token Selector UI */}
-        <div className="mb-8 bg-white/80 backdrop-blur-sm p-5 rounded-2xl border-2 border-indigo-100 shadow-sm relative overflow-hidden group">
+        <div className="mb-10 bg-white/5 backdrop-blur-xl p-8 rounded-[2rem] border border-white/10 shadow-2xl relative overflow-hidden z-10">
           <div className="relative z-10">
-            <div className="flex justify-between items-center mb-4">
-               <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                Token Threshold
-              </label>
-              <span className="text-xs font-black text-indigo-600 bg-indigo-50 px-2 py-1 rounded">
-                Tier: {selectedTier?.name || "Premium Access"}
-              </span>
+            <div className="flex justify-between items-center mb-6">
+              <div className="space-y-1">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                  Choose Credits
+                </label>
+                <p className="text-xs font-black text-indigo-400 uppercase">
+                  {selectedTier?.name || "Power User"} Allocation
+                </p>
+              </div>
+              <div className="text-right">
+                <span className="px-3 py-1 bg-white/10 rounded-lg text-[10px] font-black text-white uppercase tracking-widest border border-white/10">
+                  Active Plan
+                </span>
+              </div>
             </div>
-            
-            <div className="grid grid-cols-5 gap-2 mb-6">
+
+            <div className="grid grid-cols-5 gap-3 mb-8">
               {proPlans.map((option) => (
                 <button
                   key={option.id}
                   onClick={() => setSelectedTier(option)}
-                  className={`py-3 text-center rounded-xl border-2 transition-all text-sm font-black ${
-                    selectedTier?.id === option.id
-                      ? "bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-100"
-                      : "border-slate-100 bg-slate-50 text-slate-400 hover:border-indigo-200"
-                  }`}
+                  className={`py-4 text-center rounded-xl border transition-all text-xs font-black transition-all duration-300 active:scale-90 ${selectedTier?.id === option.id
+                      ? "bg-white text-slate-900 border-white shadow-[0_0_25px_rgba(255,255,255,0.3)]"
+                      : "border-white/10 bg-white/5 text-slate-400 hover:border-white/30 hover:bg-white/10"
+                    }`}
                 >
                   {option.tokensIncluded / 1000}K
                 </button>
               ))}
             </div>
-            
+
             {/* Dynamic Progress Bar */}
-            <div className="relative h-3 bg-slate-100 rounded-full overflow-hidden mb-6">
-              <div 
-                className="absolute top-0 left-0 h-full bg-linear-to-r from-indigo-500 via-purple-500 to-indigo-600 transition-all duration-700 ease-out"
+            <div className="relative h-4 bg-white/5 rounded-full overflow-hidden mb-8 border border-white/5">
+              <div
+                className="absolute top-0 left-0 h-full bg-linear-to-r from-indigo-500 via-purple-500 to-white transition-all duration-1000 ease-in-out"
                 style={{ width: `${selectedTier ? (selectedTier.tokensIncluded / maxProTokens) * 100 : 0}%` }}
               />
             </div>
-            
-            <div className="flex items-end justify-between">
-               <div>
-                  <p className="text-xs font-bold text-slate-400 uppercase mb-1">Total Payment</p>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-black text-slate-900">
-                      Rs. {selectedTier?.price.toLocaleString() || 0}
-                    </span>
-                  </div>
-               </div>
-               <div className="text-right">
-                 <p className="text-2xl font-black text-indigo-600">
-                   {selectedTier?.tokensIncluded.toLocaleString() || 0}
-                 </p>
-                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">AI Credits</p>
-               </div>
+
+            <div className="flex items-end justify-between border-t border-white/5 pt-6">
+              <div>
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Price</p>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-5xl font-black text-white tracking-tighter">
+                    Rs. {selectedTier?.price.toLocaleString() || 0}
+                  </span>
+                </div>
+              </div>
+              <div className="text-right bg-indigo-500/10 p-3 rounded-2xl border border-indigo-500/20">
+                <p className="text-3xl font-black text-indigo-400 tracking-tighter leading-none mb-1">
+                  {selectedTier?.tokensIncluded.toLocaleString() || 0}
+                </p>
+                <p className="text-[9px] font-black text-indigo-300 uppercase tracking-widest text-center">AI Credits</p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="flex-1 mb-10">
-          <ul className="space-y-4">
+        <div className="flex-1 mb-12 relative z-10">
+          <ul className="space-y-5">
             {(selectedTier?.features?.length > 0 ? selectedTier.features : features).map((feature) => (
-              <li key={feature} className="flex items-center gap-3 text-sm text-slate-700 font-bold">
-                <div className="w-5 h-5 rounded-full bg-indigo-50 flex items-center justify-center">
-                  <Check className="w-3 h-3 text-indigo-600" />
+              <li key={feature} className="flex items-center gap-4 text-sm text-slate-200 font-bold">
+                <div className="w-6 h-6 rounded-full bg-indigo-500/20 flex items-center justify-center shrink-0 border border-indigo-500/30">
+                  <Check className="w-3.5 h-3.5 text-indigo-400" />
                 </div>
                 {feature}
               </li>
             ))}
-            <li className="flex items-center gap-3 text-sm text-indigo-800 font-black italic">
-              <Sparkles className="w-4 h-4 text-amber-500" />
-              Priority AI Processing
+            <li className="flex items-center gap-4 text-sm text-amber-400 font-black italic mt-6">
+              <div className="w-6 h-6 rounded-full bg-amber-500/20 flex items-center justify-center shrink-0 border border-amber-500/30">
+                <Sparkles className="w-3.5 h-3.5 text-amber-400 fill-current" />
+              </div>
+              Priority AI Tools
             </li>
           </ul>
         </div>
 
-        <Button 
+        <Button
           onClick={handleUpgrade}
           disabled={loading === "upgrade" || !selectedTier}
-          className="w-full py-8 text-xl font-black rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-2xl shadow-indigo-200 transition-all hover:scale-[1.02] active:scale-95 border-b-4 border-indigo-800"
+          className="w-full h-20 text-sm font-black uppercase tracking-[0.2em] rounded-2xl bg-white text-slate-900 border-0 shadow-[0_20px_50px_rgba(255,255,255,0.1)] transition-all hover:scale-[1.02] hover:text-slate-100 active:scale-95 relative z-10 group/btn overflow-hidden"
         >
-          {loading === "upgrade" ? "Preparing Secure Checkout..." : "Upgrade & Recharge Now"}
+          <span className="relative z-10 flex items-center justify-center gap-3">
+            {loading === "upgrade" ? "Processing..." : "Upgrade to Pro"}
+            <Crown size={18} className="transition-transform group-hover/btn:rotate-12" />
+          </span>
+          <div className="absolute top-0 -left-[100%] w-full h-full bg-linear-to-r from-transparent via-indigo-200/20 to-transparent transition-all duration-1000 group-hover:left-[100%]" />
         </Button>
       </div>
     </div>

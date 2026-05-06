@@ -5,111 +5,117 @@ import { TrendingUp, Sparkles, ShieldAlert, GraduationCap } from "lucide-react";
 const MarketOverviewCards = ({ insights }) => {
     return (
         <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 {/* Growth Score */}
-                <Card className="glass p-3 md:px-0 md:py-6 rounded-xl shadow-none border-0">
-                    <CardHeader className="flex items-center gap-3 mb-4">
-                        <div className="p-2 bg-indigo-100 text-indigo-600 rounded-xl">
-                            <TrendingUp size={25} />
+                <Card className="border-0 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden p-6 hover:-translate-y-1 transition-all duration-300">
+                    <CardHeader className="p-0 flex flex-row items-center gap-4 mb-6">
+                        <div className="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-100/50">
+                            <TrendingUp size={28} className="font-black" />
                         </div>
-                        <CardTitle className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <CardTitle className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
                             Growth Score
                         </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                        <div className="flex items-end gap-2">
-                            <span className="text-4xl font-extrabold text-slate-900">{insights.growthScore}</span>
-                            <span className="text-slate-400 font-medium mb-1">/ 100</span>
+                    <CardContent className="p-0">
+                        <div className="flex items-baseline gap-2">
+                            <span className="text-5xl font-black text-slate-900 tracking-tighter">{insights.growthScore}</span>
+                            <span className="text-slate-300 font-bold text-sm tracking-widest">/ 100</span>
                         </div>
-                        <div className="mt-4 w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                        <div className="mt-6 w-full bg-slate-50 rounded-full h-3 overflow-hidden border border-slate-100">
                             <div
                                 style={{
                                     width: `${insights.growthScore}%`,
-                                    backgroundColor: insights.growthScore >= 70 ? "#4ade80" : insights.growthScore >= 40 ? "#facc15" : "#f87171",
+                                    backgroundColor: insights.growthScore >= 70 ? "#10b981" : insights.growthScore >= 40 ? "#f59e0b" : "#ef4444",
                                 }}
-                                className="h-full transition-all duration-1000 ease-out"
+                                className="h-full transition-all duration-1000 ease-out shadow-[0_0_12px_rgba(0,0,0,0.1)]"
                             />
                         </div>
                     </CardContent>
                 </Card>
 
                 {/* Market Demand */}
-                <Card className="glass p-3 md:px-0 md:py-6 rounded-xl shadow-none border-0">
-                    <CardHeader className="flex items-center gap-3 mb-4">
-                        <div className="p-2 bg-emerald-100 text-emerald-600 rounded-xl">
-                            <Sparkles size={25} />
+                <Card className="border-0 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden p-6 hover:-translate-y-1 transition-all duration-300">
+                    <CardHeader className="p-0 flex flex-row items-center gap-4 mb-6">
+                        <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-100/50">
+                            <Sparkles size={28} />
                         </div>
-                        <CardTitle className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <CardTitle className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
                             Market Demand
                         </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                        <span
-                            className={`text-2xl font-bold ${insights.marketOutlook.demandLevel === "High"
-                                    ? "text-emerald-500"
-                                    : insights.marketOutlook.demandLevel === "Medium"
-                                        ? "text-amber-500"
-                                        : "text-rose-500"
-                                }`}
-                        >
-                            {insights.marketOutlook.demandLevel}
-                        </span>
-                        <CardDescription className="text-xs text-slate-500 mt-2 leading-relaxed">
-                            Based on hiring trends and industry trajectory.
+                    <CardContent className="p-0">
+                        <div className="mb-2">
+                            <span
+                                className={`text-3xl font-black tracking-tighter uppercase ${insights.marketOutlook.demandLevel === "High"
+                                        ? "text-emerald-600"
+                                        : insights.marketOutlook.demandLevel === "Medium"
+                                            ? "text-amber-600"
+                                            : "text-rose-600"
+                                    }`}
+                            >
+                                {insights.marketOutlook.demandLevel}
+                            </span>
+                        </div>
+                        <CardDescription className="text-xs text-slate-500 font-medium leading-relaxed mt-4">
+                            Hiring signals and industry growth.
                         </CardDescription>
                     </CardContent>
                 </Card>
 
                 {/* Automation Risk */}
-                <Card className="glass p-3 md:px-0 md:py-6 rounded-xl shadow-none border-0">
-                    <CardHeader className="flex items-center gap-3 mb-4">
-                        <div className="p-2 bg-rose-100 text-rose-600 rounded-xl">
-                            <ShieldAlert size={25} />
+                <Card className="border-0 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden p-6 hover:-translate-y-1 transition-all duration-300">
+                    <CardHeader className="p-0 flex flex-row items-center gap-4 mb-6">
+                        <div className="w-14 h-14 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center shadow-lg shadow-rose-100/50">
+                            <ShieldAlert size={28} />
                         </div>
-                        <CardTitle className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                            Automation Risk
+                        <CardTitle className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                            Job Risk
                         </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                        <span
-                            className={`text-2xl font-bold ${insights.marketOutlook.automationRisk === "High"
-                                    ? "text-rose-600"
-                                    : insights.marketOutlook.automationRisk === "Medium"
-                                        ? "text-amber-500"
-                                        : "text-emerald-500"
-                                }`}
-                        >
-                            {insights.marketOutlook.automationRisk}
-                        </span>
-                        <CardDescription className="text-xs text-slate-500 mt-2 leading-relaxed">
+                    <CardContent className="p-0">
+                        <div className="mb-2">
+                           <span
+                                className={`text-3xl font-black tracking-tighter uppercase ${insights.marketOutlook.automationRisk === "High"
+                                        ? "text-rose-600"
+                                        : insights.marketOutlook.automationRisk === "Medium"
+                                            ? "text-amber-500"
+                                            : "text-emerald-600"
+                                    }`}
+                            >
+                                {insights.marketOutlook.automationRisk}
+                            </span>
+                        </div>
+                        <CardDescription className="text-xs text-slate-500 font-medium leading-relaxed mt-4">
                             Risk of core tasks being replaced by AI.
                         </CardDescription>
                     </CardContent>
                 </Card>
 
                 {/* Skill Match */}
-                <Card className="glass p-3 md:px-0 md:py-6 rounded-xl shadow-none border-0">
-                    <CardHeader className="flex items-center gap-3 mb-4">
-                        <div className="p-2 bg-blue-100 text-blue-600 rounded-xl">
-                            <GraduationCap size={25} />
+                <Card className="border-0 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden p-6 hover:-translate-y-1 transition-all duration-300">
+                    <CardHeader className="p-0 flex flex-row items-center gap-4 mb-6">
+                        <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-100/50">
+                            <GraduationCap size={28} />
                         </div>
-                        <CardTitle className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <CardTitle className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
                             Skill Match
                         </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                        <span
-                            className={`text-4xl font-extrabold ${insights.skillGap.matchPercentage >= 90
-                                    ? "text-emerald-600"
-                                    : insights.skillGap.matchPercentage >= 40
-                                        ? "text-blue-500"
-                                        : "text-rose-600"
-                                }`}
-                        >
-                            {insights.skillGap.matchPercentage}%
-                        </span>
-                        <CardDescription className="text-xs text-slate-500 mt-2 leading-relaxed">
-                            Match against top-tier industry standards.
+                    <CardContent className="p-0">
+                        <div className="flex items-baseline gap-2">
+                            <span
+                                className={`text-5xl font-black tracking-tighter ${insights.skillGap.matchPercentage >= 90
+                                        ? "text-emerald-600"
+                                        : insights.skillGap.matchPercentage >= 40
+                                            ? "text-blue-600"
+                                            : "text-rose-600"
+                                    }`}
+                            >
+                                {insights.skillGap.matchPercentage}%
+                            </span>
+                        </div>
+                        <CardDescription className="text-xs text-slate-500 font-medium leading-relaxed mt-6">
+                            Benchmarked against industry standards.
                         </CardDescription>
                     </CardContent>
                 </Card>

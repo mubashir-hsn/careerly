@@ -18,15 +18,18 @@ const PricingPage = async () => {
   ]);
 
   return (
-    <div className="container mx-auto px-4 py-10">
+    <div className="container mx-auto px-4 py-16 max-w-7xl min-h-screen">
       {/* Header */}
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
-          Choose Your Plan
+      <div className="text-center mb-16 space-y-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-50 border border-indigo-100 rounded-full">
+            <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-indigo-600">Premium Access Plans</span>
+        </div>
+        <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter">
+          Elevate Your <span className="text-primary italic">Potential.</span>
         </h1>
-        <p className="text-lg text-gray-500 max-w-2xl mx-auto">
-          Unlock AI-powered career tools with the right plan. Start free and
-          upgrade anytime.
+        <p className="text-lg text-slate-500 max-w-2xl mx-auto font-medium leading-relaxed opacity-80">
+          Unlock enterprise-grade AI orchestration and specialized career tools. Start with our foundational free tier and scale your growth as you dominate your market.
         </p>
       </div>
 

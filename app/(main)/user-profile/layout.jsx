@@ -1,11 +1,11 @@
-import React, { Suspense } from 'react'
-import { BarLoader } from 'react-spinners'
+import React, { Suspense } from 'react';
+import Loader from '@/components/Loader';
 
 const ProfileLayout = ({children}) => {
   return (
-    <div className='px-2 md:px-5 py-4 bg-slate-100'>
+    <div className='px-4 md:px-8 py-8 bg-slate-50/50 min-h-screen'>
       <Suspense 
-       fallback={<BarLoader className='mt-4' width={'100%'} color='gray'/>}
+       fallback={<Loader className="mt-12" />}
       >{children}</Suspense>
     </div>
   )

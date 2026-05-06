@@ -31,6 +31,8 @@ export async function POST(req) {
     }
 
     try {
+      const planId = session.metadata.planId;
+
       // Find or create user subscription and add tokens
       await db.userSubscription.update({
         where: { userId },
@@ -38,12 +40,26 @@ export async function POST(req) {
           tokensRemaining: {
             increment: tokens,
           },
+          planId: planId || undefined,
           status: "ACTIVE",
           updatedAt: new Date(),
         },
       });
 
       console.log(`Successfully added ${tokens} tokens to user ${userId}`);
+
+      // Trigger notification for admin
+      try {
+        const { createNotification } = await import("@/actions/notifications");
+        await createNotification({
+          type: "PAYMENT_SUCCESS",
+          title: "Payment Received",
+          message: `Success! PKR ${session.amount_total / 100} received from user ${userId}.`,
+          link: "/admin/revenue",
+        });
+      } catch (notifyError) {
+        console.log("Admin notification failed:", notifyError.message);
+      }
     } catch (dbError) {
       console.error("Error updating user subscription via webhook:", dbError.message);
       return new NextResponse("Database update failed", { status: 500 });

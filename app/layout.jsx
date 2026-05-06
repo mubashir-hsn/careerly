@@ -1,7 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/ThemeProvider";
-import Header from "@/components/Header";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -30,20 +29,10 @@ export default function RootLayout({ children }) {
             enableSystem
             disableTransitionOnChange
           >
-            {/* header */}
-            <Header />
-
-            {/* main content */}
-            <main className="min-h-screen">
-              {children}
-            </main>
+            {/* The root layout is now a pure container. 
+                Navigation components are handled in route-specific groups. */}
+            {children}
             <Toaster richColors />
-            {/* footer */}
-            <footer className="py-6 text-center bg-gray-800">
-              <div className="container mx-auto text-center text-gray-100">
-                <p>Made By Mubashir</p>
-              </div>
-            </footer>
           </ThemeProvider>
         </body>
       </html>

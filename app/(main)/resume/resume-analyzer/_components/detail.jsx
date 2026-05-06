@@ -6,118 +6,191 @@ import {
 } from "@/components/ui/accordion";
 import ScoreBadge from "./ScoreBadge";
 import { cn } from "@/lib/utils";
+import { 
+  CheckCircle2, 
+  AlertTriangle, 
+  Sparkles, 
+  Target, 
+  Wrench, 
+  Zap, 
+  Lightbulb,
+  Check,
+  Plus
+} from "lucide-react";
 
-const CategoryHeader = ({ title, categoryScore }) => (
-  <div className="flex flex-row gap-4 items-center py-2">
-    <p className="text-xl">{title}</p>
-    <ScoreBadge score={categoryScore} />
-  </div>
-);
+const CategoryHeader = ({ title, categoryScore }) => {
+  const getIcon = () => {
+    switch (title.toLowerCase()) {
+      case "tone & style": return <Zap className="w-5 h-5 text-indigo-500" />;
+      case "content": return <Target className="w-5 h-5 text-blue-500" />;
+      case "structure": return <Sparkles className="w-5 h-5 text-purple-500" />;
+      case "skills": return <Wrench className="w-5 h-5 text-emerald-500" />;
+      default: return null;
+    }
+  };
+
+  return (
+    <div className="flex items-center gap-4 py-1">
+      <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center border border-slate-100 shadow-xs group-hover:bg-white transition-colors">
+        {getIcon()}
+      </div>
+      <div className="flex flex-col items-start gap-0.5">
+        <p className="text-lg font-black text-slate-900 tracking-tight">{title}</p>
+        <ScoreBadge score={categoryScore} />
+      </div>
+    </div>
+  );
+};
 
 const CategoryContent = ({ tips, matchedSkills, missingSkills, skillImprovementAdvice, recommendedNewSkillsAndTools }) => (
-  <div className="flex flex-col gap-4 w-full">
-
-    {/* Tips section */}
-    <div className="w-full px-5 py-4 text-justify hidden md:grid md:grid-cols-2 gap-4">
-      {tips?.map((tip, i) => (
-        <div className="flex flex-row gap-3 items-center justify-start bg-slate-200 rounded-lg p-2" key={i}>
-          <img
-            src={tip.type === "good" ? "/icons/check.svg" : "/icons/warning.svg"}
-            alt="score"
-            className="size-6"
-          />
-          <p className="text-[16px] font-semibold text-gray-500 text-justify">{tip.tip}</p>
-        </div>
-      ))}
-    </div>
-
-    <div className=" grid grid-cols-1 md:grid-cols-2 gap-5">
-      {/* Matched Skills */}
-    {matchedSkills && matchedSkills.length > 0 && (
-      <div className="bg-green-100 w-full p-3 rounded-md">
-        <p className="font-semibold text-green-800 text-lg mb-1">Matched Skills</p>
-        <ul className="list-disc list-inside text-green-700">
-          {matchedSkills.map((skill, i) => (
-            <li key={i}>{skill}</li>
-          ))}
-        </ul>
+  <div className="flex flex-col gap-8 w-full py-4 px-2">
+    
+    {/* Summary grid for desktop */}
+    {tips && tips.length > 0 && (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {tips.map((tip, i) => (
+          <div 
+            key={i} 
+            className={cn(
+              "flex gap-4 p-5 rounded-2xl border transition-all duration-300 hover:shadow-lg h-full",
+              tip.type === "good" 
+                ? "bg-emerald-50/30 border-emerald-100 group/tip hover:bg-emerald-50" 
+                : "bg-amber-50/30 border-amber-100 group/tip hover:bg-amber-50"
+            )}
+          >
+            <div className={cn(
+              "shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-sm transition-transform group-hover/tip:scale-110",
+              tip.type === "good" ? "bg-emerald-100 text-emerald-600" : "bg-amber-100 text-amber-600"
+            )}>
+              {tip.type === "good" ? <CheckCircle2 className="w-5 h-5" /> : <AlertTriangle className="w-5 h-5" />}
+            </div>
+            <div className="space-y-1.5 flex-1">
+              <p className={cn(
+                "text-sm font-black uppercase tracking-widest",
+                tip.type === "good" ? "text-emerald-700" : "text-amber-700"
+              )}>
+                {tip.tip}
+              </p>
+              <p className="text-slate-600 text-sm font-medium leading-relaxed italic">
+                {tip.explanation}
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
     )}
 
-    {/* Missing Skills */}
-    {missingSkills && missingSkills.length > 0 && (
-      <div className="bg-red-100 w-full p-3 rounded-md">
-        <p className="font-semibold text-red-800 text-lg mb-1">Missing Skills</p>
-        <ul className="list-disc list-inside text-red-700">
-          {missingSkills.map((skill, i) => (
-            <li key={i}>{skill}</li>
-          ))}
-        </ul>
+    {/* Skills matched/missing grid */}
+    {(matchedSkills?.length > 0 || missingSkills?.length > 0) && (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {matchedSkills && matchedSkills.length > 0 && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 px-3 py-1 bg-emerald-50 border border-emerald-100 rounded-full w-fit">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600">Perfect Match</span>
+            </div>
+            <div className="bg-white border border-slate-100 rounded-[2rem] p-6 shadow-sm hover:shadow-md transition-all">
+               <div className="flex flex-wrap gap-2">
+                 {matchedSkills.map((skill, i) => (
+                   <div key={i} className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-xl text-xs font-black border border-emerald-100/50">
+                      <Check className="w-3 h-3 shrink-0" />
+                      {skill}
+                   </div>
+                 ))}
+               </div>
+            </div>
+          </div>
+        )}
+
+        {missingSkills && missingSkills.length > 0 && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 px-3 py-1 bg-rose-50 border border-rose-100 rounded-full w-fit">
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-widest text-rose-600">Opportunities for Growth</span>
+            </div>
+            <div className="bg-white border border-slate-100 rounded-[2rem] p-6 shadow-sm hover:shadow-md transition-all">
+               <div className="flex flex-wrap gap-2">
+                 {missingSkills.map((skill, i) => (
+                   <div key={i} className="flex items-center gap-1.5 px-3 py-1.5 bg-rose-50 text-rose-700 rounded-xl text-xs font-black border border-rose-100/50">
+                      <Plus className="w-3 h-3 shrink-0 rotate-45" />
+                      {skill}
+                   </div>
+                 ))}
+               </div>
+            </div>
+          </div>
+        )}
       </div>
     )}
-    </div>
 
     {/* Skill Improvement Advice */}
     {skillImprovementAdvice && skillImprovementAdvice.length > 0 && (
-      <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-4">
-        <p className="text-lg font-semibold text-yellow-800 mb-2">How To Improve</p>
-        {skillImprovementAdvice.map((item, i) => (
-          <div key={i} className="mb-3">
-            <p><span className="font-semibold">Skill:</span> {item.skill}</p>
-            <p><span className="font-semibold">Reason:</span> {item.reason}</p>
-            <p><span className="font-semibold">How To Improve:</span> {item.howToImprove}</p>
-          </div>
-        ))}
+      <div className="space-y-6">
+        <h3 className="text-xl font-black text-slate-800 flex items-center gap-2">
+          <Lightbulb className="w-6 h-6 text-amber-500" />
+          Strategic Growth Path
+        </h3>
+        <div className="grid grid-cols-1 gap-4">
+          {skillImprovementAdvice.map((item, i) => (
+            <div key={i} className="bg-slate-900 text-white rounded-3xl p-8 relative overflow-hidden group">
+               <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-[60px] -mr-16 -mt-16 group-hover:bg-indigo-500/20 transition-all duration-700" />
+               <div className="relative z-10 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="px-4 py-1.5 bg-white/10 rounded-xl text-indigo-300 text-[10px] font-black uppercase tracking-[0.2em] border border-white/5">
+                      Priority Target
+                    </span>
+                    <p className="text-2xl font-black text-white tracking-tight">{item.skill}</p>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-8 pt-4 border-t border-white/10">
+                    <div className="space-y-2">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">The Challenge</p>
+                      <p className="text-sm font-medium text-slate-300 leading-relaxed italic">&quot;{item.reason}&quot;</p>
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">The Strategy</p>
+                      <p className="text-sm font-bold text-white leading-relaxed">{item.howToImprove}</p>
+                    </div>
+                  </div>
+               </div>
+            </div>
+          ))}
+        </div>
       </div>
     )}
 
     {/* Recommended New Skills & Tools */}
     {recommendedNewSkillsAndTools && recommendedNewSkillsAndTools.length > 0 && (
-      <div className="bg-blue-50 border border-blue-300 rounded-lg p-4">
-        <p className="text-lg font-semibold text-blue-800 mb-2">Recommended Tools & Skills</p>
-        {recommendedNewSkillsAndTools.map((item, i) => (
-          <div key={i} className="mb-2">
-            <p><span className="font-semibold">Name:</span> {item.name}</p>
-            <p><span className="font-semibold">Why Important:</span> {item.whyImportant}</p>
-          </div>
-        ))}
+      <div className="space-y-6">
+        <h3 className="text-xl font-black text-slate-800 flex items-center gap-2">
+           <Zap className="w-6 h-6 text-indigo-600" />
+           Recommended Tools & Intelligence
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {recommendedNewSkillsAndTools.map((item, i) => (
+            <div key={i} className="flex flex-col gap-3 p-6 bg-slate-50 border border-slate-100 rounded-[2rem] hover:bg-white hover:shadow-xl transition-all duration-300 group">
+              <div className="flex items-center gap-3">
+                 <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Check className="w-4 h-4" />
+                 </div>
+                 <p className="text-lg font-black text-slate-900 tracking-tight">{item.name}</p>
+              </div>
+              <p className="text-sm font-medium text-slate-500 leading-relaxed pl-11">
+                {item.whyImportant}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     )}
-
-    {/* Detailed tips area */}
-    <div className="flex flex-col gap-4 w-full">
-      {tips?.map((tip, i) => (
-        <div
-          key={i + tip.tip}
-          className={cn(
-            "flex flex-col gap-2 rounded-2xl p-4",
-            tip.type === "good"
-              ? "bg-green-50 border border-green-200 text-green-700"
-              : "bg-yellow-50 border border-yellow-200 text-yellow-700"
-          )}
-        >
-          <div className="flex flex-row gap-2 items-center">
-            <img
-              src={tip.type === "good" ? "/icons/check.svg" : "/icons/warning.svg"}
-              alt="score"
-              className="size-5"
-            />
-            <p className="font-bold text-justify md:text-lg">{tip.tip}</p>
-          </div>
-          <p className="font-medium">{tip.explanation}</p>
-        </div>
-      ))}
-    </div>
   </div>
 );
 
 const Details = ({ feedback }) => {
   return (
-    <div className="flex flex-col gap-4 w-full">
-      <Accordion type="single" collapsible className="space-y-4 border-b border-gray-200">
-
-        <AccordionItem value="tone-style">
-          <AccordionTrigger className={"[&>svg]:w-6 [&>svg]:h-6 [&>svg]:text-slate-600 flex items-center font-normal hover:no-underline hover:cursor-pointer"}>
+    <div className="flex flex-col gap-6 w-full">
+      <Accordion type="single" collapsible className="space-y-6">
+        <AccordionItem value="tone-style" className="border-0 bg-white rounded-[2.5rem] shadow-sm hover:shadow-md transition-all px-8 overflow-hidden">
+          <AccordionTrigger className="[&>svg]:w-6 [&>svg]:h-6 [&>svg]:text-slate-400 py-6 hover:no-underline group">
             <CategoryHeader title="Tone & Style" categoryScore={feedback.aiFeedback.toneAndStyle.score} />
           </AccordionTrigger>
           <AccordionContent>
@@ -125,8 +198,8 @@ const Details = ({ feedback }) => {
           </AccordionContent>
         </AccordionItem>
 
-        <AccordionItem value="content">
-          <AccordionTrigger className={"[&>svg]:w-6 [&>svg]:h-6 [&>svg]:text-slate-600 flex items-center font-normal hover:no-underline hover:cursor-pointer"}>
+        <AccordionItem value="content" className="border-0 bg-white rounded-[2.5rem] shadow-sm hover:shadow-md transition-all px-8 overflow-hidden">
+          <AccordionTrigger className="[&>svg]:w-6 [&>svg]:h-6 [&>svg]:text-slate-400 py-6 hover:no-underline group">
             <CategoryHeader title="Content" categoryScore={feedback.aiFeedback.content.score} />
           </AccordionTrigger>
           <AccordionContent>
@@ -134,8 +207,8 @@ const Details = ({ feedback }) => {
           </AccordionContent>
         </AccordionItem>
 
-        <AccordionItem value="structure">
-          <AccordionTrigger className={"[&>svg]:w-6 [&>svg]:h-6 [&>svg]:text-slate-600 flex items-center font-normal hover:no-underline hover:cursor-pointer"}>
+        <AccordionItem value="structure" className="border-0 bg-white rounded-[2.5rem] shadow-sm hover:shadow-md transition-all px-8 overflow-hidden">
+          <AccordionTrigger className="[&>svg]:w-6 [&>svg]:h-6 [&>svg]:text-slate-400 py-6 hover:no-underline group">
             <CategoryHeader title="Structure" categoryScore={feedback.aiFeedback.structure.score} />
           </AccordionTrigger>
           <AccordionContent>
@@ -143,8 +216,8 @@ const Details = ({ feedback }) => {
           </AccordionContent>
         </AccordionItem>
 
-        <AccordionItem value="skills">
-          <AccordionTrigger className={"[&>svg]:w-6 [&>svg]:h-6 [&>svg]:text-slate-600 flex items-center font-normal hover:no-underline hover:cursor-pointer"}>
+        <AccordionItem value="skills" className="border-0 bg-white rounded-[2.5rem] shadow-sm hover:shadow-md transition-all px-8 overflow-hidden">
+          <AccordionTrigger className="[&>svg]:w-6 [&>svg]:h-6 [&>svg]:text-slate-400 py-6 hover:no-underline group">
             <CategoryHeader title="Skills" categoryScore={feedback.aiFeedback.skills.score} />
           </AccordionTrigger>
           <AccordionContent>
@@ -157,153 +230,9 @@ const Details = ({ feedback }) => {
             />
           </AccordionContent>
         </AccordionItem>
-
       </Accordion>
     </div>
   );
 };
 
 export default Details;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import {
-//   Accordion,
-//   AccordionContent,
-//   AccordionItem,
-//   AccordionTrigger,
-// } from "@/components/ui/accordion";
-// import ScoreBadge from "./ScoreBadge";
-// import { cn } from "@/lib/utils";
-
-
-// // Category header
-// const CategoryHeader = ({ title, categoryScore }) => (
-//   <div className="flex flex-row gap-4 items-center py-2">
-//     <p className="text-xl">{title}</p>
-//     <ScoreBadge score={categoryScore} />
-//   </div>
-// );
-
-// // Category content
-// const CategoryContent = ({ tips, matchedSkills, missingSkills }) => (
-//   <div className="flex flex-col gap-4 w-full">
-//     <div className="bg-gray-50 w-full rounded-lg px-5 py-4 grid grid-cols-2 gap-4">
-//       {tips.map((tip, i) => (
-//         <div className="flex flex-row gap-2 items-center" key={i}>
-//           <img
-//             src={tip.type === "good" ? "/icons/check.svg" : "/icons/warning.svg"}
-//             alt="score"
-//             className="size-5"
-//           />
-//           <p className="text-xl text-gray-500">{tip.tip}</p>
-//         </div>
-//       ))}
-//     </div>
-
-//     {
-//       matchedSkills && <div className="bg-green-100 w-full p-2 rounded-md">
-              
-//       </div>
-//     }
-
-//     {
-//       missingSkills && <div className="bg-red-100 p-2 rounded-md">
-
-//       </div>
-//     }
-
-//     <div className="flex flex-col gap-4 w-full"> 
-//       {tips.map((tip, i) => (
-//         <div
-//           key={i + tip.tip}
-//           className={cn(
-//             "flex flex-col gap-2 rounded-2xl p-4",
-//             tip.type === "good"
-//               ? "bg-green-50 border border-green-200 text-green-700"
-//               : "bg-yellow-50 border border-yellow-200 text-yellow-700"
-//           )}
-//         >
-//           <div className="flex flex-row gap-2 items-center">
-//             <img
-//               src={tip.type === "good" ? "/icons/check.svg" : "/icons/warning.svg"}
-//               alt="score"
-//               className="size-5"
-//             />
-//             <p className="text-xl font-semibold">{tip.tip}</p>
-//           </div>
-//           <p>{tip.explanation}</p>
-//         </div>
-//       ))}
-//     </div>
-//   </div>
-// );
-
-// const Details = ({ feedback }) => {
-//   return (
-//     <div className="flex flex-col gap-4 w-full">
-//       <Accordion type="single" collapsible className="space-y-4 border-b border-gray-200">
-//         <AccordionItem value="tone-style">
-//           <AccordionTrigger className={'[&>svg]:w-6 [&>svg]:h-6 [&>svg]:text-slate-600 flex items-center font-normal hover:no-underline hover:cursor-pointer'}>
-//             <CategoryHeader
-//               title="Tone & Style"
-//               categoryScore={feedback.toneAndStyle.score}
-//             />
-//           </AccordionTrigger>
-//           <AccordionContent>
-//             <CategoryContent tips={feedback.toneAndStyle.tips} />
-//           </AccordionContent>
-//         </AccordionItem>
-
-//         <AccordionItem value="content">
-//           <AccordionTrigger className={'[&>svg]:w-6 [&>svg]:h-6 [&>svg]:text-slate-600 flex items-center font-normal hover:no-underline hover:cursor-pointer'}>
-//             <CategoryHeader
-//               title="Content"
-//               categoryScore={feedback.content.score}
-//             />
-//           </AccordionTrigger>
-//           <AccordionContent>
-//             <CategoryContent tips={feedback.content.tips} />
-//           </AccordionContent>
-//         </AccordionItem>
-
-//         <AccordionItem value="structure">
-//           <AccordionTrigger className={'[&>svg]:w-6 [&>svg]:h-6 [&>svg]:text-slate-600 flex items-center font-normal hover:no-underline hover:cursor-pointer'}>
-//             <CategoryHeader
-//               title="Structure"
-//               categoryScore={feedback.structure.score}
-//             />
-//           </AccordionTrigger>
-//           <AccordionContent>
-//             <CategoryContent tips={feedback.structure.tips} />
-//           </AccordionContent>
-//         </AccordionItem>
-
-//         <AccordionItem value="skills">
-//           <AccordionTrigger className={'[&>svg]:w-6 [&>svg]:h-6 [&>svg]:text-slate-600 flex items-center font-normal hover:no-underline hover:cursor-pointer'}>
-//             <CategoryHeader
-//               title="Skills"
-//               categoryScore={feedback.skills.score}
-//             />
-//           </AccordionTrigger>
-//           <AccordionContent>
-//             <CategoryContent tips={feedback.skills.tips} />
-//           </AccordionContent>
-//         </AccordionItem>
-//       </Accordion>
-//     </div>
-//   );
-// };
-
-// export default Details;

@@ -3,7 +3,7 @@ import { db } from "@/lib/prisma";
 import { checkAuth } from "@/services/authCheck";
 import { generateAIResponse } from "@/services/geminiService";
 import { checkTokenBalance, deductTokens, estimateTokens } from "@/services/subscriptionService";
-import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 const modelName = process.env.GEMINI_MODEL_B;
 
@@ -41,14 +41,8 @@ Output: Return ONLY valid JSON with 4 options per question.
     return quiz.questions;
   } catch (error) {
     console.error("Error generating quiz:", error);
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Failed to generate quiz questions"
-      },
-      { status: 502 }
-    )
-      }
+    throw new Error(error.message || "Failed to generate quiz questions. AI service might be busy.");
+  }
 }
 
 export async function saveQuizResult({ questions, answers, score, quizDetail }) {
@@ -111,13 +105,7 @@ Provide 1-2 encouraging sentences on what to learn/practice next. No mention of 
     return assessment;
   } catch (error) {
     console.error("Error saving quiz result:", error);
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Failed to save quiz result"
-      },
-      { status: 500 }
-    )
+    throw new Error("Failed to save quiz result. Please check your connection.");
   }
 }
 
@@ -138,12 +126,24 @@ export async function getAssessments() {
     return assessments;
   } catch (error) {
     console.error("Error fetching assessments:", error);
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Failed to fetch assessments"
+    throw new Error("Failed to fetch assessment history.");
+  }
+}
+export async function deleteAssessment(assessmentId) {
+  const user = await checkAuth();
+  if (!user) throw new Error("Unauthorized");
+
+  try {
+    await db.assessment.delete({
+      where: {
+        id: assessmentId,
+        userId: user.id, // Ensure user can only delete their own
       },
-      { status: 500 }
-    )
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting assessment:", error);
+    throw new Error("Failed to delete assessment");
   }
 }

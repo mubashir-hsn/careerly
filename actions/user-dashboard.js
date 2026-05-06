@@ -33,7 +33,7 @@ export async function getDashboardStats() {
         feature: "CONTENT_IMPROVER"
       } 
     }),
-    db.industryInsight.count({ where: { industry: user.industry } }) // Rough count
+    user.industry ? db.industryInsight.count({ where: { industry: user.industry } }) : 0
   ]);
 
   return {

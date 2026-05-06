@@ -1,6 +1,7 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
+import Link from "next/link";
 import { 
   FileText, 
   GraduationCap, 
@@ -20,6 +21,7 @@ export default function StatsCards({ stats }) {
       bg: "bg-blue-50/50",
       border: "border-blue-100",
       glow: "shadow-blue-100",
+      href: "/ai-cover-letter",
     },
     {
       title: "Interview Prep",
@@ -29,6 +31,7 @@ export default function StatsCards({ stats }) {
       bg: "bg-indigo-50/50",
       border: "border-indigo-100",
       glow: "shadow-indigo-100",
+      href: "/interviews",
     },
     {
       title: "ATS Analysis",
@@ -38,6 +41,7 @@ export default function StatsCards({ stats }) {
       bg: "bg-rose-50/50",
       border: "border-rose-100",
       glow: "shadow-rose-100",
+      href: "/resume",
     },
     {
       title: "AI Chats",
@@ -47,6 +51,7 @@ export default function StatsCards({ stats }) {
       bg: "bg-purple-50/50",
       border: "border-purple-100",
       glow: "shadow-purple-100",
+      href: "/ai-chatbot",
     },
     {
       title: "Industry Logs",
@@ -56,6 +61,7 @@ export default function StatsCards({ stats }) {
       bg: "bg-emerald-50/50",
       border: "border-emerald-100",
       glow: "shadow-emerald-100",
+      href: "/insights",
     },
     {
       title: "Content Edits",
@@ -65,32 +71,34 @@ export default function StatsCards({ stats }) {
       bg: "bg-amber-50/50",
       border: "border-amber-100",
       glow: "shadow-amber-100",
+      href: "/resume",
     },
   ];
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-12">
       {items.map((item) => (
-        <Card 
-          key={item.title} 
-          className={`group border-2 ${item.border} shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden bg-white`}
-        >
-          <div className={`absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity`}>
-             <div className="w-24 h-24 transform rotate-12">{item.icon}</div>
-          </div>
-          
-          <CardContent className="p-6 flex flex-col items-center text-center relative z-10">
-            <div className={`p-4 rounded-2xl ${item.bg} ${item.color} mb-4 group-hover:scale-110 transition-transform duration-300 shadow-sm ${item.glow}`}>
-              {item.icon}
+        <Link key={item.title} href={item.href}>
+          <Card 
+            className={`group border-2 ${item.border} shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden bg-white active:scale-95`}
+          >
+            <div className={`absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity`}>
+              <div className="w-24 h-24 transform rotate-12">{item.icon}</div>
             </div>
-            <p className="text-4xl font-black text-slate-900 tracking-tighter mb-1 select-none">
-              {item.value || 0}
-            </p>
-            <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] leading-tight">
-              {item.title}
-            </p>
-          </CardContent>
-        </Card>
+            
+            <CardContent className="p-6 flex flex-col items-center text-center relative z-10">
+              <div className={`p-4 rounded-2xl ${item.bg} ${item.color} mb-4 group-hover:scale-110 transition-transform duration-300 shadow-sm ${item.glow}`}>
+                {item.icon}
+              </div>
+              <p className="text-4xl font-black text-slate-900 tracking-tighter mb-1 select-none">
+                {item.value || 0}
+              </p>
+              <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] leading-tight">
+                {item.title}
+              </p>
+            </CardContent>
+          </Card>
+        </Link>
       ))}
     </div>
   );

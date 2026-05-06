@@ -118,170 +118,172 @@ const CoverLetterGenerator = () => {
     return (
         <>
 
-            <div className='flex justify-between items-center p-2 md:px-5'>
-
-                <div className="pb-6 space-y-2">
-                    <Link href={'/ai-cover-letter'}>
-                        <Button variant={'link'} className={'gap-2 pl-0'}>
-                            <ArrowLeft className='w-4 h-4' />
-                            Back to cover letter page
-                        </Button>
-                    </Link>
-                    <h1 className="text-2xl pb-0 md:text-3xl font-bold gradient-subtitle">
-                        Create Cover Letter
-                    </h1>
-                    <p className="text-slate-500 text-sm">
-                        Generate a tailored cover letter for your job application
-                    </p>
+            <div className="flex flex-col gap-4 mb-8 px-2 md:px-0">
+                <Link 
+                    href="/ai-cover-letter" 
+                    className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors group"
+                >
+                    <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+                    <span className="font-bold text-sm uppercase tracking-widest">Back to Cover Letters</span>
+                </Link>
+                
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div>
+                        <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
+                            Create Cover Letter
+                        </h1>
+                        <p className="text-slate-500 font-medium">
+                            Generate a tailored cover letter for your job application.
+                        </p>
+                    </div>
+                    
+                    {generatedLetter && (
+                        <PdfButton
+                            data={formValues}
+                            activeStyle={'letter'}
+                            user={user?.fullName || ''}
+                            fileName={`${formValues?.name.replace(/\s+/g, "_")}_CoverLetter.pdf`}
+                        />
+                    )}
                 </div>
-
-                {
-                    generatedLetter && <>
-                               <PdfButton
-                                 data={formValues}
-                                 activeStyle={'letter'}
-                                 user={user?.fullName || ''}
-                                 fileName={`${formValues?.name.replace(/\s+/g, "_")}_CoverLetter.pdf`}
-                               />
-                    </>
-                }
-
             </div>
 
-            <div className="grid md:grid-cols-3 gap-2">
+            <div className="grid md:grid-cols-3 gap-6">
                 <div className="col-span-1">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Job Details</CardTitle>
-                            <CardDescription>
-                                Provide information about the position you are applying for
-                            </CardDescription>
-                        </CardHeader>
+                    <Card className="border-none shadow-2xl overflow-hidden rounded-[2rem] bg-white h-fit">
+                        <div className="bg-linear-to-br from-slate-900 to-slate-800 p-6 text-white relative">
+                             <CardTitle className="text-2xl font-black tracking-tight">Job Details</CardTitle>
+                             <CardDescription className="text-slate-400 font-medium">
+                                 Provide information about the position you are applying for
+                             </CardDescription>
+                        </div>
 
-                        <CardContent>
-                            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                                {/* User Info */}
-                                <div className="space-y-3">
-                                    <h3 className="text-slate-600 font-semibold">User Info</h3>
-
-                                    <div className="grid md:grid-cols-2 gap-4">
-                                        <div>
-                                            <Input
-                                                placeholder="Name"
-                                                {...register("name")}
-                                                className="bg-slate-100 text-slate-500"
-                                            />
-                                            {errors.name && (
-                                                <p className="text-sm text-red-500">
-                                                    {errors.name.message}
-                                                </p>
-                                            )}
-                                        </div>
-
-                                        <div>
-                                            <Input
-                                                type="email"
-                                                placeholder="Email"
-                                                {...register("email")}
-                                                className="bg-slate-100 text-slate-500"
-                                            />
-                                            {errors.email && (
-                                                <p className="text-sm text-red-500">
-                                                    {errors.email.message}
-                                                </p>
-                                            )}
-                                        </div>
+                        <CardContent className="p-6">
+                            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                                {/* User Info Section */}
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-2 pb-1 border-b border-slate-100">
+                                        <div className="h-4 w-1 bg-primary rounded-full" />
+                                        <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500">User Information</h3>
                                     </div>
 
-                                    <div>
+                                    <div className="space-y-3">
                                         <Input
-                                            placeholder="Contact"
+                                            placeholder="Your Full Name"
+                                            {...register("name")}
+                                            className="h-11 bg-slate-50 border-slate-200 focus:border-primary/50 focus:ring-primary/20 rounded-xl transition-all"
+                                        />
+                                        {errors.name && (
+                                            <p className="text-xs font-bold text-red-500 px-1">
+                                                {errors.name.message}
+                                            </p>
+                                        )}
+
+                                        <Input
+                                            type="email"
+                                            placeholder="Professional Email Address"
+                                            {...register("email")}
+                                            className="h-11 bg-slate-50 border-slate-200 focus:border-primary/50 focus:ring-primary/20 rounded-xl transition-all"
+                                        />
+                                        {errors.email && (
+                                            <p className="text-xs font-bold text-red-500 px-1">
+                                                {errors.email.message}
+                                            </p>
+                                        )}
+
+                                        <Input
+                                            placeholder="Contact Number (e.g. +1 234 567 890)"
                                             {...register("contact")}
-                                            className="bg-slate-100 text-slate-500"
+                                            className="h-11 bg-slate-50 border-slate-200 focus:border-primary/50 focus:ring-primary/20 rounded-xl transition-all"
                                         />
                                         {errors.contact && (
-                                            <p className="text-sm text-red-500">
+                                            <p className="text-xs font-bold text-red-500 px-1">
                                                 {errors.contact.message}
                                             </p>
                                         )}
                                     </div>
                                 </div>
-                                 {/* Company Info */}
-                                <div className="space-y-3">
-                                    <h3 className="text-slate-600 font-semibold">Company Info</h3>
 
-                                    <div className="grid md:grid-cols-2 gap-4">
-                                        <div>
-                                            <Input
-                                                placeholder="Company name"
-                                                {...register("companyName")}
-                                                className="bg-slate-100 text-slate-500"
-                                            />
-                                            {errors.companyName && (
-                                                <p className="text-sm text-red-500">
-                                                    {errors.companyName.message}
-                                                </p>
-                                            )}
-                                        </div>
-
-                                        <div>
-                                            <Input
-                                                placeholder="Job title"
-                                                {...register("jobTitle")}
-                                                className="bg-slate-100 text-slate-500"
-                                            />
-                                            {errors.jobTitle && (
-                                                <p className="text-sm text-red-500">
-                                                    {errors.jobTitle.message}
-                                                </p>
-                                            )}
-                                        </div>
+                                {/* Company Info Section */}
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-2 pb-1 border-b border-slate-100">
+                                        <div className="h-4 w-1 bg-primary rounded-full" />
+                                        <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500">Target Company</h3>
                                     </div>
 
-                                    {!generatedLetter && (
-                                        <div>
-                                            <Textarea
-                                                placeholder="Paste job description here"
-                                                className="h-32 bg-slate-100 text-slate-500"
-                                                {...register("jobDescription")}
-                                            />
-                                            {errors.jobDescription && (
-                                                <p className="text-sm text-red-500">
-                                                    {errors.jobDescription.message}
-                                                </p>
-                                            )}
-                                        </div>
-                                    )}
+                                    <div className="space-y-3">
+                                        <Input
+                                            placeholder="Company Name"
+                                            {...register("companyName")}
+                                            className="h-11 bg-slate-50 border-slate-200 focus:border-primary/50 focus:ring-primary/20 rounded-xl transition-all"
+                                        />
+                                        {errors.companyName && (
+                                            <p className="text-xs font-bold text-red-500 px-1">
+                                                {errors.companyName.message}
+                                            </p>
+                                        )}
 
-                                    {generatedLetter && (
-                                        <div>
-                                            <h3 className="text-slate-600 font-semibold pt-4 pb-2">
-                                                Cover Letter
-                                            </h3>
-                                            <Textarea
-                                                placeholder="Cover letter content"
-                                                className="h-36 bg-slate-100 text-slate-500"
-                                                {...register("content")}
-                                            />
-                                            {errors.content && (
-                                                <p className="text-sm text-red-500">
-                                                    {errors.content.message}
-                                                </p>
-                                            )}
-                                        </div>
-                                    )}
+                                        <Input
+                                            placeholder="Target Job Title"
+                                            {...register("jobTitle")}
+                                            className="h-11 bg-slate-50 border-slate-200 focus:border-primary/50 focus:ring-primary/20 rounded-xl transition-all"
+                                        />
+                                        {errors.jobTitle && (
+                                            <p className="text-xs font-bold text-red-500 px-1">
+                                                {errors.jobTitle.message}
+                                            </p>
+                                        )}
+
+                                        {!generatedLetter && (
+                                            <>
+                                                <Textarea
+                                                    placeholder="Paste the job description here..."
+                                                    className="min-h-[120px] bg-slate-50 border-slate-200 focus:border-primary/50 focus:ring-primary/20 rounded-xl transition-all resize-none"
+                                                    {...register("jobDescription")}
+                                                />
+                                                {errors.jobDescription && (
+                                                    <p className="text-xs font-bold text-red-500 px-1">
+                                                        {errors.jobDescription.message}
+                                                    </p>
+                                                )}
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
-                                 {/* Buttons */}
-                                <div className="flex justify-end">
+
+                                {generatedLetter && (
+                                    <div className="space-y-4">
+                                        <div className="flex items-center gap-2 pb-1 border-b border-slate-100">
+                                            <div className="h-4 w-1 bg-primary rounded-full" />
+                                            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500">Edit content</h3>
+                                        </div>
+                                        <Textarea
+                                            placeholder="Customize your generated content..."
+                                            className="min-h-[160px] bg-slate-50 border-slate-200 focus:border-primary/50 focus:ring-primary/20 rounded-xl transition-all resize-none"
+                                            {...register("content")}
+                                        />
+                                        {errors.content && (
+                                            <p className="text-xs font-bold text-red-500 px-1">
+                                                {errors.content.message}
+                                            </p>
+                                        )}
+                                    </div>
+                                )}
+
+                                <div className="pt-2">
                                     {!generatedLetter ? (
-                                        <Button type="submit" disabled={generating}>
+                                        <Button 
+                                            type="submit" 
+                                            disabled={generating}
+                                            className="w-full h-12 rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all bg-primary hover:bg-primary/90"
+                                        >
                                             {generating ? (
                                                 <>
-                                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                                    Generating
+                                                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                                    Generating...
                                                 </>
                                             ) : (
-                                                "Generate Cover Letter"
+                                                "Generate with AI"
                                             )}
                                         </Button>
                                     ) : (
@@ -289,14 +291,15 @@ const CoverLetterGenerator = () => {
                                             type="button"
                                             onClick={handleSave}
                                             disabled={saving}
+                                            className="w-full h-12 rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all bg-primary hover:bg-primary/90"
                                         >
                                             {saving ? (
                                                 <>
-                                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                                    Saving
+                                                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                                    Saving...
                                                 </>
                                             ) : (
-                                                "Save"
+                                                "Finalize & Save"
                                             )}
                                         </Button>
                                     )}
@@ -305,6 +308,7 @@ const CoverLetterGenerator = () => {
                         </CardContent>
                     </Card>
                 </div>
+
 
                 <div className="md:col-span-2 max-h-[42%] p-4 md:p-8 rounded-xl bg-gray-700 border-4 border-slate-300 overflow-y-auto">
                     <Template letterData={formValues} mode="letter" />

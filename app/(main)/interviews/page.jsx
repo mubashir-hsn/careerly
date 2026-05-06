@@ -9,9 +9,15 @@ const InterviewPage = async () => {
   const assessments = await getAssessments();
   return (
     <>
-      <div className='py-8 px-2 md:px-0'>
-        <h1 className='text-4xl font-bold gradient-subtitle'>Interview Preparation</h1>
-        <p className='text-slate-500 text-sm -mt-1 font-medium'>Track your progress and practical skills.</p>
+      <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8 px-2 md:px-0">
+        <div>
+          <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
+            Interview Preparation
+          </h1>
+          <p className="text-slate-500 font-medium">
+            Track your progress and practice with AI-powered mock interviews.
+          </p>
+        </div>
       </div>
       <div className='space-y-4'>
         <StatsCards assessments={assessments} />

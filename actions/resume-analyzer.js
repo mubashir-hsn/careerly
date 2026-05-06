@@ -6,15 +6,12 @@ import { generateAIResponse } from "@/services/geminiService";
 import { checkTokenBalance, deductTokens, estimateTokens } from "@/services/subscriptionService";
 import fs from 'fs';
 import { createRequire } from "module";
-import { NextResponse } from "next/server";
 import path from "path";
-
 
 const require = createRequire(import.meta.url);
 const pdfParse = require("pdf-parse-new");
 
 const modelName = process.env.GEMINI_MODEL_B;
-
 
 export async function generateResumeFeedback(formData) {
 
@@ -122,15 +119,8 @@ Rules:
 
   } catch (error) {
     console.log("Error while analyzing resume", error)
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Error while analyzing resume"
-      },
-      { status: 502 }
-    )
+    throw new Error(error.message || "Error while analyzing resume. AI services might be busy.");
   }
-
 }
 
 export async function getResumeFeedback(id) {

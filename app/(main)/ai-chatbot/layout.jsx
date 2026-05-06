@@ -1,11 +1,11 @@
-import React, { Suspense } from 'react'
-import { BarLoader } from 'react-spinners'
+import React, { Suspense } from 'react';
+import Loader from '@/components/Loader';
 
 const ChatLayout = ({children}) => {
   return (
-    <div className='px-0'>
+    <div className='px-0 min-h-screen bg-slate-50/50'>
       <Suspense 
-       fallback={<BarLoader className='mt-4' width={'100%'} color='gray'/>}
+       fallback={<Loader className="mt-12" />}
       >{children}</Suspense>
     </div>
   )

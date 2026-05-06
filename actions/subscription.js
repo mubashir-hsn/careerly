@@ -25,21 +25,6 @@ async function getSafeSubscription(userId) {
     include: { plan: true },
   });
 
-  // Self-healing: Upgrade to PRO if tokens > 1000 but still on FREE plan
-  if (subscription?.plan?.type === "FREE" && subscription.tokensRemaining > 1000) {
-    const proPlan = await db.subscriptionPlan.findFirst({
-      where: { type: "PRO", isActive: true }
-    });
-    
-    if (proPlan) {
-      subscription = await db.userSubscription.update({
-        where: { userId: userId },
-        data: { planId: proPlan.id },
-        include: { plan: true },
-      });
-    }
-  }
-
   return subscription;
 }
 
@@ -120,36 +105,47 @@ export async function verifyStripeSession(sessionId) {
          return { success: true, message: "Already processed" };
        }
 
-       // Update tokens, promote to Pro, and log the payment
-       await db.$transaction([
-         db.userSubscription.update({
-           where: { userId: user.id },
-           data: {
-             tokensRemaining: {
-               increment: tokens,
-             },
-             planId: proPlan ? proPlan.id : undefined,
-             clerkSubscriptionId: sessionId,
-             status: "ACTIVE",
-             startDate: new Date(),
-           }
-         }),
-         db.payment.create({
-           data: {
-             userId: user.id,
-             stripeSessionId: sessionId,
-             amount: session.amount_total / 100,
-             currency: session.currency || "pkr",
-             tokens: tokens,
-             planId: proPlan ? proPlan.id : null,
-             status: "paid",
-           }
-         })
-       ]);
+        const planId = session.metadata.planId;
 
-       revalidatePath("/dashboard");
-       revalidatePath("/billing");
-       revalidatePath("/admin");
+        // Update tokens, promote to Pro, and log the payment
+        await db.$transaction([
+          db.userSubscription.update({
+            where: { userId: user.id },
+            data: {
+              tokensRemaining: {
+                increment: tokens,
+              },
+              planId: planId || undefined,
+              clerkSubscriptionId: sessionId,
+              status: "ACTIVE",
+              startDate: new Date(),
+            }
+          }),
+          db.payment.create({
+            data: {
+              userId: user.id,
+              stripeSessionId: sessionId,
+              amount: session.amount_total / 100,
+              currency: session.currency || "pkr",
+              tokens: tokens,
+              planId: planId || null,
+              status: "paid",
+            }
+          })
+        ]);
+
+        // Trigger notification for admin
+        try {
+          const { createNotification } = await import("./notifications");
+          await createNotification({
+            type: "PAYMENT_SUCCESS",
+            title: "Payment Received",
+            message: `Success! PKR ${session.amount_total / 100} received from user ${user.id} (Manual Verification).`,
+            link: "/admin/revenue",
+          });
+        } catch (notifyError) {
+          console.log("Admin notification failed:", notifyError.message);
+        }
 
        return { success: true, tokensAdded: tokens };
     }
@@ -183,6 +179,23 @@ export async function cancelSubscription() {
     },
     include: { plan: true },
   });
+
+  // Revalidate to ensure UI updates
+  revalidatePath("/dashboard");
+  revalidatePath("/billing");
+
+  // Trigger notification for admin
+  try {
+    const { createNotification } = await import("./notifications");
+    await createNotification({
+      type: "PLAN_CHANGE",
+      title: "Plan Downgraded",
+      message: `User ${user.id} has switched back to the Free Plan.`,
+      link: "/admin/users",
+    });
+  } catch (notifyError) {
+    console.log("Admin notification failed:", notifyError.message);
+  }
 
   return { success: true, subscription: updated };
 }

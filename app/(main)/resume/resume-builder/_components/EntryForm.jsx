@@ -208,127 +208,145 @@ const EntryForm = ({ type, entries, onChange }) => {
 
             {/* The Entry Form */}
             {isAdding && (
-                <Card className=" shadow-md">
-                    <CardHeader>
-                        <CardTitle className="">
-                            {editingId !== null ? `Edit ${type}` : `Add ${type}`}
+                <Card className="border-none shadow-2xl overflow-hidden rounded-[2rem] bg-white">
+                    <div className="bg-linear-to-br from-slate-900 to-slate-800 p-6 text-white relative">
+                        <CardTitle className="text-2xl font-black tracking-tight">
+                            {editingId !== null ? `Edit ${type}` : `Add New ${type}`}
                         </CardTitle>
-                    </CardHeader>
-                    <CardContent className='space-y-4'>
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                        <p className="text-slate-400 font-medium text-sm mt-1">
+                            {editingId !== null ? `Update your ${type.toLowerCase()} details` : `Provide information about your ${type.toLowerCase()}`}
+                        </p>
+                    </div>
+                    
+                    <CardContent className='p-8 space-y-6'>
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                             <div className='space-y-2'>
-                                <Label className="text-slate-700">{text.titleLabel}</Label>
+                                <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">{text.titleLabel}</label>
                                 <Input
                                     {...register('title')}
                                     placeholder={text.titlePlaceholder}
-                                    className='bg-slate-100 text-slate-600 border-none placeholder:text-xs md:placeholder:text-sm text-sm'
+                                    className='h-12 bg-slate-50 border-slate-200 focus:border-primary/50 focus:ring-primary/20 rounded-xl transition-all font-semibold'
                                 />
-                                {errors.title && <p className='text-xs text-red-500'>{errors.title.message}</p>}
+                                {errors.title && <p className='text-xs font-bold text-red-500 px-1'>{errors.title.message}</p>}
                             </div>
                             <div className='space-y-2'>
-                                <Label className="text-slate-700">{text.orgLabel}</Label>
+                                <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">{text.orgLabel}</label>
                                 <Input
                                     {...register("organization")}
                                     placeholder={text.orgPlaceholder}
-                                    className='bg-slate-100 text-slate-600 border-none placeholder:text-xs md:placeholder:text-sm text-sm'
+                                    className='h-12 bg-slate-50 border-slate-200 focus:border-primary/50 focus:ring-primary/20 rounded-xl transition-all font-semibold'
                                 />
-                                {errors.organization && <p className='text-xs text-red-500'>{errors.organization.message}</p>}
+                                {errors.organization && <p className='text-xs font-bold text-red-500 px-1'>{errors.organization.message}</p>}
                             </div>
                         </div>
 
                         {type === 'Project' && (
-                            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                                 <div className='space-y-2'>
-                                    <Label className="text-slate-700">{text.github.label}</Label>
+                                    <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">{text.github.label}</label>
                                     <Input
                                         {...register('githubLink')}
                                         placeholder={text.github.placeholder}
-                                        className='bg-slate-100 text-slate-600 border-none placeholder:text-xs md:placeholder:text-sm text-sm'
+                                        className='h-12 bg-slate-50 border-slate-200 focus:border-primary/50 focus:ring-primary/20 rounded-xl transition-all font-semibold'
                                     />
                                 </div>
                                 <div className='space-y-2'>
-                                    <Label className="text-slate-700">{text.live.label}</Label>
+                                    <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">{text.live.label}</label>
                                     <Input
                                         {...register('liveLink')}
                                         placeholder={text.live.placeholder}
-                                        className='bg-slate-100 text-slate-600 border-none placeholder:text-xs md:placeholder:text-sm text-sm'
+                                        className='h-12 bg-slate-50 border-slate-200 focus:border-primary/50 focus:ring-primary/20 rounded-xl transition-all font-semibold'
                                     />
                                 </div>
                             </div>
                         )}
 
-                        <div className='grid grid-cols-2 gap-4'>
+                        <div className='grid grid-cols-2 gap-6'>
                             <div className='space-y-2'>
-                                <Label className="text-slate-700">Start Date</Label>
+                                <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Start Date</label>
                                 <Input
                                     {...register('startDate')}
                                     type='month'
-                                    className='bg-slate-100 text-slate-600 border-none text-sm'
+                                    className='h-12 bg-slate-50 border-slate-200 focus:border-primary/50 focus:ring-primary/20 rounded-xl transition-all font-semibold'
                                 />
-                                {errors.startDate && <p className='text-xs text-red-500'>{errors.startDate.message}</p>}
+                                {errors.startDate && <p className='text-xs font-bold text-red-500 px-1'>{errors.startDate.message}</p>}
                             </div>
                             <div className='space-y-2'>
-                                <Label className="text-slate-700">End Date</Label>
+                                <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">End Date</label>
                                 <Input
                                     {...register('endDate')}
                                     type='month'
                                     disabled={current}
-                                    className='bg-slate-100 text-slate-600 border-none text-sm'
+                                    className='h-12 bg-slate-50 border-slate-200 focus:border-primary/50 focus:ring-primary/20 rounded-xl transition-all font-semibold disabled:opacity-50'
                                 />
-                                {errors.endDate && <p className='text-xs text-red-500'>{errors.endDate.message}</p>}
+                                {errors.endDate && <p className='text-xs font-bold text-red-500 px-1'>{errors.endDate.message}</p>}
                             </div>
                         </div>
 
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-3 bg-slate-50 p-4 rounded-2xl border border-slate-100">
                             <input
                                 type="checkbox"
                                 id="current"
                                 {...register("current")}
-                                className="w-4 h-4"
+                                className="w-5 h-5 rounded-md border-slate-300 text-primary focus:ring-primary/20 transition-all cursor-pointer"
                                 onChange={(e) => {
                                     setValue("current", e.target.checked);
                                     if (e.target.checked) setValue("endDate", "");
                                 }}
                             />
-                            <Label htmlFor="current" className="text-sm text-slate-600 cursor-pointer">
+                            <Label htmlFor="current" className="text-sm font-bold text-slate-600 cursor-pointer select-none">
                                 Currently {type === 'Education' ? 'Enrolled' : 'Working'} here
                             </Label>
                         </div>
 
-                        <div className="space-y-2">
-                            <Label className="text-slate-700">Description</Label>
+                        <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                                <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Description</label>
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={handleImprovedDescription}
+                                    disabled={isImproving || !watch("description")}
+                                    className="h-8 bg-primary/5 text-primary hover:bg-primary/10 rounded-full px-3 font-bold transition-all text-xs"
+                                >
+                                    {isImproving ? (
+                                        <Loader2 className="h-3 w-3 mr-1.5 animate-spin" />
+                                    ) : (
+                                        <Sparkles className="h-3 w-3 mr-1.5" />
+                                    )}
+                                    AI Assist
+                                </Button>
+                            </div>
                             <Textarea
                                 {...register("description")}
                                 placeholder={text.descriptionPlaceholder}
-                                className='h-32 bg-slate-100 text-slate-600 border-none placeholder:text-xs md:placeholder:text-sm text-sm'
+                                className='min-h-[140px] bg-slate-50 border-slate-200 focus:border-primary/50 focus:ring-primary/20 rounded-2xl transition-all resize-none text-[15px] leading-relaxed'
                             />
-                            {errors.description && <p className='text-xs text-red-500'>{errors.description.message}</p>}
+                            {errors.description && <p className='text-xs font-bold text-red-500 px-1'>{errors.description.message}</p>}
+                        </div>
 
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                onClick={handleImprovedDescription}
-                                disabled={isImproving || !watch("description")}
-                                className="mt-2"
+                        <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                            <Button 
+                                variant="outline" 
+                                type="button" 
+                                onClick={handleCancel}
+                                className="h-12 px-6 rounded-xl font-bold border-slate-200 hover:bg-slate-50 transition-all"
                             >
-                                {isImproving ? (
-                                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                ) : (
-                                    <Sparkles className="h-4 w-4 mr-2" />
-                                )}
-                                Improve with AI
+                                Cancel
+                            </Button>
+                            <Button 
+                                type="button" 
+                                onClick={handleAdd}
+                                className="h-12 px-8 rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all bg-primary hover:bg-primary/90"
+                            >
+                                {editingId !== null ? "Update Entry" : `Add to ${type}`}
                             </Button>
                         </div>
                     </CardContent>
-                    <CardFooter className="flex justify-end gap-2 bg-slate-50 p-4 rounded-b-lg">
-                        <Button variant="outline" type="button" onClick={handleCancel}>Cancel</Button>
-                        <Button type="button" onClick={handleAdd}>
-                            {editingId !== null ? "Update Entry" : `Add to ${type}`}
-                        </Button>
-                    </CardFooter>
                 </Card>
             )}
+
 
             {!isAdding && (
                 <Button

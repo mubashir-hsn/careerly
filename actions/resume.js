@@ -4,7 +4,6 @@ import { checkAuth } from "@/services/authCheck";
 import { generateAIResponse } from "@/services/geminiService";
 import { checkTokenBalance, deductTokens, estimateTokens } from "@/services/subscriptionService";
 import { revalidatePath } from "next/cache";
-import { NextResponse } from "next/server";
 
 const modelName = process.env.GEMINI_MODEL_A;
 
@@ -35,14 +34,8 @@ export const saveResume = async(content)=>{
         
     } catch (error) {
         console.log("Error while saving resume:" , error);
-        return NextResponse.json(
-          {
-            success: false,
-            message: "Failed to save resume"
-          },
-          { status: 500 }
-        )
-            }
+        throw new Error("Failed to save resume. Please try again.");
+    }
 }
 
 export const getResume = async()=>{
@@ -93,13 +86,7 @@ Rules: 2-3 high-impact sentences. Use action verbs and metrics. 3rd person. No b
     return response.trim();
   } catch (error) {
     console.error("Error improving content:", error);
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Failed to improve content"
-      },
-      { status: 502 }
-    )
-      }
+    throw new Error(error.message || "Failed to improve content via AI.");
+  }
 }
 
