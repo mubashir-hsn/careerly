@@ -8,7 +8,7 @@ const onBoardingPage = async() => {
   const { isOnboarded } = await userOnboardingStatus();
 
   if (isOnboarded) {
-    redirect('/dashboard')
+    redirect('/insights')
   }
   return (
     <div className='bg-slate-100 min-h-screen pb-10'>

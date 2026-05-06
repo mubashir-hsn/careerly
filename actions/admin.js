@@ -214,6 +214,8 @@ export async function getAllPayments(page = 1, pageSize = 20) {
   };
 }
 
+import { clerkClient } from "@clerk/nextjs/server";
+
 /**
  * Get detailed audit data for a specific user.
  */
@@ -239,10 +241,32 @@ export async function getUserAuditData(userId) {
     })
   ]);
 
+  if (!user) return { user: null };
+
+  // Fetch login history from Clerk
+  let loginHistory = [];
+  try {
+    const client = await clerkClient();
+    const sessions = await client.sessions.getSessionList({
+      userId: user.clerkUserId,
+    });
+    
+    loginHistory = sessions.data.map(session => ({
+      id: session.id,
+      ipAddress: session.ipAddress,
+      userAgent: session.userAgent,
+      lastActiveAt: session.lastActiveAt,
+      status: session.status,
+    }));
+  } catch (error) {
+    console.error("Error fetching Clerk sessions:", error.message);
+  }
+
   return {
     user,
     subscription,
     payments,
     usageLogs,
+    loginHistory,
   };
 }

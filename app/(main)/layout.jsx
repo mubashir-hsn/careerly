@@ -2,7 +2,20 @@ import React from 'react'
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-const MainLayoutPage = ({ children }) => {
+import { checkAuth } from '@/services/authCheck';
+import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
+
+const MainLayoutPage = async ({ children }) => {
+  const user = await checkAuth();
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname");
+
+  // Restrict admin users to only landing page and admin routes
+  if (user?.adminUser && pathname !== "/") {
+    redirect("/admin");
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />

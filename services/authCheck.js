@@ -12,7 +12,8 @@ export async function checkAuth() {
         const user = await db.user.findUnique({
             where: { clerkUserId: userId },
             include: {
-              industryInsight: true
+              industryInsight: true,
+              adminUser: true,
             }
         });
 

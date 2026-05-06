@@ -16,16 +16,24 @@ const ResumeReviewPage = async ({ params }) => {
 
   return (
     <>
-      <div className='md:px-4 pb-2 space-y-2'>
-        <Link href={'/resume'}>
-          <Button variant={'link'} className={'font-medium'}>
-            <ArrowLeft className='w-4 h-4' /> Back to resume page
-          </Button>
+      <div className="flex flex-col gap-4 mb-8 px-2 md:px-0">
+        <Link 
+          href="/resume" 
+          className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors group"
+        >
+          <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+          <span className="font-bold text-sm uppercase tracking-widest">Back to Resumes</span>
         </Link>
-        <div className='flex flex-col gap-2 md:flex-row md:justify-between p-2'>
-          <h1 className='text-2xl md:text-3xl font-bold text-gray-700'>
-            Resume Review
-          </h1>
+        
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          <div>
+            <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
+              Resume Review
+            </h1>
+            <p className="text-slate-500 font-medium">
+              Analyze your resume to get professional feedback and ATS optimization.
+            </p>
+          </div>
           <Previewbtn resumeUrl={feedback.resumeUrl}/>
         </div>
       </div>

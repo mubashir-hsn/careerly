@@ -15,10 +15,17 @@ export const metadata = {
 
 import { currentUser } from "@clerk/nextjs/server";
 import { verifyStripeSession } from "@/actions/subscription";
+import { checkAuth } from "@/services/authCheck";
+import { redirect } from "next/navigation";
 
 export default async function DashboardPage({ searchParams }) {
   const { success, session_id } = await searchParams;
   const user = await currentUser();
+  const dbUser = await checkAuth();
+
+  if (dbUser?.adminUser) {
+    redirect("/");
+  }
 
   // Handle successful payment verification if session_id is present
   if (success && session_id) {
