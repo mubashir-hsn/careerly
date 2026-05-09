@@ -7,6 +7,9 @@ import { ArrowLeft, Download, Filter, Search, IndianRupee } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import ExportCSVButton from "./ExportCSVButton";
+import SearchTransactions from "./SearchTransactions";
+import DateFilter from "./DateFilter";
 
 export const metadata = {
   title: "Revenue Ledger - Admin",
@@ -15,7 +18,11 @@ export const metadata = {
 export default async function AdminRevenuePage({ searchParams }) {
   const params = await searchParams;
   const page = parseInt(params.page) || 1;
-  const { payments, total, totalPages } = await getAllPayments(page);
+  const searchQuery = params.search || "";
+  const startDate = params.startDate || null;
+  const endDate = params.endDate || null;
+
+  const { payments, total, totalPages } = await getAllPayments(page, 20, searchQuery, startDate, endDate);
 
   return (
     <div className="space-y-8 p-6">
@@ -29,33 +36,25 @@ export default async function AdminRevenuePage({ searchParams }) {
           <h1 className="text-3xl font-black text-slate-900 tracking-tight">Revenue Ledger</h1>
           <p className="text-slate-500 font-medium">Platform-wide transaction history and financial audits.</p>
         </div>
-        <div className="flex gap-3">
-          <Button variant="outline" className="rounded-xl border-slate-200">
-            <Download className="w-4 h-4 mr-2" />
-            Export CSV
-          </Button>
+        <div className="flex flex-col md:flex-row gap-3">
+          <DateFilter />
         </div>
       </div>
 
       {/* Transaction Table */}
       <Card className="border-0 shadow-lg bg-white overflow-hidden">
-        <CardHeader className="border-b border-slate-50 bg-slate-50/50">
+        <CardHeader className="pt-2 border-b border-slate-50 bg-slate-50/50">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <CardTitle>All Transactions</CardTitle>
               <CardDescription>A total of {total} successful payments processed.</CardDescription>
             </div>
-            <div className="flex gap-2">
-               <div className="relative">
-                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                 <input 
-                   placeholder="Search transactions..." 
-                   className="pl-10 pr-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 w-64"
-                 />
-               </div>
-               <Button variant="outline" size="icon" className="rounded-xl border-slate-200">
-                 <Filter className="w-4 h-4" />
-               </Button>
+            <div className="flex items-center gap-3">
+              <SearchTransactions />
+              <Button variant="outline" size="icon" className="rounded-xl border-slate-200 h-10 w-10 hover:bg-slate-50 transition-colors">
+                <Filter className="w-4 h-4 text-slate-500" />
+              </Button>
+              <ExportCSVButton searchQuery={searchQuery} startDate={startDate} endDate={endDate} />
             </div>
           </div>
         </CardHeader>
@@ -76,18 +75,18 @@ export default async function AdminRevenuePage({ searchParams }) {
                 payments.map((p) => (
                   <TableRow key={p.id} className="hover:bg-slate-50/80 transition-colors">
                     <TableCell className="pl-8">
-                       <div className="flex items-center gap-3">
-                         <Avatar className="w-8 h-8 border border-slate-100">
-                           <AvatarImage src={p.user.imageUrl} />
-                           <AvatarFallback className="bg-indigo-50 text-indigo-600 font-bold text-[10px]">
-                             {p.user.name?.charAt(0) || "U"}
-                           </AvatarFallback>
-                         </Avatar>
-                         <div>
-                           <p className="text-sm font-black text-slate-900 group-hover:text-indigo-600">{p.user.name || "Anonymous User"}</p>
-                           <p className="text-[10px] text-slate-400 font-medium">{p.user.email}</p>
-                         </div>
-                       </div>
+                      <div className="flex items-center gap-3">
+                        <Avatar className="w-8 h-8 border border-slate-100">
+                          <AvatarImage src={p.user.imageUrl} />
+                          <AvatarFallback className="bg-indigo-50 text-indigo-600 font-bold text-[10px]">
+                            {p.user.name?.charAt(0) || "U"}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="text-sm font-black text-slate-900 group-hover:text-indigo-600">{p.user.name || "Anonymous User"}</p>
+                          <p className="text-[10px] text-slate-400 font-medium">{p.user.email}</p>
+                        </div>
+                      </div>
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col">
@@ -101,8 +100,8 @@ export default async function AdminRevenuePage({ searchParams }) {
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center text-sm font-black text-emerald-600">
-                         <span className="uppercase text-[10px] mr-1">{p.currency}</span>
-                         {p.amount.toLocaleString()}
+                        <span className="uppercase text-[10px] mr-1">{p.currency}</span>
+                        {p.amount.toLocaleString()}
                       </div>
                     </TableCell>
                     <TableCell className="text-xs font-semibold text-slate-500">
@@ -140,7 +139,9 @@ export default async function AdminRevenuePage({ searchParams }) {
               variant={page === i + 1 ? "default" : "outline"}
               className="w-10 h-10 rounded-xl font-bold"
             >
-              <Link href={`/admin/revenue?page=${i + 1}`}>{i + 1}</Link>
+              <Link href={`/admin/revenue?page=${i + 1}${searchQuery ? `&search=${searchQuery}` : ""}${startDate ? `&startDate=${startDate}` : ""}${endDate ? `&endDate=${endDate}` : ""}`}>
+                {i + 1}
+              </Link>
             </Button>
           ))}
         </div>

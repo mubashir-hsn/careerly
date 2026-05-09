@@ -190,12 +190,56 @@ export async function deleteSubscriptionPlan(planId) {
 /**
  * Get all payment records for the revenue ledger.
  */
-export async function getAllPayments(page = 1, pageSize = 20) {
+export async function exportAllPayments(searchQuery = "", startDate = null, endDate = null) {
+  await checkAdmin();
+
+  const where = {
+    AND: [
+      searchQuery ? {
+        OR: [
+          { user: { name: { contains: searchQuery, mode: "insensitive" } } },
+          { user: { email: { contains: searchQuery, mode: "insensitive" } } },
+          { stripeSessionId: { contains: searchQuery, mode: "insensitive" } },
+        ]
+      } : {},
+      startDate ? { createdAt: { gte: new Date(new Date(startDate).setHours(0, 0, 0, 0)) } } : {},
+      endDate ? { createdAt: { lte: new Date(new Date(endDate).setHours(23, 59, 59, 999)) } } : {},
+    ].filter(Boolean)
+  };
+
+  const payments = await db.payment.findMany({
+    where,
+    include: { 
+      user: { select: { name: true, email: true } },
+      plan: true 
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return payments;
+}
+
+export async function getAllPayments(page = 1, pageSize = 20, searchQuery = "", startDate = null, endDate = null) {
   await checkAdmin();
   const skip = (page - 1) * pageSize;
 
+  const where = {
+    AND: [
+      searchQuery ? {
+        OR: [
+          { user: { name: { contains: searchQuery, mode: "insensitive" } } },
+          { user: { email: { contains: searchQuery, mode: "insensitive" } } },
+          { stripeSessionId: { contains: searchQuery, mode: "insensitive" } },
+        ]
+      } : {},
+      startDate ? { createdAt: { gte: new Date(new Date(startDate).setHours(0, 0, 0, 0)) } } : {},
+      endDate ? { createdAt: { lte: new Date(new Date(endDate).setHours(23, 59, 59, 999)) } } : {},
+    ].filter(Boolean)
+  };
+
   const [payments, total] = await Promise.all([
     db.payment.findMany({
+      where,
       include: { 
         user: { select: { id: true, name: true, email: true, imageUrl: true } },
         plan: true 
@@ -204,7 +248,7 @@ export async function getAllPayments(page = 1, pageSize = 20) {
       skip,
       take: pageSize,
     }),
-    db.payment.count(),
+    db.payment.count({ where }),
   ]);
 
   return {
