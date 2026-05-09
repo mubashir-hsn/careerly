@@ -29,6 +29,11 @@ export async function checkAdmin() {
 export async function getPlatformStats() {
   await checkAdmin();
 
+  const sixMonthsAgo = new Date();
+  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+  sixMonthsAgo.setDate(1);
+  sixMonthsAgo.setHours(0, 0, 0, 0);
+
   const [totalUsers, activeSubscriptions, totalTokensUsed, totalRevenue, featureUsage] = await Promise.all([
     db.user.count(),
     db.userSubscription.count({ where: { status: "ACTIVE" } }),
@@ -41,11 +46,55 @@ export async function getPlatformStats() {
     }),
   ]);
 
+  // Fetch monthly data for comparison
+  const monthlyData = [];
+  for (let i = 5; i >= 0; i--) {
+    const start = new Date();
+    start.setDate(1); // Set to 1st first to avoid overflow issues
+    start.setMonth(new Date().getMonth() - i);
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(start);
+    end.setMonth(end.getMonth() + 1);
+
+    monthlyData.push({
+      name: start.toLocaleString("default", { month: "short" }),
+      start,
+      end,
+    });
+  }
+
+  const monthlyStats = await Promise.all(
+    monthlyData.map(async (m) => {
+      const [users, revenue, usage] = await Promise.all([
+        db.user.count({ 
+          where: { createdAt: { gte: m.start, lt: m.end } } 
+        }),
+        db.payment.aggregate({
+          _sum: { amount: true },
+          where: { status: "paid", createdAt: { gte: m.start, lt: m.end } },
+        }),
+        db.tokenUsageLog.aggregate({
+          _sum: { tokensUsed: true },
+          where: { createdAt: { gte: m.start, lt: m.end } },
+        }),
+      ]);
+
+      return {
+        name: m.name,
+        users,
+        revenue: revenue._sum.amount || 0,
+        usage: usage._sum.tokensUsed || 0,
+      };
+    })
+  );
+
   return {
     totalUsers,
     activeSubscriptions,
     totalTokensUsed: totalTokensUsed._sum.tokensUsed || 0,
     totalRevenue: totalRevenue._sum.amount || 0,
+    monthlyStats,
     featureUsage: featureUsage.map((f) => ({
       feature: f.feature,
       count: f._count.feature,

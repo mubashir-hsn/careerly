@@ -1,7 +1,6 @@
 'use server'
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
 
 export async function checkAuth() {
     try {
@@ -12,8 +11,8 @@ export async function checkAuth() {
         const user = await db.user.findUnique({
             where: { clerkUserId: userId },
             include: {
-              industryInsight: true,
-              adminUser: true,
+                industryInsight: true,
+                adminUser: true,
             }
         });
 

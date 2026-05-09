@@ -67,7 +67,7 @@ const OnBoardingForm = ({ industries }) => {
     useEffect(() => {
         if (updateResult?.success && !updateLoading) {
             toast.success("Profile completed successfully!");
-            router.push("/insights");
+            router.push("/dashboard");
             router.refresh();
         }
     }, [updateResult, updateLoading]);

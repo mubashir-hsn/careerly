@@ -2,6 +2,7 @@ import { getPlatformStats } from "@/actions/admin";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, CreditCard, Zap, TrendingUp } from "lucide-react";
 import Link from "next/link";
+import DashboardCharts from "./_components/DashboardCharts";
 
 export const metadata = {
   title: "Admin Overview - Careerly",
@@ -77,6 +78,9 @@ export default async function AdminDashboardPage() {
           );
         })}
       </div>
+
+      {/* Analytics Chart */}
+      <DashboardCharts data={stats.monthlyStats} />
 
       {/* Feature Usage Section */}
       <div className="grid grid-cols-1 gap-6">
