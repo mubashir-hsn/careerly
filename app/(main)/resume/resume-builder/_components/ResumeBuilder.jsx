@@ -102,19 +102,19 @@ const ResumeBuilder = ({ initialContent }) => {
     } = useFetch(improveWithAI);
 
     useEffect(() => {
-      if (!user) return;
+        if (!user) return;
 
-      const currentName = watch("contactInfo.name");
+        const currentName = watch("contactInfo.name");
 
-      if (!currentName && user.fullName) {
-        setValue("contactInfo.name", user.fullName, {
-          shouldDirty: false,
-          shouldTouch: false,
-          shouldValidate: false,
-        });
-      }
+        if (!currentName && user.fullName) {
+            setValue("contactInfo.name", user.fullName, {
+                shouldDirty: false,
+                shouldTouch: false,
+                shouldValidate: false,
+            });
+        }
     }, [user, setValue, watch]);
-    
+
     useEffect(() => {
         if (improvedContent && !isImproving) {
             setValue("summary", improvedContent);
@@ -137,46 +137,46 @@ const ResumeBuilder = ({ initialContent }) => {
 
     return (
         <>
-        <div className="flex flex-col gap-4 mb-8 px-2 md:px-0">
-            <Link 
-                href="/resume" 
-                className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors group"
-            >
-                <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-                <span className="font-bold text-sm uppercase tracking-widest">Back to Resumes</span>
-            </Link>
-            
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                <div>
-                    <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
-                        Resume Builder
-                    </h1>
-                    <p className="text-slate-500 font-medium">
-                        Build your professional profile and generate a high-quality resume.
-                    </p>
-                </div>
-                <div className="flex gap-4">
-                    <Button
-                        variant="destructive"
-                        onClick={handleSubmit(onSubmit)}
-                        disabled={isSaving}
-                        className="rounded-xl font-bold"
-                    >
-                        {isSaving ? (
-                            <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Saving...</>
-                        ) : (
-                            <><Save className="mr-2 h-4 w-4" />Save Content</>
-                        )}
-                    </Button>
-                    <PdfButton
-                        data={formValues}
-                        user={user}
-                        activeStyle={activeStyle}
-                        fileName={`${user?.firstName || "resume"}.pdf`}
-                    />
+            <div className="flex flex-col gap-4 mb-8 px-2 md:px-0">
+                <Link
+                    href="/resume"
+                    className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors group"
+                >
+                    <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+                    <span className="font-bold text-sm uppercase tracking-widest">Back to Resumes</span>
+                </Link>
+
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div>
+                        <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
+                            Resume Builder
+                        </h1>
+                        <p className="text-slate-500 font-medium">
+                            Build your professional profile and generate a high-quality resume.
+                        </p>
+                    </div>
+                    <div className="flex gap-4">
+                        <Button
+                            variant="destructive"
+                            onClick={handleSubmit(onSubmit)}
+                            disabled={isSaving}
+                            className="rounded-xl font-bold"
+                        >
+                            {isSaving ? (
+                                <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Saving...</>
+                            ) : (
+                                <><Save className="mr-2 h-4 w-4" />Save Content</>
+                            )}
+                        </Button>
+                        <PdfButton
+                            data={formValues}
+                            user={user}
+                            activeStyle={activeStyle}
+                            fileName={`${user?.firstName || "resume"}.pdf`}
+                        />
+                    </div>
                 </div>
             </div>
-        </div>
 
             <Tabs value={activeTab} onValueChange={setActiveTab}>
                 <TabsList className={'bg-slate-200'}>
@@ -192,8 +192,8 @@ const ResumeBuilder = ({ initialContent }) => {
                                 <div className="h-6 w-1.5 bg-primary rounded-full shadow-[0_0_8px_rgba(var(--primary),0.4)]" />
                                 <h3 className="text-xl font-black tracking-tight text-slate-800">Contact Information</h3>
                             </div>
-                            
-                            <Card className="border-none shadow-xl rounded-[2rem] bg-white overflow-hidden">
+
+                            <Card className="border-none shadow-xl rounded-4xl bg-white overflow-hidden">
                                 <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6 p-8">
                                     <div className="space-y-2">
                                         <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Full Name</label>
@@ -314,7 +314,7 @@ const ResumeBuilder = ({ initialContent }) => {
                                 </Button>
                             </div>
 
-                            <Card className="border-none shadow-xl rounded-[2rem] bg-white overflow-hidden">
+                            <Card className="border-none shadow-xl rounded-4xl bg-white overflow-hidden">
                                 <CardContent className="p-8">
                                     <Controller
                                         name={"summary"}
@@ -343,8 +343,8 @@ const ResumeBuilder = ({ initialContent }) => {
                                 <div className="h-6 w-1.5 bg-primary rounded-full" />
                                 <h3 className="text-xl font-black tracking-tight text-slate-800">Core Competencies</h3>
                             </div>
-                            
-                            <Card className="border-none shadow-xl rounded-[2rem] bg-white overflow-hidden">
+
+                            <Card className="border-none shadow-xl rounded-4xl bg-white overflow-hidden">
                                 <CardContent className="p-8">
                                     <Controller
                                         name={"skills"}
@@ -374,7 +374,7 @@ const ResumeBuilder = ({ initialContent }) => {
                                 <div className="h-6 w-1.5 bg-primary rounded-full" />
                                 <h3 className="text-xl font-black tracking-tight text-slate-800">Work History</h3>
                             </div>
-                            
+
                             <Controller
                                 name={"experience"}
                                 control={control}
@@ -399,7 +399,7 @@ const ResumeBuilder = ({ initialContent }) => {
                                 <div className="h-6 w-1.5 bg-primary rounded-full" />
                                 <h3 className="text-xl font-black tracking-tight text-slate-800">Educational Background</h3>
                             </div>
-                            
+
                             <Controller
                                 name={"education"}
                                 control={control}
@@ -424,7 +424,7 @@ const ResumeBuilder = ({ initialContent }) => {
                                 <div className="h-6 w-1.5 bg-primary rounded-full" />
                                 <h3 className="text-xl font-black tracking-tight text-slate-800">Key Projects</h3>
                             </div>
-                            
+
                             <Controller
                                 name={"projects"}
                                 control={control}
@@ -449,7 +449,7 @@ const ResumeBuilder = ({ initialContent }) => {
                 <TabsContent value="preview">
                     <div className='rounded-lg bg-slate-700 py-5 border-2 '>
                         <div className="w-full md:max-w-[210mm] mx-auto bg-white p-2 md:p-4 rounded-md md:rounded-xl shadow-lg flex flex-wrap justify-center gap-3 no-print">
-                            {['ats', 'academic', 'corporate', 'executive'].map((style) => (
+                            {['ats', 'academic', 'corporate', 'executive', 'modern'].map((style) => (
                                 <button
                                     key={style}
                                     onClick={() => setActiveStyle(style)}
