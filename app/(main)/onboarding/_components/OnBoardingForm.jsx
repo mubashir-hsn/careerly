@@ -26,11 +26,13 @@ import { Button } from '@/components/ui/button';
 import useFetch from '@/hooks/useFetch';
 import { updateUser } from '@/actions/user';
 import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Plus, X } from 'lucide-react';
 
 const OnBoardingForm = ({ industries }) => {
 
     const [industry, setIndustry] = useState(null);
+    const [skillInput, setSkillInput] = useState("");
+    const [skills, setSkills] = useState([]);
     const router = useRouter();
     const {
         loading: updateLoading,
@@ -49,6 +51,44 @@ const OnBoardingForm = ({ industries }) => {
     });
 
     const watchIndustry = watch('industry');
+
+    const syncSkills = (nextSkills) => {
+        setSkills(nextSkills);
+        setValue("skills", nextSkills.join(", "), {
+            shouldValidate: true,
+            shouldDirty: true,
+        });
+    };
+
+    const addSkill = () => {
+        const nextSkill = skillInput.trim();
+
+        if (!nextSkill) return;
+
+        const exists = skills.some(
+            (skill) => skill.toLowerCase() === nextSkill.toLowerCase()
+        );
+
+        if (exists) {
+            setSkillInput("");
+            return;
+        }
+
+        syncSkills([...skills, nextSkill]);
+        setSkillInput("");
+    };
+
+    const removeSkill = (skillToRemove) => {
+        syncSkills(skills.filter((skill) => skill !== skillToRemove));
+    };
+
+    const handleSkillKeyDown = (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            addSkill();
+        }
+    };
+
     const onSubmit = async (values) => {
         try {
             const formattedIndustry = `${values.industry}-${values.subIndustry
@@ -168,13 +208,49 @@ const OnBoardingForm = ({ industries }) => {
 
                                 <div className='space-y-2 col-span-2'>
                                     <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Key Skills</label>
-                                    <Input
-                                        id='skills'
-                                        placeholder="e.g. React, Docker, Python"
-                                        {...register('skills')}
-                                        className="h-12 bg-slate-50 border-slate-200 focus:border-primary/50 focus:ring-primary/20 rounded-xl transition-all font-semibold"
-                                    />
-                                    <p className='text-[10px] font-bold text-slate-400 uppercase tracking-tighter mt-1 ml-1'>Separate with commas</p>
+                                    <input type="hidden" {...register('skills')} />
+                                    <div className="flex gap-2">
+                                        <Input
+                                            id='skill-input'
+                                            value={skillInput}
+                                            onChange={(event) => setSkillInput(event.target.value)}
+                                            onKeyDown={handleSkillKeyDown}
+                                            placeholder="Add a skill"
+                                            className="h-12 bg-slate-50 border-slate-200 focus:border-primary/50 focus:ring-primary/20 rounded-xl transition-all font-semibold"
+                                        />
+                                        <Button
+                                            type="button"
+                                            onClick={addSkill}
+                                            disabled={!skillInput.trim()}
+                                            className="h-12 w-12 shrink-0 rounded-xl bg-slate-900 hover:bg-slate-800 shadow-lg shadow-slate-200"
+                                            aria-label="Add skill"
+                                        >
+                                            <Plus className="h-5 w-5" />
+                                        </Button>
+                                    </div>
+
+                                    {skills.length > 0 && (
+                                        <div className="rounded-2xl border border-slate-100 bg-slate-50/70 p-3">
+                                            <div className="flex flex-wrap gap-2">
+                                                {skills.map((skill) => (
+                                                    <span
+                                                        key={skill}
+                                                        className="inline-flex max-w-full items-center gap-2 rounded-xl bg-white px-3 py-2 text-sm font-bold text-slate-700 shadow-sm ring-1 ring-slate-200"
+                                                    >
+                                                        <span className="truncate">{skill}</span>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => removeSkill(skill)}
+                                                            className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-red-50 hover:text-red-500"
+                                                            aria-label={`Remove ${skill}`}
+                                                        >
+                                                            <X className="h-3.5 w-3.5" />
+                                                        </button>
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
                                     {errors.skills && <p className='text-xs font-bold text-red-500 px-1'>{errors.skills.message}</p>}
                                 </div>
                             </div>
@@ -220,4 +296,4 @@ const OnBoardingForm = ({ industries }) => {
     )
 }
 
-export default OnBoardingForm
+export default OnBoardingForm

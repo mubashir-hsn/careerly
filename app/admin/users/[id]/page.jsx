@@ -38,7 +38,7 @@ export default async function UserAuditPage({ params }) {
             <div className="relative">
               <Avatar className="w-24 h-24 md:w-32 md:h-32 border-4 border-white/10 shadow-2xl">
                 <AvatarImage src={user.imageUrl} />
-                <AvatarFallback className="bg-gradient-to-br from-indigo-600 to-purple-600 text-white font-black text-4xl">
+                <AvatarFallback className="bg-linear-to-br from-indigo-600 to-purple-600 text-white font-black text-4xl">
                   {user.name?.charAt(0) || "U"}
                 </AvatarFallback>
               </Avatar>
@@ -49,7 +49,7 @@ export default async function UserAuditPage({ params }) {
 
             <div className="text-center md:text-left space-y-3">
               <div className="flex flex-col md:flex-row items-center gap-4">
-                <h1 className="text-4xl md:text-5xl font-black tracking-tight">{user.name || "Anonymous User"}</h1>
+                <h1 className="text-4xl capitalize md:text-5xl font-black tracking-tight">{user.name || "Anonymous User"}</h1>
                 <Badge className={`px-4 py-1.5 font-black uppercase text-[10px] tracking-[0.2em] border-0 shadow-lg ${isFree ? "bg-white/10 text-white" : "bg-purple-600 text-white"}`}>
                   {isFree ? "Standard tier" : "pro executive"}
                 </Badge>
@@ -79,25 +79,25 @@ export default async function UserAuditPage({ params }) {
         
         {/* Quick Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 px-1">
-          <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
+          <div className="bg-white p-8 rounded-4xl border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Available Credits</p>
             <h4 className="text-4xl font-black text-slate-900 tracking-tighter group-hover:text-primary transition-colors">
               {subscription?.tokensRemaining.toLocaleString() || 0}
             </h4>
           </div>
-          <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all">
+          <div className="bg-white p-8 rounded-4xl border border-slate-100 shadow-sm hover:shadow-xl transition-all">
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Lifetime Usage</p>
             <h4 className="text-4xl font-black text-slate-900 tracking-tighter">
               {subscription?.tokensUsed.toLocaleString() || 0}
             </h4>
           </div>
-          <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all">
+          <div className="bg-white p-8 rounded-4xl border border-slate-100 shadow-sm hover:shadow-xl transition-all">
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Total Revenue</p>
             <h4 className="text-4xl font-black text-emerald-600 tracking-tighter">
               {payments.reduce((acc, p) => acc + p.amount, 0).toLocaleString()} <span className="text-sm font-bold text-slate-400">USD</span>
             </h4>
           </div>
-          <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all">
+          <div className="bg-white p-8 rounded-4xl border border-slate-100 shadow-sm hover:shadow-xl transition-all">
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Membership Status</p>
             <h4 className="text-2xl font-black text-indigo-600 tracking-tight uppercase">
               {subscription?.plan?.name || "Free Plan"}

@@ -148,10 +148,18 @@ const Header = async () => {
 
           {/* Sign In & UP Buttons (only if signed out) */}
           <SignedOut>
-            <SignInButton mode="modal">
+            <SignInButton
+              mode="modal"
+              signUpForceRedirectUrl="/onboarding"
+              signUpFallbackRedirectUrl="/onboarding"
+            >
               <Button variant="ghost" className="h-11 px-5 rounded-xl font-bold text-slate-600 hover:bg-slate-100/50 transition-all">Sign In</Button>
             </SignInButton>
-            <SignUpButton mode="modal">
+            <SignUpButton
+              mode="modal"
+              forceRedirectUrl="/onboarding"
+              fallbackRedirectUrl="/onboarding"
+            >
               <Button className="h-11 px-8 bg-slate-900 border border-slate-800 text-white hover:bg-slate-800 shadow-xl shadow-slate-200 rounded-xl active:scale-95 transition-all font-black uppercase text-[11px] tracking-widest">Get Started</Button>
             </SignUpButton>
           </SignedOut>

@@ -1,4 +1,8 @@
-import { getDashboardStats, getTokenUsageHistory, getRecentActivity } from "@/actions/user-dashboard";
+import {
+  getDashboardStats,
+  getTokenUsageHistory,
+  getRecentActivity,
+} from "@/actions/user-dashboard";
 import { getUserFeedbacks } from "@/actions/feedback";
 import DashboardOverview from "./_components/DashboardOverview";
 import StatsCards from "./_components/StatsCards";
@@ -32,16 +36,20 @@ export default async function DashboardPage({ searchParams }) {
     try {
       await verifyStripeSession(session_id);
     } catch (error) {
-      console.error("Payment verification failed on dashboard load:", error.message);
+      console.error(
+        "Payment verification failed on dashboard load:",
+        error.message,
+      );
     }
   }
 
-  const [dashboardData, usageHistory, recentActivity, feedbacks] = await Promise.all([
-    getDashboardStats(),
-    getTokenUsageHistory(),
-    getRecentActivity(),
-    getUserFeedbacks(),
-  ]);
+  const [dashboardData, usageHistory, recentActivity, feedbacks] =
+    await Promise.all([
+      getDashboardStats(),
+      getTokenUsageHistory(),
+      getRecentActivity(),
+      getUserFeedbacks(),
+    ]);
 
   const { subscription, stats } = dashboardData;
 
@@ -49,7 +57,7 @@ export default async function DashboardPage({ searchParams }) {
     <div className="container mx-auto px-4 py-12 max-w-7xl">
       {/* Welcome Header */}
       <div className="mb-12">
-        <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter">
+        <h1 className="text-4xl capitalize md:text-5xl font-black text-slate-900 tracking-tighter">
           Welcome, {user?.firstName}!
         </h1>
         <p className="text-slate-500 mt-3 text-lg font-medium opacity-80">

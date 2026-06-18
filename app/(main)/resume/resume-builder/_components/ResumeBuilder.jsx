@@ -1,7 +1,7 @@
 "use client"
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { ArrowLeft, Loader2, Save, Sparkles } from 'lucide-react'
+import { ArrowLeft, Loader2, Plus, Save, Sparkles, X } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -38,6 +38,8 @@ const initialData = {
 const ResumeBuilder = ({ initialContent }) => {
     const [activeTab, setActiveTab] = useState('edit');
     const [activeStyle, setActiveStyle] = useState('ats');
+    const [skillInput, setSkillInput] = useState("");
+    const [skills, setSkills] = useState([]);
     const { user } = useUser();
 
 
@@ -71,8 +73,50 @@ const ResumeBuilder = ({ initialContent }) => {
         if (initialContent) {
             const savedData = JSON.parse(initialContent);
             reset(savedData);
+            setSkills(
+                savedData.skills
+                    ? savedData.skills.split(",").map((skill) => skill.trim()).filter(Boolean)
+                    : []
+            );
         }
     }, [initialContent, reset]);
+
+    const syncSkills = (nextSkills) => {
+        setSkills(nextSkills);
+        setValue("skills", nextSkills.join(", "), {
+            shouldValidate: true,
+            shouldDirty: true,
+        });
+    };
+
+    const addSkill = () => {
+        const nextSkill = skillInput.trim();
+
+        if (!nextSkill) return;
+
+        const exists = skills.some(
+            (skill) => skill.toLowerCase() === nextSkill.toLowerCase()
+        );
+
+        if (exists) {
+            setSkillInput("");
+            return;
+        }
+
+        syncSkills([...skills, nextSkill]);
+        setSkillInput("");
+    };
+
+    const removeSkill = (skillToRemove) => {
+        syncSkills(skills.filter((skill) => skill !== skillToRemove));
+    };
+
+    const handleSkillKeyDown = (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            addSkill();
+        }
+    };
 
     // Handle save result
     useEffect(() => {
@@ -345,20 +389,50 @@ const ResumeBuilder = ({ initialContent }) => {
                             </div>
 
                             <Card className="border-none shadow-xl rounded-4xl bg-white overflow-hidden">
-                                <CardContent className="p-8">
-                                    <Controller
-                                        name={"skills"}
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Textarea
-                                                {...field}
-                                                placeholder="e.g. React.js, Python, Project Management, Strategic Planning..."
-                                                className={'min-h-[100px] bg-slate-50 border-slate-200 focus:border-primary/50 focus:ring-primary/20 rounded-2xl transition-all resize-none text-[15px]'}
-                                                error={errors?.skills}
-                                            />
-                                        )}
-                                    />
-                                    <p className="text-xs text-slate-400 mt-3 font-medium italic">Pro tip: Separate multiple skills with commas to make them stand out.</p>
+                                <CardContent className="space-y-3 p-8">
+                                    <input type="hidden" {...register("skills")} />
+                                    <div className="flex gap-2">
+                                        <Input
+                                            id="resume-skill-input"
+                                            value={skillInput}
+                                            onChange={(event) => setSkillInput(event.target.value)}
+                                            onKeyDown={handleSkillKeyDown}
+                                            placeholder="Add a skill"
+                                            className="h-12 bg-slate-50 border-slate-200 focus:border-primary/50 focus:ring-primary/20 rounded-xl transition-all font-semibold"
+                                        />
+                                        <Button
+                                            type="button"
+                                            onClick={addSkill}
+                                            disabled={!skillInput.trim()}
+                                            className="h-12 w-12 shrink-0 rounded-xl bg-slate-900 hover:bg-slate-800 shadow-lg shadow-slate-200"
+                                            aria-label="Add skill"
+                                        >
+                                            <Plus className="h-5 w-5" />
+                                        </Button>
+                                    </div>
+
+                                    {skills.length > 0 && (
+                                        <div className="rounded-2xl border border-slate-100 bg-slate-50/70 p-3">
+                                            <div className="flex flex-wrap gap-2">
+                                                {skills.map((skill) => (
+                                                    <span
+                                                        key={skill}
+                                                        className="inline-flex max-w-full items-center gap-2 rounded-xl bg-white px-3 py-2 text-sm font-bold text-slate-700 shadow-sm ring-1 ring-slate-200"
+                                                    >
+                                                        <span className="truncate">{skill}</span>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => removeSkill(skill)}
+                                                            className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-red-50 hover:text-red-500"
+                                                            aria-label={`Remove ${skill}`}
+                                                        >
+                                                            <X className="h-3.5 w-3.5" />
+                                                        </button>
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
                                     {errors?.skills && (
                                         <p className="text-xs font-bold text-red-500 mt-2 px-1">
                                             {errors?.skills?.message}
