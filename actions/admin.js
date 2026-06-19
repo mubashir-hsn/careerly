@@ -1,8 +1,9 @@
-"use server"; 
-   
+"use server";
+
 import { db } from "@/lib/prisma";
 import { checkAuth } from "@/services/authCheck";
-import { redirect } from "next/navigation";
+import { createNotification } from "./notifications";
+import { clerkClient } from "@clerk/nextjs/server";
 
 /**
  * Verify if the current user is an admin.
@@ -34,7 +35,13 @@ export async function getPlatformStats() {
   sixMonthsAgo.setDate(1);
   sixMonthsAgo.setHours(0, 0, 0, 0);
 
-  const [totalUsers, activeSubscriptions, totalTokensUsed, totalRevenue, featureUsage] = await Promise.all([
+  const [
+    totalUsers,
+    activeSubscriptions,
+    totalTokensUsed,
+    totalRevenue,
+    featureUsage,
+  ] = await Promise.all([
     db.user.count(),
     db.userSubscription.count({ where: { status: "ACTIVE" } }),
     db.tokenUsageLog.aggregate({ _sum: { tokensUsed: true } }),
@@ -67,8 +74,8 @@ export async function getPlatformStats() {
   const monthlyStats = await Promise.all(
     monthlyData.map(async (m) => {
       const [users, revenue, usage] = await Promise.all([
-        db.user.count({ 
-          where: { createdAt: { gte: m.start, lt: m.end } } 
+        db.user.count({
+          where: { createdAt: { gte: m.start, lt: m.end } },
         }),
         db.payment.aggregate({
           _sum: { amount: true },
@@ -86,7 +93,7 @@ export async function getPlatformStats() {
         revenue: revenue._sum.amount || 0,
         usage: usage._sum.tokensUsed || 0,
       };
-    })
+    }),
   );
 
   return {
@@ -152,7 +159,6 @@ export async function createSubscriptionPlan(data) {
 
   // Trigger notification
   try {
-    const { createNotification } = await import("./notifications");
     await createNotification({
       type: "PLAN_CREATED",
       title: "New Plan Created",
@@ -187,7 +193,6 @@ export async function updateSubscriptionPlan(planId, data) {
 
   // Trigger notification
   try {
-    const { createNotification } = await import("./notifications");
     await createNotification({
       type: "PLAN_CHANGE",
       title: "Plan Updated",
@@ -213,7 +218,9 @@ export async function deleteSubscriptionPlan(planId) {
   });
 
   if (activeUserCount > 0) {
-    throw new Error(`Cannot delete plan: ${activeUserCount} users are currently subscribed to it. Deactivate it instead.`);
+    throw new Error(
+      `Cannot delete plan: ${activeUserCount} users are currently subscribed to it. Deactivate it instead.`,
+    );
   }
 
   const plan = await db.subscriptionPlan.delete({
@@ -222,7 +229,6 @@ export async function deleteSubscriptionPlan(planId) {
 
   // Trigger notification
   try {
-    const { createNotification } = await import("./notifications");
     await createNotification({
       type: "PLAN_DELETED",
       title: "Plan Removed",
@@ -239,28 +245,52 @@ export async function deleteSubscriptionPlan(planId) {
 /**
  * Get all payment records for the revenue ledger.
  */
-export async function exportAllPayments(searchQuery = "", startDate = null, endDate = null) {
+export async function exportAllPayments(
+  searchQuery = "",
+  startDate = null,
+  endDate = null,
+) {
   await checkAdmin();
 
   const where = {
     AND: [
-      searchQuery ? {
-        OR: [
-          { user: { name: { contains: searchQuery, mode: "insensitive" } } },
-          { user: { email: { contains: searchQuery, mode: "insensitive" } } },
-          { stripeSessionId: { contains: searchQuery, mode: "insensitive" } },
-        ]
-      } : {},
-      startDate ? { createdAt: { gte: new Date(new Date(startDate).setHours(0, 0, 0, 0)) } } : {},
-      endDate ? { createdAt: { lte: new Date(new Date(endDate).setHours(23, 59, 59, 999)) } } : {},
-    ].filter(Boolean)
+      searchQuery
+        ? {
+            OR: [
+              {
+                user: { name: { contains: searchQuery, mode: "insensitive" } },
+              },
+              {
+                user: { email: { contains: searchQuery, mode: "insensitive" } },
+              },
+              {
+                stripeSessionId: { contains: searchQuery, mode: "insensitive" },
+              },
+            ],
+          }
+        : {},
+      startDate
+        ? {
+            createdAt: {
+              gte: new Date(new Date(startDate).setHours(0, 0, 0, 0)),
+            },
+          }
+        : {},
+      endDate
+        ? {
+            createdAt: {
+              lte: new Date(new Date(endDate).setHours(23, 59, 59, 999)),
+            },
+          }
+        : {},
+    ].filter(Boolean),
   };
 
   const payments = await db.payment.findMany({
     where,
-    include: { 
+    include: {
       user: { select: { name: true, email: true } },
-      plan: true 
+      plan: true,
     },
     orderBy: { createdAt: "desc" },
   });
@@ -268,30 +298,56 @@ export async function exportAllPayments(searchQuery = "", startDate = null, endD
   return payments;
 }
 
-export async function getAllPayments(page = 1, pageSize = 20, searchQuery = "", startDate = null, endDate = null) {
+export async function getAllPayments(
+  page = 1,
+  pageSize = 20,
+  searchQuery = "",
+  startDate = null,
+  endDate = null,
+) {
   await checkAdmin();
   const skip = (page - 1) * pageSize;
 
   const where = {
     AND: [
-      searchQuery ? {
-        OR: [
-          { user: { name: { contains: searchQuery, mode: "insensitive" } } },
-          { user: { email: { contains: searchQuery, mode: "insensitive" } } },
-          { stripeSessionId: { contains: searchQuery, mode: "insensitive" } },
-        ]
-      } : {},
-      startDate ? { createdAt: { gte: new Date(new Date(startDate).setHours(0, 0, 0, 0)) } } : {},
-      endDate ? { createdAt: { lte: new Date(new Date(endDate).setHours(23, 59, 59, 999)) } } : {},
-    ].filter(Boolean)
+      searchQuery
+        ? {
+            OR: [
+              {
+                user: { name: { contains: searchQuery, mode: "insensitive" } },
+              },
+              {
+                user: { email: { contains: searchQuery, mode: "insensitive" } },
+              },
+              {
+                stripeSessionId: { contains: searchQuery, mode: "insensitive" },
+              },
+            ],
+          }
+        : {},
+      startDate
+        ? {
+            createdAt: {
+              gte: new Date(new Date(startDate).setHours(0, 0, 0, 0)),
+            },
+          }
+        : {},
+      endDate
+        ? {
+            createdAt: {
+              lte: new Date(new Date(endDate).setHours(23, 59, 59, 999)),
+            },
+          }
+        : {},
+    ].filter(Boolean),
   };
 
   const [payments, total] = await Promise.all([
     db.payment.findMany({
       where,
-      include: { 
+      include: {
         user: { select: { id: true, name: true, email: true, imageUrl: true } },
-        plan: true 
+        plan: true,
       },
       orderBy: { createdAt: "desc" },
       skip,
@@ -307,8 +363,6 @@ export async function getAllPayments(page = 1, pageSize = 20, searchQuery = "", 
   };
 }
 
-import { clerkClient } from "@clerk/nextjs/server";
-
 /**
  * Get detailed audit data for a specific user.
  */
@@ -317,21 +371,21 @@ export async function getUserAuditData(userId) {
 
   const [user, subscription, payments, usageLogs] = await Promise.all([
     db.user.findUnique({
-      where: { id: userId }
+      where: { id: userId },
     }),
     db.userSubscription.findUnique({
       where: { userId },
-      include: { plan: true }
+      include: { plan: true },
     }),
     db.payment.findMany({
       where: { userId },
-      orderBy: { createdAt: "desc" }
+      orderBy: { createdAt: "desc" },
     }),
     db.tokenUsageLog.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
-      take: 50
-    })
+      take: 50,
+    }),
   ]);
 
   if (!user) return { user: null };
@@ -343,8 +397,8 @@ export async function getUserAuditData(userId) {
     const sessions = await client.sessions.getSessionList({
       userId: user.clerkUserId,
     });
-    
-    loginHistory = sessions.data.map(session => ({
+
+    loginHistory = sessions.data.map((session) => ({
       id: session.id,
       ipAddress: session.ipAddress,
       userAgent: session.userAgent,

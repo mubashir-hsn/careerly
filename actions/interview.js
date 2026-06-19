@@ -3,7 +3,6 @@ import { db } from "@/lib/prisma";
 import { checkAuth } from "@/services/authCheck";
 import { generateAIResponse } from "@/services/geminiService";
 import { checkTokenBalance, deductTokens, estimateTokens } from "@/services/subscriptionService";
-import { revalidatePath } from "next/cache";
 
 const modelName = process.env.GEMINI_MODEL_B;
 

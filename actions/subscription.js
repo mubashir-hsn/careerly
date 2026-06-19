@@ -5,6 +5,7 @@ import { checkAuth } from "@/services/authCheck";
 import { stripe } from "@/lib/stripe";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { createNotification } from "./notifications";
 
 /**
  * Get all active subscription plans.
@@ -136,7 +137,6 @@ export async function verifyStripeSession(sessionId) {
 
         // Trigger notification for admin
         try {
-          const { createNotification } = await import("./notifications");
           await createNotification({
             type: "PAYMENT_SUCCESS",
             title: "Payment Received",
@@ -186,7 +186,6 @@ export async function cancelSubscription() {
 
   // Trigger notification for admin
   try {
-    const { createNotification } = await import("./notifications");
     await createNotification({
       type: "PLAN_CHANGE",
       title: "Plan Downgraded",
