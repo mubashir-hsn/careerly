@@ -14,6 +14,17 @@ import {
   DialogTrigger,
   DialogFooter
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -87,8 +98,6 @@ export default function PlanManager({ initialPlans }) {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this plan? This cannot be undone if no users are active.")) return;
-    
     setLoading(true);
     try {
       await deleteSubscriptionPlan(id);
@@ -141,14 +150,39 @@ export default function PlanManager({ initialPlans }) {
                   <Edit2 className="w-4 h-4" />
                 </Button>
                 {plan.type !== "FREE" && (
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      onClick={() => handleDelete(plan.id)}
-                      className="rounded-xl hover:bg-rose-50 hover:text-rose-600 text-slate-400"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="rounded-xl hover:bg-rose-50 hover:text-rose-600 text-slate-400"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent className="rounded-[2rem] border-none shadow-2xl">
+                      <AlertDialogHeader>
+                        <AlertDialogTitle className="text-xl font-black tracking-tight text-slate-900">
+                          Delete Subscription Plan?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription className="font-medium text-slate-500">
+                          This will permanently delete <strong>{plan.name}</strong>. Plans with active subscribers cannot be deleted and should be deactivated instead.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter className="gap-3">
+                        <AlertDialogCancel className="rounded-xl font-bold border-slate-200 bg-slate-50">
+                          Cancel
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDelete(plan.id)}
+                          disabled={loading}
+                          className="rounded-xl bg-rose-600 hover:bg-rose-700 font-bold text-white"
+                        >
+                          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Delete Permanently"}
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 )}
               </div>
             </CardHeader>

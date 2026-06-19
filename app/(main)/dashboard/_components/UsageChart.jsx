@@ -25,6 +25,7 @@ export default function UsageChart({ data }) {
   const chartData = data.map((item) => ({
     name: new Date(item.date + "T00:00:00").toLocaleDateString("en-US", {
       weekday: "short",
+      day: "numeric",
     }),
     tokens: item.tokens,
   }));

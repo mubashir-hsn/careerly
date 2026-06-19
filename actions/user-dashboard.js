@@ -6,6 +6,20 @@ import { stripe } from "@/lib/stripe";
 
 import { getCurrentPlan } from "@/actions/subscription";
 
+const DASHBOARD_TIME_ZONE = "Asia/Karachi";
+
+function getLocalDateKey(date) {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: DASHBOARD_TIME_ZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date);
+
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day}`;
+}
+
 /**
  * Get aggregated dashboard statistics for the user.
  */
@@ -57,40 +71,37 @@ export async function getTokenUsageHistory() {
   const user = await checkAuth();
   if (!user) throw new Error("Unauthorized");
 
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  const today = new Date();
+  const oldestDate = new Date(today);
+  oldestDate.setDate(today.getDate() - 7);
+
+  const dailyUsage = {};
+  for (let i = 6; i >= 0; i--) {
+    const day = new Date(today);
+    day.setDate(today.getDate() - i);
+    dailyUsage[getLocalDateKey(day)] = 0;
+  }
 
   const logs = await db.tokenUsageLog.findMany({
     where: {
       userId: user.id,
-      createdAt: { gte: sevenDaysAgo },
+      createdAt: { gte: oldestDate },
     },
     orderBy: { createdAt: "asc" },
   });
 
-  // Group by day
-  const dailyUsage = {};
-  for (let i = 0; i <= 7; i++) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    const dateStr = d.toISOString().split("T")[0];
-    dailyUsage[dateStr] = 0;
-  }
-
   logs.forEach((log) => {
-    const dateStr = log.createdAt.toISOString().split("T")[0];
+    const dateStr = getLocalDateKey(log.createdAt);
     if (dailyUsage[dateStr] !== undefined) {
       dailyUsage[dateStr] += log.tokensUsed;
     }
   });
 
-  return Object.entries(dailyUsage)
-    .map(([date, tokens]) => ({ date, tokens }))
-    .reverse();
+  return Object.entries(dailyUsage).map(([date, tokens]) => ({ date, tokens }));
 }
 
 /**
- * Get the latest 10 token usage logs.
+ * Get the latest 5 token usage logs.
  */
 export async function getRecentActivity() {
   const user = await checkAuth();
@@ -99,7 +110,7 @@ export async function getRecentActivity() {
   return await db.tokenUsageLog.findMany({
     where: { userId: user.id },
     orderBy: { createdAt: "desc" },
-    take: 10,
+    take: 5,
   });
 }
 

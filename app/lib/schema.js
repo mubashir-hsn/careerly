@@ -27,7 +27,7 @@ export const onboardingSchema = z.object({
 
   skills: z
     .string()
-    .max(250, "Skills too long, add only key skills")
+    .max(300, "Skills too long, add only key skills")
     .transform((val) =>
       val
         ? val
@@ -94,7 +94,7 @@ export const entrySchema = z
     description: z
       .string()
       .min(1, "Description required")
-      .max(250, "Description too long, keep it short"),
+      .max(300, "Description too long, keep it short"),
 
     current: z.boolean().default(false),
   })
@@ -127,12 +127,12 @@ export const resumeSchema = z.object({
   summary: z
     .string()
     .min(1, "Summary required")
-    .max(400, "Summary too long, write briefly"),
+    .max(500, "Summary too long, write briefly"),
 
   skills: z
     .string()
     .min(1, "Skills required")
-    .max(200, "Skills too long"),
+    .max(300, "Skills too long"),
 
   experience: z.array(entrySchema),
   education: z.array(entrySchema),
@@ -168,7 +168,7 @@ export const coverLetterSchema = z.object({
   jobDescription: z
     .string()
     .min(1, "Job description required")
-    .max(500, "Job description too long, keep only key points (max 500 characters)."),
+    .max(1000, "Job description too long, keep only key points (max 500 characters)."),
 
   content: z
     .string()
@@ -180,15 +180,15 @@ export const resumeAnalysisSchema = z.object({
   companyName: z
     .string()
     .min(1, "Company name required")
-    .max(40, "Company name too long"),
+    .max(50, "Company name too long"),
 
   jobTitle: z
     .string()
     .min(1, "Job title required")
-    .max(30, "Job title too long"),
+    .max(40, "Job title too long"),
 
   jobDescription: z
     .string()
     .min(1, "Job description required")
-    .max(600, "Job description too long (max 600 characters)"),
+    .max(1000, "Job description too long (max 61000 characters)"),
 });

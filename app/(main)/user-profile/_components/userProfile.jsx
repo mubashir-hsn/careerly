@@ -157,9 +157,7 @@ export default function UserProfilePage({ user }) {
                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
                       Specialization
                     </p>
-                    <p className="font-bold text-slate-800 truncate">
-                      {subIndustry}
-                    </p>
+                    <p className="font-bold text-slate-800">{subIndustry}</p>
                   </div>
                 </div>
 

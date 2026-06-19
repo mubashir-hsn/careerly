@@ -39,14 +39,14 @@ export default function RecentActivity({ activities }) {
     return (
       <Card className="border-0 shadow-2xl bg-white h-full">
         <CardHeader>
-          <CardTitle className="text-xl font-black text-slate-900 tracking-tight">Recent Activity</CardTitle>
-          <CardDescription className="text-xs font-bold uppercase tracking-widest text-slate-400">Your AI interaction feed</CardDescription>
+          <CardTitle className="text-xl font-black text-slate-900 tracking-tight">Latest Events</CardTitle>
+          <CardDescription className="text-xs font-bold uppercase tracking-widest text-slate-400">Top 5 recent tool usage</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center py-12 text-center">
           <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4 border-2 border-dashed border-slate-200">
              <Clock className="w-6 h-6 text-slate-300" />
           </div>
-          <p className="text-sm font-bold text-slate-400 max-w-[200px]">No recent activity found. Start using AI tools!</p>
+          <p className="text-sm font-bold text-slate-400 max-w-50">No recent activity found. Start using AI tools!</p>
         </CardContent>
       </Card>
     );
@@ -61,7 +61,7 @@ export default function RecentActivity({ activities }) {
                 <Clock className="w-5 h-5 text-indigo-600" />
                 Latest Events
               </CardTitle>
-              <CardDescription className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mt-1">Real-time usage feed</CardDescription>
+              <CardDescription className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mt-1">Top 5 recent tool usage</CardDescription>
             </div>
             <Badge variant="outline" className="text-[10px] uppercase font-bold text-slate-400 border-slate-100">
               Live
@@ -76,7 +76,7 @@ export default function RecentActivity({ activities }) {
             return (
               <div key={activity.id} className="relative pl-10 group/item transition-all">
                 {/* Timeline Dot */}
-                <div className={`absolute left-[13px] top-1 w-2.5 h-2.5 rounded-full border-2 border-white shadow-sm transition-all group-hover/item:scale-150 ${config.bg.replace("50", "500")}`} />
+                <div className={`absolute left-3.25 top-1 w-2.5 h-2.5 rounded-full border-2 border-white shadow-sm transition-all group-hover/item:scale-150 ${config.bg.replace("50", "500")}`} />
                 
                 <div className="flex flex-col gap-1">
                   <div className="flex justify-between items-center">
@@ -94,8 +94,8 @@ export default function RecentActivity({ activities }) {
                       {featureIcons[activity.feature] || <Clock className="w-4 h-4" />}
                     </div>
                     <div>
-                      <p className="text-xs font-bold text-slate-600">Consumed Credits</p>
-                      <p className="text-sm font-black text-slate-900 tracking-tighter">-{activity.tokensUsed} Tokens</p>
+                      <p className="text-xs font-bold text-slate-600">Token Consumption</p>
+                      <p className="text-sm font-black text-slate-900 tracking-tighter">-{activity.tokensUsed.toLocaleString()} Tokens</p>
                     </div>
                   </div>
                 </div>
