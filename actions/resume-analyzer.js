@@ -84,8 +84,8 @@ Rules:
 }`;
 
   try {
-    // Check token balance before AI call
-    await checkTokenBalance(user.id);
+    const estimatedTokens = await estimateTokens(prompt) + 1000;
+    await checkTokenBalance(user.id, estimatedTokens);
 
     const result = await generateAIResponse(prompt, modelName);
 

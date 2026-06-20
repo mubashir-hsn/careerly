@@ -26,8 +26,7 @@ Output: Return ONLY valid JSON with 4 options per question.
 }`;
 
   try {
-    // Check token balance before AI call
-    await checkTokenBalance(user.id);
+    await checkTokenBalance(user.id, await estimateTokens(prompt));
 
     const result = await generateAIResponse(prompt, modelName)
     const cleanedText = result.replace(/```(?:json)?\n?/g, "").trim();
@@ -76,6 +75,8 @@ Provide 1-2 encouraging sentences on what to learn/practice next. No mention of 
 
 
     try {
+      await checkTokenBalance(user.id, await estimateTokens(improvementPrompt));
+
       const tipResult = await generateAIResponse(improvementPrompt, modelName);
 
       // Deduct tokens for improvement tip

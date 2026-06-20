@@ -103,7 +103,7 @@ export default function PricingCards({ currentPlan, plans = [] }) {
             <span className="text-slate-300 font-black text-lg uppercase">/ Life</span>
           </div>
           <p className="text-sm text-slate-500 mt-4 font-medium leading-relaxed">
-            Allocated <span className="text-slate-900 font-black px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-lg">{freePlan?.tokensIncluded.toLocaleString() || "1,000"} Credits</span> per cycle for ecosystem exploration.
+            Allocated <span className="text-slate-900 font-black px-2 py-0.5 bg-emerald-50 rounded-lg">{freePlan?.tokensIncluded.toLocaleString() || "2,000"} Credits</span> per cycle for ecosystem exploration.
           </p>
         </div>
 
@@ -157,7 +157,7 @@ export default function PricingCards({ currentPlan, plans = [] }) {
         </div>
 
         {/* Token Selector UI */}
-        <div className="mb-10 bg-white/5 backdrop-blur-xl p-8 rounded-[2rem] border border-white/10 shadow-2xl relative overflow-hidden z-10">
+        <div className="mb-10 bg-white/5 backdrop-blur-xl p-8 rounded-4xl border border-white/10 shadow-2xl relative overflow-hidden z-10">
           <div className="relative z-10">
             <div className="flex justify-between items-center mb-6">
               <div className="space-y-1">
@@ -180,9 +180,9 @@ export default function PricingCards({ currentPlan, plans = [] }) {
                 <button
                   key={option.id}
                   onClick={() => setSelectedTier(option)}
-                  className={`py-4 text-center rounded-xl border transition-all text-xs font-black transition-all duration-300 active:scale-90 ${selectedTier?.id === option.id
-                      ? "bg-white text-slate-900 border-white shadow-[0_0_25px_rgba(255,255,255,0.3)]"
-                      : "border-white/10 bg-white/5 text-slate-400 hover:border-white/30 hover:bg-white/10"
+                  className={`py-4 text-center rounded-xl border transition-all text-xs font-black duration-300 active:scale-90 ${selectedTier?.id === option.id
+                    ? "bg-white text-slate-900 border-white shadow-[0_0_25px_rgba(255,255,255,0.3)]"
+                    : "border-white/10 bg-white/5 text-slate-400 hover:border-white/30 hover:bg-white/10"
                     }`}
                 >
                   {option.tokensIncluded / 1000}K
@@ -245,7 +245,7 @@ export default function PricingCards({ currentPlan, plans = [] }) {
             {loading === "upgrade" ? "Processing..." : "Upgrade to Pro"}
             <Crown size={18} className="transition-transform group-hover/btn:rotate-12" />
           </span>
-          <div className="absolute top-0 -left-[100%] w-full h-full bg-linear-to-r from-transparent via-indigo-200/20 to-transparent transition-all duration-1000 group-hover:left-[100%]" />
+          <div className="absolute top-0 -left-full w-full h-full bg-linear-to-r from-transparent via-indigo-200/20 to-transparent transition-all duration-1000 group-hover:left-full" />
         </Button>
       </div>
     </div>

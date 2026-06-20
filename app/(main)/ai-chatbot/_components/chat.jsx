@@ -26,11 +26,14 @@ export default function Chat() {
       body: JSON.stringify({ prompt, chatId })
     })
     const data = await res.json()
+    if (!res.ok) {
+      throw new Error(data.error || "Failed to generate chat response");
+    }
     if (data.chatId) setChatId(data.chatId)
     return data
   }
 
-  const { data, loading, fn: fetchData } = useFetch(callApi)
+  const { data, loading, fn: fetchData, error } = useFetch(callApi)
 
   /* auto scroll */
   useEffect(() => {
@@ -76,6 +79,19 @@ export default function Chat() {
 
     return () => clearTimeout(timer);
   }, [data?.response, loading]);
+
+  /* handle error */
+  useEffect(() => {
+    if (error) {
+      // Remove the last bot message if it's empty (pending response)
+      setMessages(prev => {
+        if (prev.length > 0 && prev[prev.length - 1].sender === "bot" && prev[prev.length - 1].text === "") {
+          return prev.slice(0, -1);
+        }
+        return prev;
+      });
+    }
+  }, [error]);
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -176,7 +192,7 @@ export default function Chat() {
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-1 shadow-sm ${msg.sender === "user" ? "bg-slate-800" : "bg-primary"}`}>
                       {msg.sender === "user" ? <div className="text-[10px] font-black text-white">YOU</div> : <BrainCircuit size={16} className="text-white" />}
                     </div>
-                    <div className={`px-5 py-4 rounded-[1.5rem] shadow-sm text-base leading-relaxed ${msg.sender === "user"
+                    <div className={`px-5 py-4 rounded-3xl shadow-sm text-base leading-relaxed ${msg.sender === "user"
                       ? "bg-slate-900 text-white rounded-tr-none"
                       : "bg-white border border-slate-100 text-slate-700 rounded-tl-none font-medium"
                       }`}>
@@ -194,7 +210,7 @@ export default function Chat() {
                   <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shrink-0 shadow-sm">
                     <BrainCircuit size={16} className="text-white" />
                   </div>
-                  <div className="px-5 py-4 rounded-[1.5rem] bg-white border border-slate-100 shadow-sm flex items-center gap-2">
+                  <div className="px-5 py-4 rounded-3xl bg-white border border-slate-100 shadow-sm flex items-center gap-2">
                     <div className="flex gap-1">
                       <div className="w-2 h-2 bg-primary/40 rounded-full animate-bounce [animation-delay:-0.3s]" />
                       <div className="w-2 h-2 bg-primary/40 rounded-full animate-bounce [animation-delay:-0.15s]" />
@@ -210,7 +226,7 @@ export default function Chat() {
         )}
 
         {/* Input Form Floating */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8 bg-gradient-to-t from-white via-white/90 to-transparent pointer-events-none">
+        <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8 bg-linear-to-t from-white via-white/90 to-transparent pointer-events-none">
           <div className="max-w-4xl mx-auto pointer-events-auto">
             <ChatInput
               input={input}

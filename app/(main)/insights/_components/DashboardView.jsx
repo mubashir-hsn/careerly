@@ -19,14 +19,15 @@ const DashboardView = ({ insights }) => {
         loading: updating,
         fn: updateInsightFn,
         data: updatedData,
+        error: updateError,
     } = useFetch(updateIndustryInsights);
 
     React.useEffect(() => {
-        if (updatedData && !updating) {
+        if (updatedData && !updating && !updateError) {
             toast.success("Industry Insights updated.");
             router.refresh();
         }
-    }, [updatedData, updating]);
+    }, [updatedData, updating, updateError]);
 
     const canUpdate = new Date() >= new Date(insights.nextUpdate);
     // Format dates using date-fns
@@ -37,13 +38,19 @@ const DashboardView = ({ insights }) => {
     );
 
     const handleSubmit = async () => {
-        try {
-            await updateInsightFn();
-            toast.success("Industry Insights updated.");
-        } catch (err) {
-            toast.error('Failed to update industry insights.')
-            console.log("Error while updating insights: ", err)
-        }
+        await updateInsightFn();
+    }
+
+    if (!insights || !insights.salaryRanges || insights.salaryRanges.length === 0) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-[50vh] p-10 text-center bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 max-w-2xl mx-auto my-12">
+                 <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mb-6" />
+                 <h2 className="text-2xl font-black text-slate-800 mb-2">Analyzing Industry Trends</h2>
+                 <p className="text-slate-500 max-w-md font-medium text-sm leading-relaxed">
+                     We are currently using AI to generate real-time Pakistan market insights, salary benchmarks, and learning paths for your specialization. Please check back in a few seconds or refresh the page.
+                 </p>
+            </div>
+        )
     }
 
     return (

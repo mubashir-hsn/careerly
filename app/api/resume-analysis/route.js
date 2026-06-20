@@ -8,6 +8,9 @@ export async function POST(req) {
     return NextResponse.json(result);
   } catch (err) {
     console.error("Resume analyze error:", err);
-    return NextResponse.json({ error: "Failed to analyze resume" }, { status: 500 });
+    return NextResponse.json(
+      { error: err.message || "Failed to analyze resume" },
+      { status: 500 }
+    );
   }
 }

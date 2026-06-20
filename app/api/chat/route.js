@@ -12,8 +12,7 @@ export async function POST(req) {
 
         const { prompt, chatId } = await req.json();
 
-        // Check token balance before AI call
-        await checkTokenBalance(user.id);
+        await checkTokenBalance(user.id, await estimateTokens(prompt));
 
         // Initialize the AI model
         const systemInstruction = "AI career guide. Brief, helpful info on tech, careers, and trends. Professional and concise.";
@@ -51,43 +50,50 @@ export async function POST(req) {
             return NextResponse.json({ error: 'No response received. Please try again' }, { status: 500 });
         }
 
-        let generatedTitle = null
+        // For new sessions, create chat immediately with a temp title so we can return fast
         if (!currentChatId) {
-            const titleResult = await model.generateContent(`Generate a 3-4 word title for: "${prompt}". Return ONLY the title.`);
-            generatedTitle = titleResult.response.text().trim().replace(/[*"']/g, "");
-
-            //create new chat
             const newChat = await db.chat.create({
                 data: {
                     userId: user.id,
-                    title: generatedTitle || 'New Conversation'
+                    title: prompt.slice(0, 40) || 'New Conversation'
                 }
             })
-
             currentChatId = newChat.id
         }
 
-        // save messages in database
-        await db.message.createMany({
-            data: [
-                { chatId: currentChatId, role: "USER", content: prompt },
-                { chatId: currentChatId, role: "MODEL", content: textResponse },
-            ]
-        })
-
-        // Deduct tokens after successful AI call
+        // Save messages and deduct tokens in parallel (don't block response)
         const tokensUsed = await estimateTokens(prompt + textResponse);
-        await deductTokens(user.id, "CHATBOT", tokensUsed);
+        await Promise.all([
+            deductTokens(user.id, "CHATBOT", tokensUsed),
+            db.message.createMany({
+                data: [
+                    { chatId: currentChatId, role: "USER", content: prompt },
+                    { chatId: currentChatId, role: "MODEL", content: textResponse },
+                ]
+            })
+        ]);
 
+        // Generate a proper AI title in the background (non-blocking)
+        const bgChatId = currentChatId;
+        model.generateContent(`Generate a 3-4 word title for: "${prompt}". Return ONLY the title.`)
+            .then(async (titleResult) => {
+                const title = titleResult.response.text().trim().replace(/[*"']/g, "");
+                if (title) {
+                    await db.chat.update({
+                        where: { id: bgChatId },
+                        data: { title }
+                    });
+                }
+            })
+            .catch((err) => console.error("Background title generation failed:", err.message));
 
         return NextResponse.json({
             chatId: currentChatId,
             response: textResponse,
-            title: generatedTitle
         });
 
     } catch (error) {
         console.error('Chat API Route Error:', error);
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+        return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
     }
 }

@@ -32,6 +32,17 @@ export async function getUserSubscription(userId) {
       },
       include: { plan: true },
     });
+  } else if (subscription.plan) {
+    const totalAllocated = subscription.tokensRemaining + subscription.tokensUsed;
+    if (totalAllocated < subscription.plan.tokensIncluded) {
+      subscription = await db.userSubscription.update({
+        where: { id: subscription.id },
+        data: {
+          tokensRemaining: subscription.plan.tokensIncluded - subscription.tokensUsed,
+        },
+        include: { plan: true },
+      });
+    }
   }
 
   return subscription;
@@ -39,10 +50,11 @@ export async function getUserSubscription(userId) {
 
 /**
  * Check if user has enough tokens remaining.
- * Throws an error if tokens are exhausted.
+ * Throws an error if tokens are exhausted or below the required amount.
  */
-export async function checkTokenBalance(userId) {
+export async function checkTokenBalance(userId, requiredTokens = 1) {
   const subscription = await getUserSubscription(userId);
+  const requestedTokens = Math.max(1, Math.ceil(Number(requiredTokens) || 1));
 
   if (subscription.status !== "ACTIVE") {
     throw new Error(
@@ -50,9 +62,9 @@ export async function checkTokenBalance(userId) {
     );
   }
 
-  if (subscription.tokensRemaining <= 0) {
+  if (subscription.tokensRemaining < requestedTokens) {
     throw new Error(
-      "Token limit reached. Please upgrade your plan to continue using AI features."
+      `Insufficient tokens. This action needs about ${requestedTokens.toLocaleString()} tokens, but you have ${Math.max(0, subscription.tokensRemaining).toLocaleString()} remaining. Please upgrade or recharge your plan.`
     );
   }
 
@@ -66,25 +78,46 @@ export async function checkTokenBalance(userId) {
  * @param {number} tokensUsed - Number of tokens to deduct
  */
 export async function deductTokens(userId, feature, tokensUsed) {
-  // Update subscription token counts
-  const subscription = await db.userSubscription.update({
-    where: { userId },
-    data: {
-      tokensUsed: { increment: tokensUsed },
-      tokensRemaining: { decrement: tokensUsed },
-    },
-  });
+  const normalizedTokens = Math.max(1, Math.ceil(Number(tokensUsed) || 0));
 
-  // Log the usage
-  await db.tokenUsageLog.create({
-    data: {
-      userId,
-      feature,
-      tokensUsed,
-    },
-  });
+  await getUserSubscription(userId);
 
-  return subscription;
+  return await db.$transaction(async (tx) => {
+    const updateResult = await tx.userSubscription.updateMany({
+      where: {
+        userId,
+        status: "ACTIVE",
+        tokensRemaining: { gte: normalizedTokens },
+      },
+      data: {
+        tokensUsed: { increment: normalizedTokens },
+        tokensRemaining: { decrement: normalizedTokens },
+      },
+    });
+
+    if (updateResult.count === 0) {
+      const subscription = await tx.userSubscription.findUnique({
+        where: { userId },
+      });
+
+      throw new Error(
+        `Insufficient tokens. This action needs ${normalizedTokens.toLocaleString()} tokens, but you have ${Math.max(0, subscription?.tokensRemaining || 0).toLocaleString()} remaining. Please upgrade or recharge your plan.`
+      );
+    }
+
+    await tx.tokenUsageLog.create({
+      data: {
+        userId,
+        feature,
+        tokensUsed: normalizedTokens,
+      },
+    });
+
+    return await tx.userSubscription.findUnique({
+      where: { userId },
+      include: { plan: true },
+    });
+  });
 }
 
 /**

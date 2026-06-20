@@ -1,16 +1,15 @@
 "use server"
 
 import { db } from "@/lib/prisma";
-import { generateAIInsight } from "./dashboard.js";
+import { generateAIInsight, generateAIInsightWithTokens } from "./dashboard.js";
 import { checkAuth } from "@/services/authCheck.js";
-import { NextResponse } from "next/server.js";
 
-export async function userProfile(){
+export async function userProfile() {
 
   try {
-    const user = await checkAuth(); 
-    if(!user) return null
-    return user; 
+    const user = await checkAuth();
+    if (!user) return null
+    return user;
   } catch (error) {
     return null;
   }
@@ -27,15 +26,35 @@ export const updateUser = async (data) => {
     });
 
     if (!industryInsight) {
-      const insights = await generateAIInsight(data);
+      // Create a placeholder industryInsight immediately so the user can complete onboarding instantly
       industryInsight = await db.industryInsight.create({
         data: {
           industry: data.industry,
-          ...insights,
-          lastUpdated: new Date(),
+          growthScore: 0,
+          industryTrends: [],
+          learningPaths: [],
+          skillGap: { matched: [], missing: [], matchPercentage: 0 },
+          salaryRanges: [],
+          topSkills: [],
+          marketOutlook: { summary: "Generating insights in background...", demandLevel: "Medium", automationRisk: "Medium" },
           nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         },
       });
+
+      // Generate insights in the background
+      generateAIInsight(data)
+        .then(async (insights) => {
+          await db.industryInsight.update({
+            where: { industry: data.industry },
+            data: {
+              ...insights,
+              lastUpdated: new Date(),
+            },
+          });
+        })
+        .catch((err) => {
+          console.error("Background insight generation failed:", err.message);
+        });
     }
 
     // Now update user safely
@@ -52,14 +71,7 @@ export const updateUser = async (data) => {
     return { success: true, updatedUser };
   } catch (error) {
     console.log("Error updating user:", error.message);
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Failed to update profile"
-      },
-      { status: 500 }
-    )
-    
+    throw new Error(error.message || "Failed to update profile");
   }
 };
 
@@ -87,11 +99,11 @@ export async function userOnboardingStatus() {
 export async function updateIndustryInsights() {
   const user = await checkAuth();
   if (!user) throw new Error("Unauthorized");
-  
+
   if (!user.industry) throw new Error("User has no industry defined");
 
-  // Generate new insights based on the user's industry
-  const insights = await generateAIInsight(user, process.env.GEMINI_MODEL_C);
+  // Generate new insights with token balance checking and tracking
+  const insights = await generateAIInsightWithTokens(user, user.id);
 
   const updatedInsight = await db.industryInsight.update({
     where: {

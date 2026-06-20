@@ -26,10 +26,11 @@ export default async function BillingPage() {
 
   const { plan, tokensUsed, tokensRemaining } = subscription;
   const isFree = plan.type === "FREE";
+  const safeTokensRemaining = Math.max(0, tokensRemaining);
   
   // Logic Fix: Sync with Dashboard total capacity logic
-  const totalCapacity = Math.max(plan.tokensIncluded, tokensUsed + tokensRemaining);
-  const usagePercentage = totalCapacity > 0 ? ((tokensUsed / totalCapacity) * 100) : 0;
+  const totalCapacity = Math.max(plan.tokensIncluded, tokensUsed + safeTokensRemaining);
+  const usagePercentage = totalCapacity > 0 ? Math.min((tokensUsed / totalCapacity) * 100, 100) : 0;
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl space-y-8">
@@ -85,7 +86,7 @@ export default async function BillingPage() {
                 </div>
                 <div className="flex items-baseline gap-2">
                   <p className="text-3xl font-black text-slate-900 tracking-tighter flex items-center gap-2">
-                    {tokensRemaining.toLocaleString()}
+                    {safeTokensRemaining.toLocaleString()}
                     <span className="text-[10px] font-black uppercase tracking-tighter bg-emerald-600 text-white px-2 py-0.5 rounded shadow-sm">
                       Cumulative
                     </span>

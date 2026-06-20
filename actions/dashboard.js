@@ -38,7 +38,7 @@ Rules: 5+ trends/skills, 5 common roles (PKR), real free course links if possibl
 
 // Wrapper that adds token tracking to insight generation
 export async function generateAIInsightWithTokens(data, userId) {
-  await checkTokenBalance(userId);
+  await checkTokenBalance(userId, await estimateTokens(JSON.stringify(data)));
 
   const insights = await generateAIInsight(data);
 

@@ -35,7 +35,7 @@ export default function Error({ error, reset }) {
         </h1>
         
         <p className="text-lg md:text-xl text-slate-500 font-bold mb-12 leading-relaxed max-w-lg mx-auto">
-          Our system encountered an unexpected bottleneck. This usually happens during high demand or temporary database sync issues.
+          {error?.message || "Our system encountered an unexpected bottleneck. This usually happens during high demand or temporary database sync issues."}
         </p>
       </div>
 

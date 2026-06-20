@@ -24,7 +24,6 @@ const ChatSidebar = ({ isSidebarOpen, chatId, setChatId, setMessages, setIsHisto
       })
   }, [chatId])
 
-  const loadedChatsRef = useRef(new Set())
   const loadChat = async (id) => {
     setIsHistoryLoading(true);
     try {
@@ -50,14 +49,7 @@ const ChatSidebar = ({ isSidebarOpen, chatId, setChatId, setMessages, setIsHisto
   useEffect(() => {
     if (!chatId) {
       setMessages([])
-      return
     }
-
-    if (loadedChatsRef.current.has(chatId)) return
-
-    loadedChatsRef.current.add(chatId)
-
-    loadChat(chatId)
   }, [chatId])
 
   const handleDeleteChat = async (id) => {

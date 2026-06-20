@@ -8,12 +8,14 @@ async function main() {
   // Upsert Free Plan
   await prisma.subscriptionPlan.upsert({
     where: { type_tier: { type: "FREE", tier: "" } },
-    update: {},
+    update: {
+      tokensIncluded: 2000,
+    },
     create: {
       name: "Free",
       type: "FREE",
       tier: "",
-      tokensIncluded: 1000,
+      tokensIncluded: 2000,
       price: 0,
       features: [
         "COVER_LETTER",

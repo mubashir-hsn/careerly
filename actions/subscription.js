@@ -26,6 +26,19 @@ async function getSafeSubscription(userId) {
     include: { plan: true },
   });
 
+  if (subscription && subscription.plan) {
+    const totalAllocated = subscription.tokensRemaining + subscription.tokensUsed;
+    if (totalAllocated < subscription.plan.tokensIncluded) {
+      subscription = await db.userSubscription.update({
+        where: { id: subscription.id },
+        data: {
+          tokensRemaining: subscription.plan.tokensIncluded - subscription.tokensUsed,
+        },
+        include: { plan: true },
+      });
+    }
+  }
+
   return subscription;
 }
 

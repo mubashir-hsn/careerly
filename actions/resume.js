@@ -74,8 +74,7 @@ Rules: 2-3 high-impact sentences. Use action verbs and metrics. 3rd person. No b
   
 
   try {
-    // Check token balance before AI call
-    await checkTokenBalance(user.id);
+    await checkTokenBalance(user.id, await estimateTokens(prompt));
 
     const response = await generateAIResponse(prompt, modelName)
 

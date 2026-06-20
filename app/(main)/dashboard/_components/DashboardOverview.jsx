@@ -11,11 +11,12 @@ export default function DashboardOverview({ subscription }) {
   if (!subscription) return null;
 
   const { plan, tokensUsed, tokensRemaining } = subscription;
+  const safeTokensRemaining = Math.max(0, tokensRemaining);
 
   // Logic Fix: Calculate total capacity based on actual tokens rather than just static plan limit
   // This ensures that recharges beyond the base limit are reflected correctly in the UI
-  const totalCapacity = Math.max(plan.tokensIncluded, tokensUsed + tokensRemaining);
-  const usagePercentage = totalCapacity > 0 ? (tokensUsed / totalCapacity) * 100 : 0;
+  const totalCapacity = Math.max(plan.tokensIncluded, tokensUsed + safeTokensRemaining);
+  const usagePercentage = totalCapacity > 0 ? Math.min((tokensUsed / totalCapacity) * 100, 100) : 0;
   const isFree = plan.type === "FREE";
 
   return (
@@ -35,7 +36,7 @@ export default function DashboardOverview({ subscription }) {
             <div className="flex justify-between items-end">
               <div>
                 <p className="text-5xl font-black text-slate-900 tracking-tighter flex items-center gap-3">
-                  {tokensRemaining.toLocaleString()}
+                  {safeTokensRemaining.toLocaleString()}
                   <span className="text-[10px] font-black uppercase tracking-widest bg-indigo-600 text-white px-2.5 py-1 rounded-lg leading-none shadow-lg shadow-indigo-200">
                     Active
                   </span>

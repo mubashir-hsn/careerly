@@ -29,8 +29,7 @@ Rules:
 4. No clichés or markdown. Plain text only.`;
 
   try {
-    // Check token balance before AI call
-    await checkTokenBalance(user.id);
+    await checkTokenBalance(user.id, await estimateTokens(prompt));
 
     const result = await generateAIResponse(prompt, modelName)
     const content = result.trim();
