@@ -2,7 +2,7 @@ import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@cl
 import Link from 'next/link'
 import React from 'react'
 import { Button } from './ui/button'
-import { BrainCircuit, ChevronDown, CreditCard, FileText, GraduationCap, LayoutDashboard, PenBox, StarIcon } from 'lucide-react'
+import { BrainCircuit, ChevronDown, CreditCard, FileText, GraduationCap, LayoutDashboard, PenBox, StarIcon, Globe } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { checkUser } from '@/lib/checkUser.js';
 import Image from 'next/image'
@@ -66,7 +66,7 @@ const Header = async () => {
                     </Button>
                   </DropdownMenuTrigger>
 
-                  <DropdownMenuContent align="end" className="w-64 p-3 rounded-[1.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] border-slate-100 bg-white/95 backdrop-blur-xl animate-in fade-in zoom-in duration-200">
+                  <DropdownMenuContent align="end" className="w-64 p-3 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border-slate-100 bg-white/95 backdrop-blur-xl animate-in fade-in zoom-in duration-200">
                     <div className="px-3 pb-2 mb-2 border-b border-slate-50">
                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Available Tools</p>
                     </div>
@@ -118,7 +118,7 @@ const Header = async () => {
                       </Link>
                     </DropdownMenuItem>
 
-                    <DropdownMenuItem className="rounded-xl focus:bg-slate-50 p-0 overflow-hidden">
+                    <DropdownMenuItem className="rounded-xl focus:bg-slate-50 p-0 overflow-hidden mb-1">
                       <Link href="/resume" className="flex items-center gap-4 w-full px-3 py-3">
                         <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center shrink-0">
                           <FileText className="w-5 h-5 text-indigo-600" />
@@ -126,6 +126,18 @@ const Header = async () => {
                         <div>
                           <h4 className="text-sm font-black text-slate-900 group-hover:text-indigo-600 transition-colors">Resume Builder</h4>
                           <p className="text-[10px] text-slate-500 font-medium leading-relaxed">Better resumes with AI.</p>
+                        </div>
+                      </Link>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem className="rounded-xl focus:bg-slate-50 p-0 overflow-hidden">
+                      <Link href="/portfolio" className="flex items-center gap-4 w-full px-3 py-3">
+                        <div className="w-10 h-10 bg-rose-500/10 rounded-xl flex items-center justify-center shrink-0">
+                          <Globe className="w-5 h-5 text-rose-600" />
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-black text-slate-900 group-hover:text-indigo-600 transition-colors">Portfolio Builder</h4>
+                          <p className="text-[10px] text-slate-500 font-medium leading-relaxed">Showcase your career with AI.</p>
                         </div>
                       </Link>
                     </DropdownMenuItem>

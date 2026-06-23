@@ -31,21 +31,20 @@ export default function LandingPricingProCard({ proPlans = [] }) {
       </div>
 
       {/* Token Selector UI / Custom Options */}
-      <div className="mb-8 bg-black/20 backdrop-blur-xl p-6 rounded-[2rem] border border-white/10 relative z-10">
+      <div className="mb-8 bg-black/20 backdrop-blur-xl p-6 rounded-4xl border border-white/10 relative z-10">
         <div className="flex justify-between items-center mb-4">
           <label className="text-[10px] font-black text-indigo-200 uppercase tracking-[0.2em]">Select Credit Tier</label>
         </div>
-        
+
         <div className="grid grid-cols-5 gap-2 mb-6">
           {proPlans.map((plan) => (
             <button
               key={plan.id}
               onClick={() => setSelectedTier(plan)}
-              className={`py-3 text-center rounded-xl border transition-all text-[10px] font-black duration-300 active:scale-95 ${
-                selectedTier.id === plan.id
+              className={`py-3 text-center rounded-xl border transition-all text-[10px] font-black duration-300 active:scale-95 ${selectedTier.id === plan.id
                   ? "bg-white text-indigo-600 border-white shadow-lg"
                   : "border-white/10 bg-white/5 text-indigo-200 hover:bg-white/10 hover:border-white/30"
-              }`}
+                }`}
             >
               {plan.tokensIncluded / 1000}K
             </button>
@@ -54,7 +53,7 @@ export default function LandingPricingProCard({ proPlans = [] }) {
 
         {/* Mini progress bar */}
         <div className="h-1.5 bg-white/10 rounded-full overflow-hidden mb-6">
-          <div 
+          <div
             className="h-full bg-white transition-all duration-700 ease-out"
             style={{ width: `${(selectedTier.tokensIncluded / maxProTokens) * 100}%` }}
           />
@@ -65,8 +64,8 @@ export default function LandingPricingProCard({ proPlans = [] }) {
             <span className="text-4xl font-black text-white">Rs. {selectedTier.price.toLocaleString()}</span>
           </div>
           <div className="text-right">
-             <p className="text-2xl font-black text-white leading-none">{selectedTier.tokensIncluded.toLocaleString()}</p>
-             <p className="text-[8px] font-black text-indigo-200 uppercase tracking-widest">AI CREDITS</p>
+            <p className="text-2xl font-black text-white leading-none">{selectedTier.tokensIncluded.toLocaleString()}</p>
+            <p className="text-[8px] font-black text-indigo-200 uppercase tracking-widest">AI CREDITS</p>
           </div>
         </div>
       </div>

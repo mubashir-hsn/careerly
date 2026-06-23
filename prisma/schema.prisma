@@ -25,6 +25,7 @@ model User {
   coverLetter     CoverLetter[]
   payments        Payment[]
   resume          Resume?
+  portfolio       Portfolio?
   resumeAnalysis  ResumeAnalysis[]
   tokenUsageLogs  TokenUsageLog[]
   industryInsight IndustryInsight?  @relation(fields: [industry], references: [industry])
@@ -276,4 +277,37 @@ enum NotificationType {
   PLAN_CREATED
   PLAN_DELETED
   NEW_FEEDBACK
+}
+
+model Portfolio {
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  username           String   @unique
+  aboutMe            String?
+  skills             String[]
+  education          Json?    // Array of: { school, degree, fieldOfStudy, startDate, endDate, description }
+  experience         Json?    // Array of: { company, position, startDate, endDate, description, current }
+  projects           Json?    // Array of: { title, description, technologies, link }
+  certifications     Json?    // Array of: { name, issuer, date, link }
+  achievements       Json?    // Array of: { title, description, date }
+  customSections     Json?    // Array of: { title, content }
+  theme              String   @default("modern") // modern, sleek, creative, minimalist
+  layout             String   @default("standard")
+  profileImage       String?
+  sectionVisibility  Json?    // Map of visibility: { aboutMe: boolean, ... }
+  aboutMeImage       String?
+  aboutMeImageSide   String?  @default("right")
+  contactEmail       String?
+  contactPhone       String?
+  location           String?
+  linkedinUrl        String?
+  githubUrl          String?
+  websiteUrl         String?
+  resumeUrl          String?
+  isPublished        Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([username])
 }
