@@ -115,7 +115,7 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
   const userImageUrl = profileImage || defaultProfileImg;
 
   // Colors & themes configurations
-  const themeClasses = {
+  const themeConfig = {
     modern: {
       bg: "bg-slate-950 text-slate-100",
       accent: "text-violet-400",
@@ -127,6 +127,32 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
       border: "border-slate-800",
       font: "font-sans",
       gradientText: "bg-linear-to-r from-violet-400 via-fuchsia-400 to-indigo-400 bg-clip-text text-transparent",
+      titleText: "text-slate-100",
+      modalBg: "bg-slate-900",
+      modalBorder: "border-slate-800",
+      modalFooterBg: "bg-slate-950",
+      modalCloseBtn: "bg-slate-800 hover:bg-slate-700 text-slate-300",
+      modalLinkBtn: "bg-violet-600 hover:bg-violet-500 text-white",
+      galleryBg: "bg-slate-950",
+      timelineLine: "from-violet-500 via-indigo-500 to-transparent",
+      timelineExpDot: "bg-violet-600 border-violet-400 text-white",
+      timelineEduDot: "bg-indigo-600 border-indigo-400 text-white",
+      expBadge: "bg-violet-500/10 text-violet-300 border-violet-500/20",
+      eduBadge: "bg-indigo-500/10 text-indigo-300 border-indigo-500/20",
+      typeBadgeExp: "bg-amber-500/10 text-amber-400 border border-amber-500/20",
+      typeBadgeEdu: "bg-teal-500/10 text-teal-400 border border-teal-500/20",
+      ownerPanel: "bg-slate-800/40",
+      ownerPanelBorder: "border-slate-700/50",
+      ownerPanelAccent: "text-violet-400",
+      ownerBtn: "bg-slate-900 hover:bg-slate-800 text-white border-slate-700",
+      ownerUploadBtn: "bg-violet-600 hover:bg-violet-500 text-white",
+      ownerUploadPanel: "bg-violet-950/20 border-violet-800/30",
+      coverPlaceholder: "from-violet-950 to-slate-900",
+      techBadge: "bg-white/5 border border-white/10 text-slate-300",
+      photosBadge: "bg-slate-900/80 border-white/10 text-white",
+      footerLabel: "text-slate-400",
+      socialBtn: "bg-white/5 border-white/10 hover:bg-white/10 text-white",
+      footerSeparator: "border-white/5",
     },
     sleek: {
       bg: "bg-zinc-900 text-zinc-100",
@@ -139,6 +165,32 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
       border: "border-zinc-700/50",
       font: "font-mono",
       gradientText: "bg-linear-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent",
+      titleText: "text-zinc-100",
+      modalBg: "bg-zinc-800",
+      modalBorder: "border-zinc-700",
+      modalFooterBg: "bg-zinc-900",
+      modalCloseBtn: "bg-zinc-700 hover:bg-zinc-600 text-zinc-300",
+      modalLinkBtn: "bg-emerald-600 hover:bg-emerald-500 text-white",
+      galleryBg: "bg-zinc-900",
+      timelineLine: "from-emerald-500 via-teal-500 to-transparent",
+      timelineExpDot: "bg-emerald-600 border-emerald-400 text-white",
+      timelineEduDot: "bg-teal-600 border-teal-400 text-white",
+      expBadge: "bg-emerald-500/10 text-emerald-300 border-emerald-500/20",
+      eduBadge: "bg-teal-500/10 text-teal-300 border-teal-500/20",
+      typeBadgeExp: "bg-amber-500/10 text-amber-400 border border-amber-500/20",
+      typeBadgeEdu: "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20",
+      ownerPanel: "bg-zinc-800/60",
+      ownerPanelBorder: "border-zinc-700/50",
+      ownerPanelAccent: "text-emerald-400",
+      ownerBtn: "bg-zinc-900 hover:bg-zinc-800 text-white border-zinc-700",
+      ownerUploadBtn: "bg-emerald-600 hover:bg-emerald-500 text-white",
+      ownerUploadPanel: "bg-emerald-950/20 border-emerald-800/30",
+      coverPlaceholder: "from-emerald-950 to-zinc-900",
+      techBadge: "bg-white/5 border border-white/10 text-zinc-300",
+      photosBadge: "bg-zinc-900/80 border-white/10 text-white",
+      footerLabel: "text-zinc-400",
+      socialBtn: "bg-white/5 border-white/10 hover:bg-white/10 text-white",
+      footerSeparator: "border-zinc-700/30",
     },
     creative: {
       bg: "bg-orange-50/50 text-slate-800",
@@ -151,6 +203,32 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
       border: "border-orange-100",
       font: "font-sans",
       gradientText: "bg-linear-to-r from-rose-500 to-orange-500 bg-clip-text text-transparent",
+      titleText: "text-slate-800",
+      modalBg: "bg-white",
+      modalBorder: "border-orange-200",
+      modalFooterBg: "bg-orange-50",
+      modalCloseBtn: "bg-orange-100 hover:bg-orange-200 text-slate-600",
+      modalLinkBtn: "bg-rose-500 hover:bg-rose-600 text-white",
+      galleryBg: "bg-orange-50",
+      timelineLine: "from-rose-400 via-orange-400 to-transparent",
+      timelineExpDot: "bg-rose-500 border-rose-300 text-white",
+      timelineEduDot: "bg-orange-500 border-orange-300 text-white",
+      expBadge: "bg-rose-500/10 text-rose-600 border-rose-500/20",
+      eduBadge: "bg-orange-500/10 text-orange-600 border-orange-500/20",
+      typeBadgeExp: "bg-rose-500/10 text-rose-500 border border-rose-500/20",
+      typeBadgeEdu: "bg-orange-500/10 text-orange-500 border border-orange-500/20",
+      ownerPanel: "bg-rose-50",
+      ownerPanelBorder: "border-rose-200",
+      ownerPanelAccent: "text-rose-500",
+      ownerBtn: "bg-white hover:bg-rose-50 text-slate-700 border-rose-200",
+      ownerUploadBtn: "bg-rose-500 hover:bg-rose-600 text-white",
+      ownerUploadPanel: "bg-rose-50 border-rose-200",
+      coverPlaceholder: "from-rose-100 to-orange-100",
+      techBadge: "bg-orange-50 border border-orange-200 text-slate-600",
+      photosBadge: "bg-white/90 border-orange-200 text-slate-700",
+      footerLabel: "text-slate-400",
+      socialBtn: "border-orange-200 hover:bg-orange-50 text-slate-600",
+      footerSeparator: "border-orange-200",
     },
     minimalist: {
       bg: "bg-white text-stone-900",
@@ -163,8 +241,35 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
       border: "border-stone-200",
       font: "font-serif",
       gradientText: "text-stone-900 font-extrabold",
+      titleText: "text-stone-900",
+      modalBg: "bg-white",
+      modalBorder: "border-stone-200",
+      modalFooterBg: "bg-stone-50",
+      modalCloseBtn: "bg-stone-100 hover:bg-stone-200 text-stone-600",
+      modalLinkBtn: "bg-stone-900 hover:bg-stone-800 text-white",
+      galleryBg: "bg-stone-100",
+      timelineLine: "from-stone-400 via-stone-300 to-transparent",
+      timelineExpDot: "bg-stone-800 border-stone-500 text-white",
+      timelineEduDot: "bg-stone-600 border-stone-400 text-white",
+      expBadge: "bg-stone-100 text-stone-800 border-stone-300",
+      eduBadge: "bg-stone-100 text-stone-700 border-stone-300",
+      typeBadgeExp: "bg-stone-100 text-stone-700 border border-stone-300",
+      typeBadgeEdu: "bg-stone-100 text-stone-600 border border-stone-300",
+      ownerPanel: "bg-stone-100",
+      ownerPanelBorder: "border-stone-300",
+      ownerPanelAccent: "text-stone-700",
+      ownerBtn: "bg-white hover:bg-stone-50 text-stone-800 border-stone-300",
+      ownerUploadBtn: "bg-stone-900 hover:bg-stone-800 text-white",
+      ownerUploadPanel: "bg-stone-100 border-stone-300",
+      coverPlaceholder: "from-stone-50 to-stone-200",
+      techBadge: "bg-stone-50 border border-stone-200 text-stone-600",
+      photosBadge: "bg-white/90 border-stone-200 text-stone-700",
+      footerLabel: "text-stone-400",
+      socialBtn: "border-stone-300 hover:bg-stone-50 text-stone-800",
+      footerSeparator: "border-stone-200",
     }
-  }[theme] || themeClasses.modern;
+  };
+  const themeClasses = themeConfig[theme] || themeConfig.modern;
 
   const renderSectionHeader = (title, icon) => {
     const Icon = icon;
@@ -447,12 +552,12 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
               {/* If Left Aligned Image */}
               {aboutMeImage && aboutMeImageSide === "left" && (
                 <div className="lg:col-span-5 relative group">
-                  <div className="aspect-square rounded-2xl overflow-hidden border border-white/10 shadow-xl relative">
+                  <div className={`aspect-square rounded-2xl overflow-hidden border ${themeClasses.modalBorder} shadow-xl relative`}>
                     <img src={aboutMeImage} className="w-full h-full object-cover" alt="About Me" />
                     {isOwner && (
                       <button
                         onClick={toggleAboutImageSide}
-                        className="absolute bottom-2 right-2 bg-slate-900/80 hover:bg-slate-900 text-white text-xs font-black px-3 py-1.5 rounded-lg border border-white/10 backdrop-blur-xs flex items-center gap-1.5"
+                        className={`absolute bottom-2 right-2 text-xs font-black px-3 py-1.5 rounded-lg border backdrop-blur-xs flex items-center gap-1.5 ${themeClasses.ownerBtn}`}
                       >
                         <ChevronRight className="w-3.5 h-3.5" /> Move Right
                       </button>
@@ -468,20 +573,20 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
 
                 {/* Owner upload options inside public preview */}
                 {isOwner && (
-                  <div className="p-4 bg-slate-800/40 rounded-2xl border border-slate-700/50 flex flex-col sm:flex-row gap-4 items-center justify-between text-xs">
+                  <div className={`p-4 ${themeClasses.ownerPanel} rounded-2xl border ${themeClasses.ownerPanelBorder} flex flex-col sm:flex-row gap-4 items-center justify-between text-xs`}>
                     <div className="flex items-center gap-2">
-                      <Camera className="w-4 h-4 text-violet-400" />
-                      <span className="font-bold text-slate-300">Customize About Section Image:</span>
+                      <Camera className={`w-4 h-4 ${themeClasses.ownerPanelAccent}`} />
+                      <span className={`font-bold ${themeClasses.textMuted}`}>Customize About Section Image:</span>
                     </div>
                     <div className="flex gap-2">
-                      <label className="bg-slate-900 hover:bg-slate-800 text-white font-bold py-1.5 px-3 rounded-lg border border-slate-700 cursor-pointer transition-colors flex items-center gap-1">
+                      <label className={`${themeClasses.ownerBtn} font-bold py-1.5 px-3 rounded-lg border cursor-pointer transition-colors flex items-center gap-1`}>
                         <Upload className="w-3.5 h-3.5" /> {aboutMeImage ? 'Replace Image' : 'Upload Image'}
                         <input type="file" accept="image/*" className="hidden" onChange={handleUploadAboutMeImage} disabled={isUploading} />
                       </label>
                       {aboutMeImage && (
                         <button
                           onClick={toggleAboutImageSide}
-                          className="bg-slate-900 hover:bg-slate-800 text-white font-bold py-1.5 px-3 rounded-lg border border-slate-700 transition-colors"
+                          className={`${themeClasses.ownerBtn} font-bold py-1.5 px-3 rounded-lg border transition-colors`}
                         >
                           Show on {aboutMeImageSide === "left" ? "Right" : "Left"}
                         </button>
@@ -493,7 +598,7 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
                 {/* Skills list inside About Section */}
                 {isVisible("skills") && skills.length > 0 && (
                   <div className="pt-4 space-y-3">
-                    <h3 className="text-sm font-black uppercase tracking-wider text-slate-400">Key Competencies</h3>
+                    <h3 className={`text-sm font-black uppercase tracking-wider ${themeClasses.textMuted}`}>Key Competencies</h3>
                     <div className="flex flex-wrap gap-2">
                       {skills.map((skill) => (
                         <span
@@ -511,12 +616,12 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
               {/* If Right Aligned Image */}
               {aboutMeImage && aboutMeImageSide === "right" && (
                 <div className="lg:col-span-5 relative group">
-                  <div className="aspect-square rounded-2xl overflow-hidden border border-white/10 shadow-xl relative">
+                  <div className={`aspect-square rounded-2xl overflow-hidden border ${themeClasses.modalBorder} shadow-xl relative`}>
                     <img src={aboutMeImage} className="w-full h-full object-cover" alt="About Me" />
                     {isOwner && (
                       <button
                         onClick={toggleAboutImageSide}
-                        className="absolute bottom-2 left-2 bg-slate-900/80 hover:bg-slate-900 text-white text-xs font-black px-3 py-1.5 rounded-lg border border-white/10 backdrop-blur-xs flex items-center gap-1.5"
+                        className={`absolute bottom-2 left-2 text-xs font-black px-3 py-1.5 rounded-lg border backdrop-blur-xs flex items-center gap-1.5 ${themeClasses.ownerBtn}`}
                       >
                         <ChevronLeft className="w-3.5 h-3.5" /> Move Left
                       </button>
@@ -570,16 +675,16 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
                   >
                     <div className="space-y-4">
                       {/* Project cover preview */}
-                      <div className="h-40 w-full rounded-xl overflow-hidden bg-slate-900 border border-white/5 relative flex items-center justify-center">
+                      <div className={`h-40 w-full rounded-xl overflow-hidden ${themeClasses.galleryBg} border ${themeClasses.modalBorder} relative flex items-center justify-center`}>
                         {coverImage ? (
                           <img src={coverImage} className="w-full h-full object-cover" alt={proj.title} />
                         ) : (
-                          <div className={`w-full h-full bg-linear-to-br ${theme === 'sleek' ? 'from-emerald-950 to-zinc-900' : theme === 'creative' ? 'from-rose-100 to-orange-100' : theme === 'minimalist' ? 'from-stone-50 to-stone-200' : 'from-violet-950 to-slate-900'} flex items-center justify-center`}>
+                          <div className={`w-full h-full bg-linear-to-br ${themeClasses.coverPlaceholder} flex items-center justify-center`}>
                             <FolderGit2 className={`w-10 h-10 ${themeClasses.accent}`} />
                           </div>
                         )}
                         {hasImages && (
-                          <span className="absolute bottom-2 right-2 text-[10px] font-black uppercase bg-slate-900/80 px-2 py-0.5 rounded border border-white/10 text-white">
+                          <span className={`absolute bottom-2 right-2 text-[10px] font-black uppercase px-2 py-0.5 rounded border ${themeClasses.photosBadge}`}>
                             {proj.images.length} Photos
                           </span>
                         )}
@@ -599,17 +704,17 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
                     </div>
 
                     {proj.technologies && proj.technologies.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 pt-4 mt-4 border-t border-white/5">
+                      <div className={`flex flex-wrap gap-1.5 pt-4 mt-4 border-t ${themeClasses.footerSeparator}`}>
                         {proj.technologies.slice(0, 3).map((tech) => (
                           <span
                             key={tech}
-                            className="px-2 py-0.5 text-[9px] font-bold bg-white/5 border border-white/10 rounded text-slate-300 uppercase tracking-wider"
+                            className={`px-2 py-0.5 text-[9px] font-bold rounded uppercase tracking-wider ${themeClasses.techBadge}`}
                           >
                             {tech}
                           </span>
                         ))}
                         {proj.technologies.length > 3 && (
-                          <span className="text-[9px] text-slate-500 font-bold self-center">
+                          <span className={`text-[9px] font-bold self-center ${themeClasses.textMuted}`}>
                             +{proj.technologies.length - 3} more
                           </span>
                         )}
