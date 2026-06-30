@@ -853,18 +853,18 @@ const PortfolioForm = ({ initialData = {}, defaultUser = {} }) => {
                     <div className="space-y-2">
                       <Label className="text-xs font-black text-slate-400 uppercase tracking-widest">Start Date</Label>
                       <Input
+                        type="date"
                         value={currentExp.startDate}
                         onChange={(e) => setCurrentExp(prev => ({ ...prev, startDate: e.target.value }))}
-                        placeholder="YYYY-MM (e.g. 2022-01)"
                         className="bg-white border-slate-200 rounded-xl"
                       />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-xs font-black text-slate-400 uppercase tracking-widest">End Date</Label>
                       <Input
+                        type="date"
                         value={currentExp.endDate}
                         onChange={(e) => setCurrentExp(prev => ({ ...prev, endDate: e.target.value }))}
-                        placeholder="YYYY-MM"
                         disabled={currentExp.current}
                         className="bg-white border-slate-200 rounded-xl"
                       />
@@ -986,18 +986,18 @@ const PortfolioForm = ({ initialData = {}, defaultUser = {} }) => {
                       <div className="space-y-2">
                         <Label className="text-xs font-black text-slate-400 uppercase tracking-widest">Start Date</Label>
                         <Input
+                          type="date"
                           value={currentEdu.startDate}
                           onChange={(e) => setCurrentEdu(prev => ({ ...prev, startDate: e.target.value }))}
-                          placeholder="e.g. 2018"
                           className="bg-white border-slate-200 rounded-xl"
                         />
                       </div>
                       <div className="space-y-2">
                         <Label className="text-xs font-black text-slate-400 uppercase tracking-widest">End Date</Label>
                         <Input
+                          type="date"
                           value={currentEdu.endDate}
                           onChange={(e) => setCurrentEdu(prev => ({ ...prev, endDate: e.target.value }))}
-                          placeholder="e.g. 2022"
                           className="bg-white border-slate-200 rounded-xl"
                         />
                       </div>
@@ -1259,9 +1259,9 @@ const PortfolioForm = ({ initialData = {}, defaultUser = {} }) => {
                     <div className="space-y-2">
                       <Label className="text-xs font-black text-slate-400 uppercase tracking-widest">Date Earned</Label>
                       <Input
+                        type="date"
                         value={currentCert.date}
                         onChange={(e) => setCurrentCert(prev => ({ ...prev, date: e.target.value }))}
-                        placeholder="e.g. 2023-05"
                         className="bg-white border-slate-200 rounded-xl"
                       />
                     </div>
@@ -1350,9 +1350,9 @@ const PortfolioForm = ({ initialData = {}, defaultUser = {} }) => {
                     <div className="space-y-2">
                       <Label className="text-xs font-black text-slate-400 uppercase tracking-widest">Date Received</Label>
                       <Input
+                        type="date"
                         value={currentAch.date}
                         onChange={(e) => setCurrentAch(prev => ({ ...prev, date: e.target.value }))}
-                        placeholder="e.g. 2024-03"
                         className="bg-white border-slate-200 rounded-xl"
                       />
                     </div>
@@ -1484,10 +1484,10 @@ const PortfolioForm = ({ initialData = {}, defaultUser = {} }) => {
                     <button
                       type="button"
                       onClick={() => setFormData(prev => ({ ...prev, theme: "sleek" }))}
-                      className={`flex flex-col items-center p-4 border rounded-2xl hover:border-emerald-400 hover:bg-slate-50 transition-all ${formData.theme === "sleek" ? "border-emerald-500 ring-2 ring-emerald-500/20 bg-slate-50" : "border-slate-100"}`}
+                      className={`flex flex-col items-center p-4 border rounded-2xl hover:border-cyan-400 hover:bg-slate-50 transition-all ${formData.theme === "sleek" ? "border-cyan-500 ring-2 ring-cyan-500/20 bg-slate-50" : "border-slate-100"}`}
                     >
                       <span className="font-bold text-sm uppercase tracking-wider text-slate-800 mb-1">Sleek</span>
-                      <span className="text-[10px] text-slate-400 font-medium">Emerald & Slate Mono</span>
+                      <span className="text-[10px] text-slate-400 font-medium">Obsidian & Cyber Neon Teal</span>
                     </button>
                     {/* Creative */}
                     <button

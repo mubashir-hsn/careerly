@@ -134,6 +134,7 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
       modalCloseBtn: "bg-slate-800 hover:bg-slate-700 text-slate-300",
       modalLinkBtn: "bg-violet-600 hover:bg-violet-500 text-white",
       galleryBg: "bg-slate-950",
+      timelineCard: "bg-slate-900/60 border border-slate-800 text-slate-100",
       timelineLine: "from-violet-500 via-indigo-500 to-transparent",
       timelineExpDot: "bg-violet-600 border-violet-400 text-white",
       timelineEduDot: "bg-indigo-600 border-indigo-400 text-white",
@@ -155,42 +156,43 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
       footerSeparator: "border-white/5",
     },
     sleek: {
-      bg: "bg-zinc-900 text-zinc-100",
-      accent: "text-emerald-400",
-      accentBg: "bg-emerald-500/10 text-emerald-300 border-emerald-500/20",
-      card: "bg-zinc-800/80 border border-zinc-700/60 hover:border-emerald-500/30 transition-all",
-      navBg: "bg-zinc-800/90 border-b border-zinc-700/50",
+      bg: "bg-slate-950 text-zinc-100",
+      accent: "text-cyan-400",
+      accentBg: "bg-cyan-500/10 text-cyan-300 border-cyan-500/20",
+      card: "bg-white/[0.02] border border-white/[0.08] backdrop-blur-xl hover:bg-white/[0.04] hover:border-cyan-500/30 transition-all duration-300",
+      navBg: "bg-slate-950/70 border-b border-white/[0.06] backdrop-blur-md",
       textMuted: "text-zinc-400",
-      button: "bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-950/30",
-      border: "border-zinc-700/50",
-      font: "font-mono",
-      gradientText: "bg-linear-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent",
+      button: "bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white shadow-lg shadow-cyan-950/25",
+      border: "border-white/[0.06]",
+      font: "font-sans",
+      gradientText: "bg-linear-to-r from-cyan-400 via-teal-400 to-indigo-400 bg-clip-text text-transparent",
       titleText: "text-zinc-100",
-      modalBg: "bg-zinc-800",
-      modalBorder: "border-zinc-700",
-      modalFooterBg: "bg-zinc-900",
-      modalCloseBtn: "bg-zinc-700 hover:bg-zinc-600 text-zinc-300",
-      modalLinkBtn: "bg-emerald-600 hover:bg-emerald-500 text-white",
-      galleryBg: "bg-zinc-900",
-      timelineLine: "from-emerald-500 via-teal-500 to-transparent",
-      timelineExpDot: "bg-emerald-600 border-emerald-400 text-white",
-      timelineEduDot: "bg-teal-600 border-teal-400 text-white",
-      expBadge: "bg-emerald-500/10 text-emerald-300 border-emerald-500/20",
-      eduBadge: "bg-teal-500/10 text-teal-300 border-teal-500/20",
+      modalBg: "bg-zinc-900/95",
+      modalBorder: "border-white/[0.08]",
+      modalFooterBg: "bg-black/35",
+      modalCloseBtn: "bg-white/5 hover:bg-white/10 text-zinc-300",
+      modalLinkBtn: "bg-linear-to-r from-cyan-500 to-blue-500 hover:bg-cyan-400 hover:bg-blue-400 text-white",
+      galleryBg: "bg-black/40",
+      timelineCard: "bg-white/[0.02] border border-white/[0.08] text-zinc-100",
+      timelineLine: "from-cyan-500 via-blue-500 to-transparent",
+      timelineExpDot: "bg-cyan-600 border-cyan-400 text-white",
+      timelineEduDot: "bg-blue-600 border-blue-400 text-white",
+      expBadge: "bg-cyan-500/10 text-cyan-300 border-cyan-500/20",
+      eduBadge: "bg-blue-500/10 text-blue-300 border-blue-500/20",
       typeBadgeExp: "bg-amber-500/10 text-amber-400 border border-amber-500/20",
       typeBadgeEdu: "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20",
-      ownerPanel: "bg-zinc-800/60",
-      ownerPanelBorder: "border-zinc-700/50",
-      ownerPanelAccent: "text-emerald-400",
-      ownerBtn: "bg-zinc-900 hover:bg-zinc-800 text-white border-zinc-700",
-      ownerUploadBtn: "bg-emerald-600 hover:bg-emerald-500 text-white",
-      ownerUploadPanel: "bg-emerald-950/20 border-emerald-800/30",
-      coverPlaceholder: "from-emerald-950 to-zinc-900",
-      techBadge: "bg-white/5 border border-white/10 text-zinc-300",
-      photosBadge: "bg-zinc-900/80 border-white/10 text-white",
-      footerLabel: "text-zinc-400",
-      socialBtn: "bg-white/5 border-white/10 hover:bg-white/10 text-white",
-      footerSeparator: "border-zinc-700/30",
+      ownerPanel: "bg-white/[0.02]",
+      ownerPanelBorder: "border-white/[0.08]",
+      ownerPanelAccent: "text-cyan-400",
+      ownerBtn: "bg-zinc-900 hover:bg-zinc-800 text-white border-white/[0.08]",
+      ownerUploadBtn: "bg-cyan-600 hover:bg-cyan-500 text-white",
+      ownerUploadPanel: "bg-cyan-950/20 border-cyan-800/30",
+      coverPlaceholder: "from-cyan-950 to-slate-950",
+      techBadge: "bg-white/[0.03] border border-white/[0.08] text-zinc-300",
+      photosBadge: "bg-zinc-950/80 border-white/[0.08] text-white",
+      footerLabel: "text-zinc-500",
+      socialBtn: "bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.08] text-white",
+      footerSeparator: "border-white/[0.06]",
     },
     creative: {
       bg: "bg-orange-50/50 text-slate-800",
@@ -210,6 +212,7 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
       modalCloseBtn: "bg-orange-100 hover:bg-orange-200 text-slate-600",
       modalLinkBtn: "bg-rose-500 hover:bg-rose-600 text-white",
       galleryBg: "bg-orange-50",
+      timelineCard: "bg-white border border-orange-100 text-slate-800",
       timelineLine: "from-rose-400 via-orange-400 to-transparent",
       timelineExpDot: "bg-rose-500 border-rose-300 text-white",
       timelineEduDot: "bg-orange-500 border-orange-300 text-white",
@@ -248,6 +251,7 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
       modalCloseBtn: "bg-stone-100 hover:bg-stone-200 text-stone-600",
       modalLinkBtn: "bg-stone-900 hover:bg-stone-800 text-white",
       galleryBg: "bg-stone-100",
+      timelineCard: "bg-white border border-stone-200 text-stone-900",
       timelineLine: "from-stone-400 via-stone-300 to-transparent",
       timelineExpDot: "bg-stone-800 border-stone-500 text-white",
       timelineEduDot: "bg-stone-600 border-stone-400 text-white",
@@ -418,7 +422,7 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
       )}
 
       {/* Floating Top Navbar */}
-      <nav className={`sticky ${isOwner ? 'top-[45px]' : 'top-0'} z-40 backdrop-blur-md ${themeClasses.navBg} transition-all`}>
+      <nav className={`sticky ${isOwner ? 'top-11.25' : 'top-0'} z-40 backdrop-blur-md ${themeClasses.navBg} transition-all`}>
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
             <span className="text-xs uppercase tracking-[0.25em] font-black text-slate-400 group-hover:text-slate-100 transition-colors">
@@ -454,7 +458,7 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
           <div className="text-center md:text-left flex-1 space-y-6">
             <div className="space-y-2">
               <span className={`text-xs font-black uppercase tracking-[0.3em] ${themeClasses.accent}`}>
-                Introducing
+                Hello, I'm
               </span>
               <h1 className={`text-5xl md:text-7xl font-black tracking-tight leading-none ${theme === 'minimalist' ? 'font-serif text-stone-900' : ''}`}>
                 {portfolio.user?.name || "Careerly User"}
@@ -490,14 +494,13 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
               )}
             </div>
 
-            {/* Social Icons */}
             <div className="flex justify-center md:justify-start items-center gap-4 pt-4">
               {linkedinUrl && (
                 <a
                   href={linkedinUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`p-3 rounded-xl transition-all hover:scale-110 ${theme === 'minimalist' ? 'border border-stone-300 hover:bg-stone-50' : 'bg-white/5 hover:bg-white/10 border border-white/5'}`}
+                  className={`p-3 rounded-xl transition-all hover:scale-110 border ${themeClasses.socialBtn}`}
                   aria-label="LinkedIn"
                 >
                   <Linkedin className="w-5 h-5" />
@@ -508,7 +511,7 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
                   href={githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`p-3 rounded-xl transition-all hover:scale-110 ${theme === 'minimalist' ? 'border border-stone-300 hover:bg-stone-50' : 'bg-white/5 hover:bg-white/10 border border-white/5'}`}
+                  className={`p-3 rounded-xl transition-all hover:scale-110 border ${themeClasses.socialBtn}`}
                   aria-label="GitHub"
                 >
                   <Github className="w-5 h-5" />
@@ -519,7 +522,7 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
                   href={websiteUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`p-3 rounded-xl transition-all hover:scale-110 ${theme === 'minimalist' ? 'border border-stone-300 hover:bg-stone-50' : 'bg-white/5 hover:bg-white/10 border border-white/5'}`}
+                  className={`p-3 rounded-xl transition-all hover:scale-110 border ${themeClasses.socialBtn}`}
                   aria-label="Website"
                 >
                   <Globe className="w-5 h-5" />
@@ -671,7 +674,7 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
                   <div
                     key={idx}
                     onClick={() => setActiveProject({ ...proj, index: idx })}
-                    className={`w-[290px] md:w-[350px] shrink-0 snap-start p-5 rounded-2xl border flex flex-col justify-between cursor-pointer ${themeClasses.card}`}
+                    className={`w-72.5 md:w-87.5 shrink-0 snap-start p-5 rounded-2xl border flex flex-col justify-between cursor-pointer ${themeClasses.card}`}
                   >
                     <div className="space-y-4">
                       {/* Project cover preview */}
@@ -778,20 +781,20 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
 
                             {/* Card container */}
                             <div className="w-full md:w-[45%] pl-12 md:pl-0">
-                              <div className={`p-6 rounded-2xl hover:-translate-y-1 hover:shadow-xl transition-all duration-300 ${themeClasses.card}`}>
+                              <div className={`p-6 rounded-2xl hover:-translate-y-1 hover:shadow-xl transition-all duration-300 ${themeClasses.timelineCard}`}>
                                 <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                                   <span className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full border ${
-                                    isExperience ? "bg-violet-500/10 text-violet-300 border-violet-500/20" : "bg-indigo-500/10 text-indigo-300 border-indigo-500/20"
+                                    isExperience ? themeClasses.expBadge : themeClasses.eduBadge
                                   }`}>
                                     {item.date}
                                   </span>
                                   <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded ${
-                                    isExperience ? "bg-amber-500/10 text-amber-400 border border-amber-500/20" : "bg-teal-500/10 text-teal-400 border border-teal-500/20"
+                                    isExperience ? themeClasses.typeBadgeExp : themeClasses.typeBadgeEdu
                                   }`}>
                                     {isExperience ? "Experience" : "Education"}
                                   </span>
                                 </div>
-                                <h3 className="text-md font-black text-slate-100 uppercase tracking-tight">{item.title}</h3>
+                                <h3 className={`text-md font-black uppercase tracking-tight ${themeClasses.titleText}`}>{item.title}</h3>
                                 <h4 className={`text-xs font-bold mb-3 ${themeClasses.accent}`}>{item.subtitle}</h4>
                                 {item.description && (
                                   <p className={`text-xs leading-relaxed whitespace-pre-line ${themeClasses.textMuted}`}>{item.description}</p>
@@ -837,20 +840,20 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
 
                           {/* Card container */}
                           <div className="w-full md:w-[45%] pl-12 md:pl-0">
-                            <div className={`p-6 rounded-2xl hover:-translate-y-1 hover:shadow-xl transition-all duration-300 ${themeClasses.card}`}>
+                            <div className={`p-6 rounded-2xl hover:-translate-y-1 hover:shadow-xl transition-all duration-300 ${themeClasses.timelineCard}`}>
                               <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                                 <span className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full border ${
-                                  isExperience ? "bg-violet-500/10 text-violet-300 border-violet-500/20" : "bg-indigo-500/10 text-indigo-300 border-indigo-500/20"
+                                  isExperience ? themeClasses.expBadge : themeClasses.eduBadge
                                 }`}>
                                   {item.date}
-                                </span>
+                                &rbrace;</span>
                                 <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded ${
-                                  isExperience ? "bg-amber-500/10 text-amber-400 border border-amber-500/20" : "bg-teal-500/10 text-teal-400 border border-teal-500/20"
+                                  isExperience ? themeClasses.typeBadgeExp : themeClasses.typeBadgeEdu
                                 }`}>
                                   {isExperience ? "Experience" : "Education"}
                                 </span>
                               </div>
-                              <h3 className="text-md font-black text-slate-100 uppercase tracking-tight">{item.title}</h3>
+                              <h3 className={`text-md font-black uppercase tracking-tight ${themeClasses.titleText}`}>{item.title}</h3>
                               <h4 className={`text-xs font-bold mb-3 ${themeClasses.accent}`}>{item.subtitle}</h4>
                               {item.description && (
                                 <p className={`text-xs leading-relaxed whitespace-pre-line ${themeClasses.textMuted}`}>{item.description}</p>
@@ -946,50 +949,26 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
 
       {/* Premium Footer Section */}
       <footer className={`mt-32 border-t ${themeClasses.border} pt-16 pb-12`}>
-        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10">
-          {/* Column 1: Info */}
-          <div className="space-y-4 text-center md:text-left">
-            <h3 className={`text-lg font-black uppercase tracking-widest ${themeClasses.gradientText}`}>
+        <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+          {/* Info */}
+          <div className="text-center sm:text-left space-y-1">
+            <h3 className={`text-base font-black uppercase tracking-wider ${themeClasses.gradientText}`}>
               {portfolio.user?.name || "Careerly User"}
             </h3>
             <p className={`text-xs font-semibold tracking-wider uppercase ${themeClasses.accent}`}>
               {field}
             </p>
-            <p className={`text-xs leading-relaxed max-w-sm mx-auto md:mx-0 ${themeClasses.textMuted}`}>
-              {heroDescription.slice(0, 120)}...
-            </p>
           </div>
 
-          {/* Column 2: Navigation Links */}
-          <div className="flex flex-col items-center md:items-start space-y-3">
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">Navigation</h4>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs font-bold uppercase tracking-wider text-center md:text-left">
-              <a href="#home" className={`hover:${themeClasses.accent} transition-colors`}>Home</a>
-              {isVisible("aboutMe") && <a href="#about" className={`hover:${themeClasses.accent} transition-colors`}>About</a>}
-              {isVisible("projects") && projects.length > 0 && <a href="#projects" className={`hover:${themeClasses.accent} transition-colors`}>Projects</a>}
-              {timelineItems.length > 0 && <a href="#timeline" className={`hover:${themeClasses.accent} transition-colors`}>Journey</a>}
-              {downloadResumeUrl && (
-                <a href={downloadResumeUrl} target="_blank" rel="noopener noreferrer" className={`hover:${themeClasses.accent} transition-colors`}>
-                  Resume
-                </a>
-              )}
-            </div>
-          </div>
-
-          {/* Column 3: Social & Contact */}
-          <div className="flex flex-col items-center md:items-end space-y-4">
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">Stay Connected</h4>
-            <div className="flex gap-3">
+          {/* Social & Contact */}
+          <div className="flex flex-col items-center sm:items-end gap-3">
+            <div className="flex gap-2.5">
               {linkedinUrl && (
                 <a
                   href={linkedinUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`p-2.5 rounded-lg border transition-all hover:scale-105 ${
-                    theme === 'minimalist' 
-                      ? 'border-stone-300 hover:bg-stone-50 text-stone-800' 
-                      : 'bg-white/5 border-white/10 hover:bg-white/10 text-white'
-                  }`}
+                  className={`p-2.5 rounded-xl border transition-all hover:scale-105 ${themeClasses.socialBtn}`}
                   aria-label="LinkedIn"
                 >
                   <Linkedin className="w-4 h-4" />
@@ -1000,11 +979,7 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
                   href={githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`p-2.5 rounded-lg border transition-all hover:scale-105 ${
-                    theme === 'minimalist' 
-                      ? 'border-stone-300 hover:bg-stone-50 text-stone-800' 
-                      : 'bg-white/5 border-white/10 hover:bg-white/10 text-white'
-                  }`}
+                  className={`p-2.5 rounded-xl border transition-all hover:scale-105 ${themeClasses.socialBtn}`}
                   aria-label="GitHub"
                 >
                   <Github className="w-4 h-4" />
@@ -1015,11 +990,7 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
                   href={websiteUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`p-2.5 rounded-lg border transition-all hover:scale-105 ${
-                    theme === 'minimalist' 
-                      ? 'border-stone-300 hover:bg-stone-50 text-stone-800' 
-                      : 'bg-white/5 border-white/10 hover:bg-white/10 text-white'
-                  }`}
+                  className={`p-2.5 rounded-xl border transition-all hover:scale-105 ${themeClasses.socialBtn}`}
                   aria-label="Website"
                 >
                   <Globe className="w-4 h-4" />
@@ -1027,9 +998,12 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
               )}
             </div>
             {contactEmail && (
-              <p className={`text-xs ${themeClasses.textMuted}`}>
+              <a 
+                href={`mailto:${contactEmail}`} 
+                className={`text-xs ${themeClasses.textMuted} hover:${themeClasses.accent} transition-colors`}
+              >
                 {contactEmail}
-              </p>
+              </a>
             )}
           </div>
         </div>
@@ -1048,18 +1022,18 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
       {/* Project Detail Dialog Modal */}
       {activeProject && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-3xl overflow-hidden shadow-2xl relative flex flex-col animate-slide-up">
+          <div className={`${themeClasses.modalBg} border ${themeClasses.modalBorder} rounded-3xl w-full max-w-3xl overflow-hidden shadow-2xl relative flex flex-col animate-slide-up`}>
 
             {/* Modal Header */}
-            <div className="p-6 border-b border-slate-800 flex justify-between items-start gap-4">
+            <div className={`p-6 border-b ${themeClasses.modalBorder} flex justify-between items-start gap-4`}>
               <div>
-                <h3 className="text-xl md:text-2xl font-black text-white uppercase tracking-tight">
+                <h3 className={`text-xl md:text-2xl font-black ${themeClasses.titleText} uppercase tracking-tight`}>
                   {activeProject.title}
                 </h3>
                 {activeProject.technologies && (
                   <div className="flex flex-wrap gap-1 mt-2">
                     {activeProject.technologies.map(tech => (
-                      <span key={tech} className="px-2 py-0.5 text-[10px] font-bold bg-violet-500/10 border border-violet-500/20 text-violet-300 rounded">
+                      <span key={tech} className={`px-2 py-0.5 text-[10px] font-bold rounded ${themeClasses.techBadge}`}>
                         {tech}
                       </span>
                     ))}
@@ -1068,7 +1042,7 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
               </div>
               <button
                 onClick={() => setActiveProject(null)}
-                className="p-1 bg-white/5 border border-white/10 hover:bg-white/10 text-white rounded-lg transition-colors"
+                className={`p-1 rounded-lg transition-colors ${themeClasses.modalCloseBtn}`}
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1080,10 +1054,10 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
               {/* Project gallery slider */}
               {activeProject.images && activeProject.images.length > 0 && (
                 <div className="space-y-2">
-                  <h4 className="text-xs font-black uppercase text-slate-400 tracking-wider">Project Gallery</h4>
+                  <h4 className={`text-xs font-black uppercase ${themeClasses.footerLabel} tracking-wider`}>Project Gallery</h4>
                   <div className="flex gap-4 overflow-x-auto pb-2 snap-x scrollbar-hide">
                     {activeProject.images.map((img, i) => (
-                      <div key={i} className="w-[300px] md:w-[400px] aspect-video shrink-0 snap-start rounded-xl overflow-hidden border border-white/10 bg-slate-950 shadow-md">
+                      <div key={i} className={`w-75 md:w-100 aspect-video shrink-0 snap-start rounded-xl overflow-hidden border ${themeClasses.modalBorder} ${themeClasses.galleryBg} shadow-md`}>
                         <img src={img} className="w-full h-full object-contain" alt={`${activeProject.title} screenshot ${i + 1}`} />
                       </div>
                     ))}
@@ -1093,24 +1067,24 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
 
               {/* Project description detail */}
               <div className="space-y-2">
-                <h4 className="text-xs font-black uppercase text-slate-400 tracking-wider">Description & Outcome</h4>
-                <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-line">
+                <h4 className={`text-xs font-black uppercase ${themeClasses.footerLabel} tracking-wider`}>Description & Outcome</h4>
+                <p className={`${themeClasses.textMuted} text-sm leading-relaxed whitespace-pre-line`}>
                   {activeProject.description}
                 </p>
               </div>
 
               {/* Owner upload options inside modal */}
               {isOwner && (
-                <div className="p-5 bg-violet-950/20 border border-violet-800/30 rounded-2xl space-y-3 text-xs">
+                <div className={`p-5 ${themeClasses.ownerUploadPanel} border rounded-2xl space-y-3 text-xs`}>
                   <div className="flex items-center gap-2">
-                    <Upload className="w-4 h-4 text-violet-400" />
-                    <span className="font-bold text-slate-200 uppercase tracking-wider">Manage Project Screenshots (Owner-only)</span>
+                    <Upload className={`w-4 h-4 ${themeClasses.ownerPanelAccent}`} />
+                    <span className={`font-bold ${themeClasses.titleText} uppercase tracking-wider`}>Manage Project Screenshots (Owner-only)</span>
                   </div>
-                  <p className="text-slate-400">
+                  <p className={themeClasses.textMuted}>
                     Add high-quality screenshots (PNG, JPG) to showcase this project to potential employers. Max 2MB per file.
                   </p>
                   <div className="flex items-center gap-2">
-                    <label className="bg-violet-600 hover:bg-violet-500 text-white font-bold py-1.5 px-4 rounded-lg cursor-pointer transition-colors inline-flex items-center gap-1.5 shadow-sm">
+                    <label className={`${themeClasses.ownerUploadBtn} font-bold py-1.5 px-4 rounded-lg cursor-pointer transition-colors inline-flex items-center gap-1.5 shadow-sm`}>
                       <Upload className="w-3.5 h-3.5" /> {isUploading ? 'Uploading...' : 'Upload Screenshots'}
                       <input
                         type="file"
@@ -1127,20 +1101,20 @@ export default function PremiumPortfolioClient({ portfolio, isOwner, username, h
             </div>
 
             {/* Modal Footer */}
-            <div className="p-6 border-t border-slate-800 bg-slate-950 flex justify-end gap-3">
+            <div className={`p-6 border-t ${themeClasses.modalBorder} ${themeClasses.modalFooterBg} flex justify-end gap-3`}>
               {activeProject.link && (
                 <a
                   href={activeProject.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-5 py-2 text-xs font-black uppercase tracking-widest bg-violet-600 hover:bg-violet-500 text-white rounded-xl transition-colors shadow-lg"
+                  className={`flex items-center gap-2 px-5 py-2 text-xs font-black uppercase tracking-widest rounded-xl transition-colors shadow-lg ${themeClasses.modalLinkBtn}`}
                 >
                   <Globe className="w-4 h-4" /> Live Demo / Repository <ExternalLink className="w-3 h-3" />
                 </a>
               )}
               <button
                 onClick={() => setActiveProject(null)}
-                className="px-5 py-2 text-xs font-black uppercase tracking-widest bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl transition-colors"
+                className={`px-5 py-2 text-xs font-black uppercase tracking-widest rounded-xl transition-colors ${themeClasses.modalCloseBtn}`}
               >
                 Close
               </button>

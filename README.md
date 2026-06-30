@@ -22,28 +22,58 @@
 
 ## 🎯 Overview
 
-**Careerly** is a full-stack AI-powered career coaching platform designed to help professionals advance their careers. Key capabilities include:
+**Careerly** is a state-of-the-art AI-driven career coaching platform designed to empower professionals with personalized guidance, interview preparation, and advanced resume optimization tools. Built on a modern, high-performance tech stack, it provides a seamless bridge between raw talent and industry-leading career success.
 
-- AI-driven resume analysis and optimization (ATS scoring)
-- Personalized cover letter generation
-- Role-specific interview quiz preparation
-- Industry insights (salaries, trends, skills)
-- Intelligent career guidance chatbot
+### Route Isolation & Layouts
+The platform utilizes Next.js Route Groups to achieve physical UI isolation between different application contexts:
+- **`(main)` Shell**: Contains the public landing page, user dashboard, and AI tools. It includes the site-wide professional Header and Footer.
+- **`admin` Console**: A dedicated, distraction-free environment for administrators resident at `/admin`, featuring a specialized sidebar and system-status header.
+- **`(auth)` Layer**: Managed by Clerk for secure sign-in and sign-up workflows.
 
-Built with production-grade tools, Careerly demonstrates modern web development best practices.
+### Core Architecture Principles
+1. **Atomic Token Logic**: All AI operations are fueled by a token-based economy. Tokens are consumed per usage and can be recharged via Stripe.
+2. **Infinite Accumulation**: Credits from subscription upgrades and recharges are **cumulative**, ensuring users never lose their previous balance.
+3. **Event-Driven Notifications**: Administrative actions and user lifecycle events (new signups, payments) trigger real-time system alerts.
 
 [GitHub Repo](https://github.com/mubashir-hsn/careerly)
 
+---
+
 ## ✨ Features
 
-| Feature                    | Description                                                      | Tech                    |
-| -------------------------- | ---------------------------------------------------------------- | ----------------------- |
-| **Resume Analyzer**        | PDF upload, ATS scoring, skill matching, improvement suggestions | PDF.js, Google Gemini   |
-| **Content Improver**       | Optimize experience bullets, summaries for impact                | AI Prompt Engineering   |
-| **Cover Letter Generator** | Personalized for job desc/company, exportable Markdown/PDF       | Gemini AI               |
-| **Interview Quizzes**      | Technical/Behavioral MCQs by role & experience level             | Dynamic JSON Generation |
-| **Industry Insights**      | Salary data, trends, top skills, learning paths                  | Cached DB + AI          |
-| **Career Chatbot**         | Session-based, context-aware career advice                       | Streaming Chat API      |
+### Professional Feature Suite
+* **AI Resume Builder & Analyzer**: PDF upload, ATS compatibility scoring against job descriptions, and granular AI feedback.
+* **Content Improver**: Optimize experience bullet points and summaries for maximum impact using AI prompt engineering.
+* **AI Cover Letter Generator**: Synthesize user profile data with target job descriptions for context-aware drafts in multiple tones.
+* **Interview Quizzes**: Dynamically generate role-specific quizzes (Technical, Behavioral, Mixed) with instant AI feedback and scoring.
+* **Industry Insights**: Benchmarks market trends, growth scores, top skills, and salary data across 50+ sectors.
+* **Career Chatbot**: Context-aware, session-based streaming chatbot for 24/7 career advice.
+* **AI Portfolio Builder**: Build custom professional portfolio websites with multiple premium themes and AI-assisted content polishing.
+
+### Administrative Infrastructure
+* **Unified Analytics Command Center (`/admin`)**: Real-time tracking of platform revenue, active subscriptions, and system-wide token consumption.
+* **Live Notification Ecosystem**: Instant alerts for new registrations, successful checkouts, and configuration edits.
+* **Forensic User Auditing**: In-depth profile reviews verifying transaction logs, billing integrity, and user token consumption patterns.
+* **Dynamic Plan Management**: Full CRUD controls over pricing, token yields, and feature access permissions.
+
+---
+
+## 🛠️ Tech Stack
+
+| Category | Technology |
+| :--- | :--- |
+| **Framework** | Next.js 15+ (App Router, Turbopack) & React 19 |
+| **Database** | PostgreSQL (Hosted on Neon) |
+| **ORM** | Prisma ORM |
+| **Authentication** | Clerk (Auth & User Management) |
+| **Styling** | Tailwind CSS & Shadcn UI (Lucide Icons) |
+| **Payments** | Stripe (Subscription & Token-based Revenue) |
+| **AI Engine** | Google Gemini AI (via Direct API Integration) |
+| **Background Jobs** | Inngest Event-Driven Orchestration |
+| **Analytics & Data** | Recharts (Usage and payment trends visualization) |
+| **File Parsing & PDF** | PDF.js & pdf-parse (parsing), Puppeteer & html2pdf (generation) |
+
+---
 
 ## 🏗️ Project Structure
 
@@ -51,43 +81,41 @@ Built with production-grade tools, Careerly demonstrates modern web development 
 d:/careerly/
 ├── app/                  # Next.js 15 App Router
 │   ├── (auth)/           # Auth pages
-│   ├── (main)/           # Main app pages
-│   ├── api/              # API Routes (chat, resume-analysis, pdf-gen)
-│   ├── lib/              # App-specific utils
+│   ├── (main)/           # Main app pages (landing, dashboard, AI tools)
+│   ├── admin/            # Dedicated admin routes & console
+│   ├── api/              # API Routes (chat, resume-analysis, pdf-gen, Stripe webhooks)
+│   ├── lib/              # App-specific utils & schemas
 │   └── globals.css
-├── actions/              # Server Actions (resume.js, cover-letter.js, etc.)
-├── components/           # React Components
-│   └── ui/               # shadcn/ui Components
-├── lib/                  # Shared utils, Prisma client, Inngest
-├── prisma/               # Schema & migrations (PostgreSQL)
-├── public/               # Assets, uploads/
-├── data/                 # Static data (industries.js, features.js)
-├── services/             # GeminiService.js, authCheck.js
-├── diagrams/             # Mermaid diagrams (ERD, sequences)
-└── package.json          # Dependencies
+├── actions/              # Next.js Server Actions
+│   ├── admin.js          # Admin dashboard metrics and user auditing
+│   ├── notifications.js  # Live notifications logic
+│   ├── subscription.js   # Stripe checkout sessions & checkout verification
+│   ├── user-dashboard.js # User analytics & activity charts
+│   └── portfolio.js      # Portfolio updates & details
+├── components/           # Shared React Components & UI widgets
+├── lib/                  # Shared database client, Inngest handler
+├── prisma/               # Database Schema (PostgreSQL/Neon) & migrations
+├── public/               # Static assets & public uploads
+├── data/                 # System static data (industries, features, faqs)
+├── services/             # AI core services (GeminiService.js)
+└── package.json          # Dependencies & build scripts
 ```
 
-## 🛠️ Tech Stack
+---
 
-### Frontend
-
-- **Next.js 15** (App Router, Turbopack)
-- **React 19** + React Hook Form + Zod
-- **shadcn/ui** + Tailwind CSS 4 + Lucide Icons
-- **Recharts** for data visualization
-
-### Backend & AI
-
-- **Next.js API Routes** + Server Actions
-- **Prisma ORM** + PostgreSQL
-- **Google Gemini AI** (generative-ai)
-- **Inngest** for background jobs
-
-### Tools & Utils
-
-- **Clerk** Authentication
-- **Puppeteer + html2pdf** for PDF generation
-- **PDF.js + pdf-parse** for resume parsing
+## 📊 Database Models (Key Schema)
+* **`User`**: Central identity model (linked to Clerk). Stores professional profile data.
+* **`AdminUser`**: Flagging model that identifies users with administrative privileges.
+* **`SubscriptionPlan`**: Product definitions (token count, price, type, features).
+* **`UserSubscription`**: User-specific billing status, tokens remaining, and active tier.
+* **`TokenUsageLog`**: Immutable audit trail for every AI feature consumption.
+* **`Payment`**: Financial ledger entries synchronized with Stripe transactions.
+* **`Notification`**: Real-time administrative alerts (registrations, payments, etc.).
+* **`Resume`**: Markdown storage for user resumes with AI ATS scoring.
+* **`CoverLetter`**: Drafts and completed career correspondence.
+* **`Assessment`**: History of AI-generated career interview quizzes and scores.
+* **`Chat`**: Threaded AI career coaching conversations.
+* **`IndustryInsight`**: Cache for AI-generated sector trends and salary benchmarks.
 
 ## 🚀 Setup & Run
 

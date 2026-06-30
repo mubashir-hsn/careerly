@@ -1,5 +1,6 @@
 {
   "postman.settings.dotenv-detection-notification-visibility": false,
   "prisma.pinToPrisma6": true,
-  "sqltools.connections": []
+  "sqltools.connections": [],
+  "CodeGPT.apiKey": "Google AI Studio"
 }

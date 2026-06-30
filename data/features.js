@@ -1,4 +1,4 @@
-import { BrainCircuit, Briefcase, FileScan, LineChart, ScrollText, FileText } from "lucide-react";
+import { BrainCircuit, Briefcase, FileScan, LineChart, ScrollText, FileText, Sparkles } from "lucide-react";
 
 export const features = [
   {
@@ -42,5 +42,12 @@ export const features = [
     link: "/ai-cover-letter",
     description: "Generate a clear, job specific cover letter tailored to the role and company in seconds.",
     bg: "bg-indigo-100",
+  },
+  {
+    icon: <Sparkles className="w-10 h-10 mb-4 text-cyan-500" />,
+    title: "AI Portfolio Builder",
+    link: "/portfolio",
+    description: "Build a stunning personal portfolio page with custom themes and AI-enhanced text suggestions.",
+    bg: "bg-cyan-100",
   },
 ];
